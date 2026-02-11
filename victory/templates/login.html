@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Academy - Parent Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Extend Tailwind CSS theme with your custom colors based on the new palette
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'background': '#ffffff',
+                        'container-bg': '#080454', /* Deep Blue - Container */
+                        'button-bg': '#006a67', /* NEW: Darker Green for Button */
+                        'button-hover': '#005a58', /* NEW: Slightly darker green for hover */
+                        'text-color': '#fcf4bc', /* Banana Yellow - Text */
+                        // Re-adding some previous palette colors for specific needs if not covered by new semantic names
+                        'green-vogue-old': '#042c64', // Used for logo placeholder if needed
+                        'sulu-old': '#c0f888', // Used for logo placeholder if needed
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS variables for the palette, for direct use if needed */
+        :root {
+            --background: #ffffff;
+            --container-bg: #080454;
+            --button-bg: #006a67; /* NEW: Darker Green for Button */
+            --button-hover: #005a58; /* NEW: Slightly darker green for hover */
+            --text-color: #fcf4bc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background); /* White page background */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="login-container bg-container-bg p-8 md:p-10 rounded-xl shadow-2xl text-center max-w-md w-full">
+        
+        <h2 class="text-3xl font-semibold text-text-color mb-6">Parent Sign In</h2>
+        <form>
+            <div class="mb-5 text-left">
+                <label for="username" class="block text-text-color text-lg font-semibold mb-2">Username or Email</label>
+                <input type="text" id="username" name="username" required
+                       class="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-button-bg focus:ring-2 focus:ring-button-bg text-base">
+            </div>
+            <div class="mb-6 text-left">
+                <label for="password" class="block text-text-color text-lg font-semibold mb-2">Password</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-button-bg focus:ring-2 focus:ring-button-bg text-base">
+            </div>
+            <button type="submit"
+                    class="btn-sign-in w-full py-3 px-6 bg-button-bg text-container-bg font-bold text-xl rounded-lg cursor-pointer transition duration-300 ease-in-out transform hover:scale-105 hover:bg-button-hover shadow-lg">
+                Sign In
+            </button>
+        </form>
+        <div class="forgot-password mt-6 text-sm">
+            <a href="#" class="text-text-color hover:text-button-bg transition duration-300 ease-in-out">Forgot Password?</a>
+        </div>
+    </div>
+</body>
+</html>

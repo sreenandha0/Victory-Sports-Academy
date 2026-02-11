@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(to left, #6441A5, #2a0845);
+}
+
+/* Multi-step form container */
+#msform {
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+#msform fieldset {
+  background: white;
+  border: none;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  display: none;
+  position: relative;
+}
+#msform fieldset:first-of-type {
+  display: block;
+}
+
+/* Inputs & Textareas */
+#msform input, #msform select, #msform textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  width: 100%;
+  font-size: 14px;
+  color: #2C3E50;
+}
+#msform input:focus, #msform textarea:focus, #msform select:focus {
+  border-color: #ee0979;
+  outline: none;
+}
+
+/* Action Buttons */
+#msform .action-button, #msform .action-button-previous {
+  width: 130px;
+  background: #ee0979;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 0;
+  margin: 10px 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+#msform .action-button:hover, #msform .action-button-previous:hover {
+  box-shadow: 0 0 0 3px white, 0 0 0 5px #ee0979;
+}
+#msform .action-button-previous {
+  background: #6c63ff;
+}
+
+/* Step titles */
+.fs-title {
+  font-size: 22px;
+  color: #2C3E50;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.fs-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Progress Bar */
+#progressbar {
+  margin-bottom: 30px;
+  overflow: hidden;
+  counter-reset: step;
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+}
+#progressbar li {
+  list-style: none;
+  color: white;
+  font-size: 10px;
+  text-transform: uppercase;
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  border: 2px solid white;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  border-radius: 50%;
+  background-color: white;
+  color: #2a0845;
+}
+#progressbar li:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  top: 11px;
+  left: -50%;
+  z-index: -1;
+}
+#progressbar li:first-child:after {
+  content: none;
+}
+#progressbar li.active:before,
+#progressbar li.active:after {
+  background: #ee0979;
+  color: white;
+  border-color: #ee0979;
+}

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Personal & Account Info</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Ionicons Script for Navbar Icon -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #EFF3FA;
+        }
+        .navbar-container {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .bg-yinmn-blue { background-color: #38547C; }
+        .text-alice-blue { color: #EFF3FA; }
+        .hover-text-jordy-blue:hover { color: #8AADDE; }
+        .text-powder-blue { color: #B8CDEC; }
+        .border-french-gray { border-color: #BBC7D8; }
+        .bg-french-gray { background-color: #BBC7D8; }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #EFF3FA;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8AADDE;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38547C;
+        }
+
+        .errorlist {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            list-style: none;
+            padding-left: 0;
+        }
+    </style>
+</head>
+<body class="bg-[#EFF3FA] font-sans min-h-screen flex flex-col">
+
+    <!-- 🔹 Navbar -->
+    <nav class="bg-yinmn-blue p-4 navbar-container rounded-b-lg">
+        <div class="container mx-auto flex justify-between items-center px-4 md:px-6 lg:px-8">
+            <div class="flex items-center w-full justify-center relative">
+                <button class="absolute left-0 text-alice-blue focus:outline-none p-2 rounded-full hover:bg-yinmn-blue/80 transition duration-300 ease-in-out">
+                    <ion-icon name="caret-back-outline" class="w-8 h-8"></ion-icon>
+                </button>
+                <div class="flex items-center">
+                    <svg class="w-8 h-8 mr-2 text-alice-blue" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm-3 0h2v2H8zm0 4h2v2H8zm8-4h-2v2h2zm0 4h-2v2h2z"/>
+                    </svg>
+                    <a href="#" class="text-alice-blue text-2xl font-bold tracking-wide">Victory Academy</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 🔹 Main Content Area - Combined Container -->
+    <div class="p-4 flex-grow flex flex-col items-center justify-center">
+        <!-- Registration Form Container -->
+        <div class="bg-[#B8CDEC] p-8 rounded-xl shadow-lg w-full max-w-lg">
+            <h1 class="text-3xl font-bold text-[#38547C] mb-6 text-center">Register</h1>
+
+            <div class="flex mb-6 rounded-lg overflow-hidden border border-[#BBC7D8]">
+                <button id="personalInfoTab" class="flex-1 py-3 text-center text-lg font-medium rounded-l-lg transition-all duration-300 bg-[#8AADDE] text-[#EFF3FA] focus:outline-none">
+                    <ion-icon name="person-outline" class="inline-block align-middle mr-2"></ion-icon> Personal Info
+                </button>
+                <button id="accountInfoTab" class="flex-1 py-3 text-center text-lg font-medium rounded-r-lg transition-all duration-300 bg-[#EFF3FA] text-[#38547C] hover:bg-[#BBC7D8] focus:outline-none">
+                    <ion-icon name="key-outline" class="inline-block align-middle mr-2"></ion-icon> Account Info
+                </button>
+            </div>
+
+            <form method="post" action="{% url 'register_parent' %}" id="registrationForm">
+                {% csrf_token %}
+                <div id="personalInfoContent" class="tab-content">
+                    <h2 class="text-2xl font-semibold text-[#38547C] mb-4">Your Details</h2>
+                    {% if parent_form.non_field_errors %}
+                        <ul class="errorlist mb-4">
+                            {% for error in parent_form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <div class="mb-4 relative">
+                        <label for="{{ parent_form.full_name.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Full Name</label>
+                        {{ parent_form.full_name.errors }}
+                        <div class="relative">
+                            <ion-icon name="person-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
+                            <input type="text" name="{{ parent_form.full_name.name }}" id="{{ parent_form.full_name.id_for_label }}"
+                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                                placeholder="John Doe" value="{{ parent_form.full_name.value|default:'' }}">
+                        </div>
+                    </div>
+                    <div class="mb-6 relative">
+                        <label for="{{ parent_form.phone.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Phone Number</label>
+                        {{ parent_form.phone.errors }}
+                        <div class="relative">
+                            <ion-icon name="call-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
+                            <input type="tel" name="{{ parent_form.phone.name }}" id="{{ parent_form.phone.id_for_label }}"
+                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                                placeholder="+123 456 7890" value="{{ parent_form.phone.value|default:'' }}">
+                        </div>
+                    </div>
+                    <button type="button" id="nextToAccountInfo" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
+                        Next: Account Info
+                    </button>
+                </div>
+
+                <div id="accountInfoContent" class="tab-content hidden">
+                    <h2 class="text-2xl font-semibold text-[#38547C] mb-4">Account Details</h2>
+                    {% if user_form.non_field_errors %}
+                        <ul class="errorlist mb-4">
+                            {% for error in user_form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <div class="mb-4 relative">
+                        <label for="{{ user_form.username.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Username</label>
+                        {{ user_form.username.errors }}
+                        <div class="relative">
+                            <ion-icon name="person-circle-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
+                            <input type="text" name="{{ user_form.username.name }}" id="{{ user_form.username.id_for_label }}"
+                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                                placeholder="Choose a username" value="{{ user_form.username.value|default:'' }}">
+                        </div>
+                    </div>
+                    <div class="mb-4 relative">
+                        <label for="{{ user_form.email.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Email Address</label>
+                        {{ user_form.email.errors }}
+                        <div class="relative">
+                            <ion-icon name="mail-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
+                            <input type="email" name="{{ user_form.email.name }}" id="{{ user_form.email.id_for_label }}"
+                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                                placeholder="your.email@example.com" value="{{ user_form.email.value|default:'' }}">
+                        </div>
+                    </div>
+                    <div class="mb-4 relative">
+                        <label for="{{ user_form.password.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Password</label>
+                        {{ user_form.password.errors }}
+                        <div class="relative">
+                            <ion-icon name="lock-closed-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
+                            <input type="password" name="{{ user_form.password.name }}" id="{{ user_form.password.id_for_label }}"
+                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                                placeholder="••••••••">
+                        </div>
+                    </div>
+                    <div class="mb-6 relative">
+                        <label for="confirmPassword" class="block text-[#38547C] text-sm font-bold mb-2">Confirm Password</label>
+                        <div class="relative">
+                            <ion-icon name="lock-closed-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
+                            <input type="password" id="confirmPassword"
+                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                                placeholder="••••••••">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
+                        Register Account
+                    </button>
+                </div>
+            </form>
+
+            <div class="chart-container hidden mt-8">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 Footer -->
+    <footer class="bg-yinmn-blue py-6 mt-auto rounded-t-lg">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8 text-center text-alice-blue text-sm">
+            &copy; 2025 Victory Academy. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const personalInfoTab = document.getElementById('personalInfoTab');
+        const accountInfoTab = document.getElementById('accountInfoTab');
+        const personalInfoContent = document.getElementById('personalInfoContent');
+        const accountInfoContent = document.getElementById('accountInfoContent');
+        const nextToAccountInfoButton = document.getElementById('nextToAccountInfo');
+
+        function showTab(tabName) {
+            if (tabName === 'personal') {
+                personalInfoContent.classList.remove('hidden');
+                accountInfoContent.classList.add('hidden');
+                personalInfoTab.classList.add('bg-[#8AADDE]', 'text-[#EFF3FA]');
+                personalInfoTab.classList.remove('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+                accountInfoTab.classList.remove('bg-[#8AADDE]', 'text-[#EFF3FA]');
+                accountInfoTab.classList.add('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+            } else {
+                accountInfoContent.classList.remove('hidden');
+                personalInfoContent.classList.add('hidden');
+                accountInfoTab.classList.add('bg-[#8AADDE]', 'text-[#EFF3FA]');
+                accountInfoTab.classList.remove('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+                personalInfoTab.classList.remove('bg-[#8AADDE]', 'text-[#EFF3FA]');
+                personalInfoTab.classList.add('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+            }
+        }
+
+        personalInfoTab.addEventListener('click', () => showTab('personal'));
+        accountInfoTab.addEventListener('click', () => showTab('account'));
+        nextToAccountInfoButton.addEventListener('click', () => showTab('account'));
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hasUserFormErrors = document.querySelector('#accountInfoContent .errorlist li');
+            const hasParentFormErrors = document.querySelector('#personalInfoContent .errorlist li');
+            if (hasUserFormErrors) showTab('account');
+            else if (hasParentFormErrors) showTab('personal');
+            else showTab('personal');
+        });
+
+        // Chart.js example (kept for context, but hidden by default)
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function (context) {
+                                return context[0].label.length > 16 ? context[0].label.substring(0, 16) + '...' : context[0].label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            callback: function (value, index, ticks) {
+                                const label = this.getLabelForValue(value);
+                                return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

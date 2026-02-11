@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Coach Profile | Victory Academy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* --- General Layout --- */
+        body {
+            margin-top: 0;
+            color: #1a202c;
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .main-body { padding: 30px; }
+        
+        .card {
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        /* --- Navy Gradient Styling --- */
+        .navy-gradient {
+            background: #000421;
+            background: linear-gradient(135deg, #000421 0%, #022660 100%);
+        }
+
+        /* --- Navbar --- */
+        .navbar-custom {
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .navbar-custom .navbar-brand { 
+            color: white; 
+            font-weight: bold; 
+            letter-spacing: 1px;
+        }
+
+        /* --- Back Button Styling --- */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            background: white;
+            color: #022660;
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        .btn-back:hover {
+            background: #022660;
+            color: white;
+            text-decoration: none;
+            transform: translateX(-5px);
+        }
+
+        /* --- Premium Animations & Hover Effects --- */
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        }
+
+        /* --- Parallax Profile Card --- */
+        .parallax-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .parallax-card {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            height: 420px;
+            perspective: 1000px;
+        }
+
+        .parallax-card-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            color: white;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .profile-img-parallax {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border: 5px solid rgba(255,255,255,0.15);
+            transform: translateZ(80px); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .parallax-card h4 { transform: translateZ(60px); margin-top: 20px; font-weight: 700; }
+        .parallax-card p { transform: translateZ(50px); }
+        .parallax-card .badge { transform: translateZ(40px); }
+
+        /* Approved Badge Pulse */
+        .badge-success-pulse {
+            background-color: #28a745;
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+
+        /* --- Specialization Badges --- */
+        .badge-skill {
+            background-color: #f8fafc;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            cursor: default;
+        }
+        .badge-skill:hover {
+            background-color: #022660;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* --- Batch Grid --- */
+        .responsive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+        }
+
+        .grid-item {
+            background: #ffffff;
+            border: 1px solid #edf2f7;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .grid-item:hover {
+            background: #022660;
+            color: white !important;
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-custom navy-gradient">
+    <div class="container">
+        <a class="navbar-brand" href="#">VICTORY ACADEMY</a>
+    </div>
+</nav>
+
+<div class="container main-body">
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="{% url 'coach_dashboard' %}" class="btn-back">
+            <span class="mr-2">⬅</span> Back to Dashboard
+        </a>
+        
+        <nav aria-label="breadcrumb" class="d-none d-md-block">
+            <ol class="breadcrumb bg-transparent p-0 m-0">
+                <li class="breadcrumb-item"><a href="/" style="color: #022660;">Home</a></li>
+                <li class="breadcrumb-item active">Coach Profile</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="parallax-container">
+                <div class="parallax-card" id="profileCard">
+                    <div class="parallax-card-content navy-gradient">
+                        {% if coach.photo %}
+                            <img src="{{ coach.photo.url }}" class="rounded-circle profile-img-parallax" alt="Coach">
+                        {% else %}
+                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="rounded-circle profile-img-parallax" alt="Avatar">
+                        {% endif %}
+                        
+                        <h4>{{ coach.full_name }}</h4>
+                        <p class="mb-2" style="opacity: 0.8;">Head Instructor</p>
+
+                        {% if coach.is_approved %}
+                            <span class="badge badge-success-pulse px-3 py-2">Verified Coach</span>
+                        {% else %}
+                            <span class="badge badge-warning px-3 py-2">Pending Approval</span>
+                        {% endif %}
+                        
+                        <div class="mt-4" style="transform: translateZ(55px)">
+                            <button class="btn btn-outline-light btn-sm font-weight-bold px-4" style="border-radius: 20px;">Edit Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3 shadow-sm border-0">
+                <ul class="list-group list-group-flush" style="border-radius: 12px;">
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <small class="text-muted text-uppercase font-weight-bold">Username</small>
+                        <span class="font-weight-bold text-dark">@{{ coach.user.username }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <small class="text-muted text-uppercase font-weight-bold">Member Since</small>
+                        <span class="font-weight-bold text-dark">{{ coach.user.date_joined|date:"M Y" }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            
+            <div class="row mb-4">
+                <div class="col-sm-4 mb-2">
+                    <div class="card shadow-sm text-center p-3 h-100 hover-lift" style="border-left: 5px solid #022660;">
+                        <div class="text-muted small text-uppercase font-weight-bold">Active Batches</div>
+                        <div class="h2 font-weight-bold mb-0" style="color: #022660;">{{ batches|length }}</div>
+                    </div>
+                </div>
+                <div class="col-sm-4 mb-2">
+                    <div class="card shadow-sm text-center p-3 h-100 hover-lift" style="border-left: 5px solid #28a745;">
+                        <div class="text-muted small text-uppercase font-weight-bold">Success Rate</div>
+                        <div class="h2 font-weight-bold mb-0 text-success">94%</div>
+                    </div>
+                </div>
+                <div class="col-sm-4 mb-2">
+                    <div class="card shadow-sm text-center p-3 h-100 hover-lift" style="border-left: 5px solid #ffc107;">
+                        <div class="text-muted small text-uppercase font-weight-bold">Experience</div>
+                        <div class="h2 font-weight-bold mb-0" style="color: #022660;">5+ <span class="h6">Yrs</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0 font-weight-bold" style="color: #022660;">
+                            <span class="mr-2">👤</span> Personal Information
+                        </h5>
+                        <a href="javascript:history.back()" class="text-muted small font-weight-bold hover-lift">
+                            <u>Go Back</u>
+                        </a>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted">Full Name</div>
+                        <div class="col-sm-8 font-weight-bold text-dark">{{ coach.full_name }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted">Email Address</div>
+                        <div class="col-sm-8 font-weight-bold text-dark">{{ coach.user.email }}</div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-sm-4 text-muted">Specializations</div>
+                        <div class="col-sm-8 d-flex flex-wrap" style="gap: 8px;">
+                            <span class="badge-skill">Athletic Training</span>
+                            <span class="badge-skill">Team Management</span>
+                            <span class="badge-skill">Nutrition</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0 font-weight-bold" style="color: #022660;">📚 Assigned Batches</h5>
+                        <div class="d-flex" style="gap: 10px;">
+                            <a href="{% url 'mark_attendance' %}" class="btn btn-sm btn-primary px-3" style="border-radius: 20px;">Attendance</a>
+                        </div>
+                    </div>
+                    
+                    {% if batches %}
+                        <div class="responsive-grid">
+                            {% for batch in batches %}
+                                <div class="grid-item shadow-sm">
+                                    <div class="mb-2" style="font-size: 1.8rem;">🏆</div>
+                                    <span class="text-muted small text-uppercase">Batch Name</span>
+                                    <div class="font-weight-bold h6 mb-0">{{ batch.name }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5 rounded" style="border: 2px dashed #e2e8f0; background: #f8fafc;">
+                            <p class="text-muted mb-0">No active batches assigned.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Parallax Card Script
+    const card = document.querySelector('#profileCard');
+    const content = card.querySelector('.parallax-card-content');
+
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 10;
+        const rotateY = (centerX - x) / 10;
+        content.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        content.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+</script>
+
+</body>
+</html>

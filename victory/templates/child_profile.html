@@ -1,0 +1,259 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Step Child Profile - Victory Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --iron: #d3d8dd;
+      --deep-sapphire: #06235d;
+      --bali-hai: #8b9aac;
+      --lynch: #677991;
+      --ebony: #060712;
+      --bismark: #456084;
+      --san-juan: #314b73;
+      --venus: #9c949c;
+      --chambray: #38548c;
+    }
+
+    body {
+      background-color: var(--iron);
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .form-title {
+      color: var(--deep-sapphire);
+      font-weight: bold;
+    }
+
+    .btn-next, .btn-prev {
+      background-color: var(--chambray);
+      color: #fff;
+    }
+
+    .btn-next:hover, .btn-prev:hover {
+      background-color: var(--bismark);
+    }
+
+    .progressbar {
+      display: flex;
+      justify-content: space-between;
+      counter-reset: step;
+      margin-bottom: 30px;
+    }
+
+    .progressbar li {
+      list-style-type: none;
+      width: 100%;
+      position: relative;
+      text-align: center;
+      font-weight: 500;
+      color: var(--bali-hai);
+    }
+
+    .progressbar li::before {
+      counter-increment: step;
+      content: counter(step);
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      border: 2px solid var(--chambray);
+      display: block;
+      text-align: center;
+      margin: 0 auto 10px auto;
+      border-radius: 50%;
+      background-color: #fff;
+    }
+
+    .progressbar li::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: var(--chambray);
+      top: 16px;
+      left: -50%;
+      z-index: -1;
+    }
+
+    .progressbar li:first-child::after {
+      content: none;
+    }
+
+    .progressbar li.active {
+      color: var(--deep-sapphire);
+    }
+
+    .progressbar li.active::before {
+      background-color: var(--chambray);
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    footer {
+      background-color: var(--san-juan);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg" style="background-color: var(--deep-sapphire);">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="#">Victory Academy</a>
+    <a href="javascript:history.back()" class="btn btn-light ms-auto">← Back</a>
+  </div>
+</nav>
+
+<!-- Form Container -->
+<div class="container my-5">
+  <div class="form-card">
+    <h3 class="form-title mb-4">Child Profile - {{ child.name }}</h3>
+
+    <!-- Progressbar -->
+    <ul class="progressbar mb-4">
+      <li class="active">Football Info</li>
+      <li>Measurements</li>
+      <li>Consent</li>
+    </ul>
+
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <!-- Step 1 -->
+      <div class="step active">
+        <div class="mb-3">
+          <label class="form-label">Preferred Position</label>
+          {{ form.preferred_position }}
+          {{ form.preferred_position.errors }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Playing Background</label>
+          {{ form.playing_background }}
+          {{ form.playing_background.errors }}
+        </div>
+
+        <button type="button" class="btn btn-next float-end">Next →</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="mb-3">
+          <label class="form-label">Height (cm)</label>
+          {{ form.height_cm }}
+          {{ form.height_cm.errors }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Weight (kg)</label>
+          {{ form.weight_kg }}
+          {{ form.weight_kg.errors }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Medical Issues</label>
+          {{ form.medical_issues }}
+          {{ form.medical_issues.errors }}
+        </div>
+
+        <button type="button" class="btn btn-prev">← Back</button>
+        <button type="button" class="btn btn-next float-end">Next →</button>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="form-check mb-4">
+          {{ form.consent_signed }}
+          <label for="id_consent_signed" class="form-check-label">
+            I confirm the above information is correct.
+          </label>
+          {{ form.consent_signed.errors }}
+        </div>
+
+        <button type="button" class="btn btn-prev">← Back</button>
+        <button type="submit" class="btn btn-primary float-end">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-3 mt-5">
+  &copy; 2025 Victory Academy. All rights reserved.
+</footer>
+
+<!-- Bootstrap + Script -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const steps = document.querySelectorAll('.step');
+  const nextBtns = document.querySelectorAll('.btn-next');
+  const prevBtns = document.querySelectorAll('.btn-prev');
+  const progressItems = document.querySelectorAll('.progressbar li');
+
+  let currentStep = 0;
+
+  nextBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentStep < steps.length - 1) {
+        steps[currentStep].classList.remove('active');
+        progressItems[currentStep].classList.remove('active');
+        currentStep++;
+        steps[currentStep].classList.add('active');
+        progressItems[currentStep].classList.add('active');
+      }
+    });
+  });
+
+  prevBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentStep > 0) {
+        steps[currentStep].classList.remove('active');
+        progressItems[currentStep].classList.remove('active');
+        currentStep--;
+        steps[currentStep].classList.add('active');
+        progressItems[currentStep].classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,382 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Registration | Victory Sports Academy</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN (Mandatory, even if not directly used for this specific page) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom styles for the chart container, as per instructions */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Example max-width */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px; /* Max height */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #EFF3FA; /* Alice Blue */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8AADDE; /* Jordy Blue */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38547C; /* Yinmn Blue */
+        }
+
+        /* Style for Django form errors */
+        .errorlist {
+            color: #dc2626; /* Tailwind red-600 */
+            font-size: 0.875rem; /* sm */
+            margin-top: 0.25rem;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        /* Styling for Django's default date input widget */
+        input[type="date"] {
+            @apply shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent;
+        }
+
+        /* Styling for Django's default select widget */
+        select {
+            @apply shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent;
+        }
+
+        /* Styling for Django's default file input widget */
+        input[type="file"] {
+            @apply block w-full text-sm text-[#38547C]
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-lg file:border-0
+            file:text-sm file:font-semibold
+            file:bg-[#8AADDE] file:text-[#EFF3FA]
+            hover:file:bg-[#38547C] file:transition-colors file:duration-300;
+        }
+
+        /* Styling for Django's default textarea widget */
+        textarea {
+            @apply shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent;
+        }
+
+        /* Styling for Django's default checkbox widget */
+        input[type="checkbox"] {
+            @apply w-4 h-4 text-[#8AADDE] bg-[#EFF3FA] border-[#BBC7D8] rounded focus:ring-[#8AADDE] focus:ring-2;
+        }
+    </style>
+</head>
+<body class="bg-[#EFF3FA] font-sans flex flex-col items-center justify-center min-h-screen p-4">
+    <!-- Chosen Palette: Website Elements Color Palette -->
+    <!-- Application Structure Plan: This single-page application is designed for coach registration, featuring a prominent header for branding and a central motto. The core of the page is a tabbed form, split into "Personal Details" and "Professional Details" sections. All form fields are contained within a single HTML <form> element, with JavaScript controlling the visibility of each tab's content. This tabbed approach simplifies a lengthy form, making it less daunting for the user. On smaller screens, the layout remains responsive, stacking elements appropriately. A subtle footer provides additional information. This structure was chosen to provide a clear, guided, and less overwhelming user experience for form completion while correctly handling Django form submission. -->
+    <!-- Visualization & Content Choices: The primary goal is to collect comprehensive coach registration data. This is achieved through standard HTML form elements (input fields, select dropdowns, file input, textarea, checkbox). Interaction is handled by JavaScript to toggle the visibility of tab content based on user clicks, and to ensure the correct tab is displayed if there are form validation errors upon submission. No complex data visualizations are needed for this specific task; the focus is on form interaction and clear presentation of input fields. Unicode characters are used for simple icons. NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Global Header / Branding -->
+    <header class="text-center mb-8 max-w-2xl w-full">
+        <div class="flex items-center justify-center mb-4">
+            <img src="{% static 'images\vic logo.png' %}" alt="Victory Sports Academy Logo" class="rounded-full border-2 border-[#8AADDE] mr-4">
+            <h1 class="text-4xl font-bold text-[#38547C]">Victory Sports Academy</h1>
+        </div>
+        <p class="text-xl italic font-light text-[#8AADDE] px-4">“Empowering coaches to shape future champions.”</p>
+    </header>
+
+    <!-- Main Content - Registration Form -->
+    <div class="bg-[#B8CDEC] p-8 rounded-xl shadow-lg w-full max-w-2xl">
+        <h2 class="text-3xl font-bold text-[#38547C] mb-6 text-center">Register as a Coach</h2>
+
+        <div class="flex mb-6 rounded-lg overflow-hidden border border-[#BBC7D8]">
+            <button id="personalDetailsTab" class="flex-1 py-3 text-center text-lg font-medium rounded-l-lg transition-all duration-300
+                                               bg-[#8AADDE] text-[#EFF3FA] focus:outline-none">
+                Personal Details
+            </button>
+            <button id="professionalDetailsTab" class="flex-1 py-3 text-center text-lg font-medium rounded-r-lg transition-all duration-300
+                                              bg-[#EFF3FA] text-[#38547C] hover:bg-[#BBC7D8] focus:outline-none">
+                Professional Details
+            </button>
+        </div>
+
+        <!-- Single Form wrapping both sections -->
+        <form method="POST" enctype="multipart/form-data" novalidate id="coachRegistrationForm">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <!-- Personal Details Tab Content -->
+            <div id="personalDetailsContent" class="tab-content">
+                <h3 class="text-2xl font-semibold text-[#38547C] mb-4">Your Personal Information</h3>
+
+                <div class="mb-4">
+                    <label for="{{ form.username.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Username:</label>
+                    {{ form.username.errors }}
+                    <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="Choose a username" value="{{ form.username.value|default:'' }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.password.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Password:</label>
+                    {{ form.password.errors }}
+                    <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="••••••••">
+                </div>
+                <!-- Add a confirm password field for client-side UX, even if not in Django form -->
+                <div class="mb-6">
+                    <label for="confirmPassword" class="block text-[#38547C] text-sm font-bold mb-2">Confirm Password:</label>
+                    <input type="password" id="confirmPassword"
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="••••••••">
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.full_name.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Full Name:</label>
+                    {{ form.full_name.errors }}
+                    <input type="text" name="{{ form.full_name.name }}" id="{{ form.full_name.id_for_label }}" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="Your full name" value="{{ form.full_name.value|default:'' }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.date_of_birth.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Date of Birth:</label>
+                    {{ form.date_of_birth.errors }}
+                    {{ form.date_of_birth }}
+                </div>
+
+                <div class="mb-4">
+    <label for="{{ form.gender.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Gender:</label>
+    {{ form.gender.errors }}
+    {{ form.gender }}
+</div>
+
+                <div class="mb-4">
+                    <label for="{{ form.nationality.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Nationality:</label>
+                    {{ form.nationality.errors }}
+                    <input type="text" name="{{ form.nationality.name }}" id="{{ form.nationality.id_for_label }}" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="Your nationality" value="{{ form.nationality.value|default:'' }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.contact_number.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Contact Number:</label>
+                    {{ form.contact_number.errors }}
+                    <input type="tel" name="{{ form.contact_number.name }}" id="{{ form.contact_number.id_for_label }}" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="+1234567890" value="{{ form.contact_number.value|default:'' }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.email.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Email:</label>
+                    {{ form.email.errors }}
+                    <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="your.email@example.com" value="{{ form.email.value|default:'' }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.address.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Address:</label>
+                    {{ form.address.errors }}
+                    <textarea name="{{ form.address.name }}" id="{{ form.address.id_for_label }}" rows="3" required
+                              class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                              placeholder="Your full address">{{ form.address.value|default:'' }}</textarea>
+                </div>
+
+                <div class="mb-6">
+                    <label for="{{ form.photo.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Upload Photo:</label>
+                    {{ form.photo.errors }}
+                    {{ form.photo }}
+                </div>
+
+                <button type="button" id="nextToProfessionalDetails" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
+                    Next: Professional Details
+                </button>
+            </div>
+
+            <!-- Professional Details Tab Content -->
+            <div id="professionalDetailsContent" class="tab-content hidden">
+                <h3 class="text-2xl font-semibold text-[#38547C] mb-4">Your Professional Information</h3>
+
+                <div class="mb-4">
+                    <label for="{{ form.qualification.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Qualification:</label>
+                    {{ form.qualification.errors }}
+                    <input type="text" name="{{ form.qualification.name }}" id="{{ form.qualification.id_for_label }}" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="e.g., UEFA B License" value="{{ form.qualification.value|default:'' }}">
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.experience_years.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Years of Experience:</label>
+                    {{ form.experience_years.errors }}
+                    <input type="number" name="{{ form.experience_years.name }}" id="{{ form.experience_years.id_for_label }}" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
+                           placeholder="e.g., 5" min="0" value="{{ form.experience_years.value|default:'' }}">
+                </div>
+
+                <div class="form-check mb-6 flex items-center">
+                    {{ form.declaration }}
+                    <label for="{{ form.declaration.id_for_label }}" class="ml-2 text-[#38547C] text-sm font-bold">
+                        {{ form.declaration.label }}
+                    </label>
+                    {{ form.declaration.errors }}
+                </div>
+
+                <button type="submit" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
+                    Submit Registration
+                </button>
+            </div>
+        </form>
+
+        <!-- Mandatory Chart Container (hidden as not needed for this specific page) -->
+        <div class="chart-container hidden mt-8">
+            <canvas id="myChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-8 text-center text-sm text-gray-600">
+        <small>&copy; 2025 Victory Sports Academy. All rights reserved.</small>
+    </footer>
+
+    <script>
+        const personalDetailsTab = document.getElementById('personalDetailsTab');
+        const professionalDetailsTab = document.getElementById('professionalDetailsTab');
+        const personalDetailsContent = document.getElementById('personalDetailsContent');
+        const professionalDetailsContent = document.getElementById('professionalDetailsContent');
+        const nextToProfessionalDetailsButton = document.getElementById('nextToProfessionalDetails');
+
+        // Function to show the selected tab
+        function showTab(tabName) {
+            if (tabName === 'personal') {
+                personalDetailsContent.classList.remove('hidden');
+                professionalDetailsContent.classList.add('hidden');
+                personalDetailsTab.classList.remove('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+                personalDetailsTab.classList.add('bg-[#8AADDE]', 'text-[#EFF3FA]');
+                professionalDetailsTab.classList.remove('bg-[#8AADDE]', 'text-[#EFF3FA]');
+                professionalDetailsTab.classList.add('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+            } else if (tabName === 'professional') {
+                professionalDetailsContent.classList.remove('hidden');
+                personalDetailsContent.classList.add('hidden');
+                professionalDetailsTab.classList.remove('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+                professionalDetailsTab.classList.add('bg-[#8AADDE]', 'text-[#EFF3FA]');
+                personalDetailsTab.classList.remove('bg-[#8AADDE]', 'text-[#EFF3FA]');
+                personalDetailsTab.classList.add('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+            }
+        }
+
+        // Event listeners for tab buttons
+        personalDetailsTab.addEventListener('click', () => showTab('personal'));
+        professionalDetailsTab.addEventListener('click', () => showTab('professional'));
+
+        // Handle "Next: Professional Details" button click to switch tabs
+        nextToProfessionalDetailsButton.addEventListener('click', () => showTab('professional'));
+
+        // Check for form errors on page load and display the relevant tab
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if any field in the professional details section has errors
+            const professionalFields = ['qualification', 'experience_years', 'declaration'];
+            let hasProfessionalErrors = false;
+            for (const fieldName of professionalFields) {
+                const errorElement = document.querySelector(`[name="${fieldName}"] + .errorlist li`);
+                if (errorElement) {
+                    hasProfessionalErrors = true;
+                    break;
+                }
+            }
+
+            // Check if any field in the personal details section has errors (excluding password confirm)
+            const personalFields = ['username', 'password', 'full_name', 'date_of_birth', 'gender', 'nationality', 'contact_number', 'email', 'address', 'photo'];
+            let hasPersonalErrors = false;
+            for (const fieldName of personalFields) {
+                const errorElement = document.querySelector(`[name="${fieldName}"] + .errorlist li`);
+                if (errorElement) {
+                    hasPersonalErrors = true;
+                    break;
+                }
+            }
+
+            // Check for non-field errors
+            const nonFieldErrors = document.querySelector('#coachRegistrationForm > .errorlist li');
+
+            if (hasProfessionalErrors || (nonFieldErrors && !hasPersonalErrors)) {
+                showTab('professional'); // Show professional tab if professional fields or non-field errors exist and no personal errors
+            } else {
+                showTab('personal'); // Default to personal tab or show if personal errors exist
+            }
+        });
+
+
+        // Initialize Chart.js even if not used, as per instructions
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, /* Critical for responsiveness */
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return context[0].label.length > 16 ? context[0].label.substring(0, 16) + '...' : context[0].label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                const label = this.getLabelForValue(value);
+                                return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

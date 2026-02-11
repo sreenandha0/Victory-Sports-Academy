@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Victory Academy - Player Selection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-blue: #38547C;
+      --accent-blue: #8AADDE;
+      --section-bg: #B8CDEC;
+      --main-bg: #EFF3FA;
+      --border-grey: #D1D9E6;
+      --text-grey: #5a7399;
+      --white: #FFFFFF;
+      --alert-red: #dc2626;
+      --alert-red-light: #ef4444;
+      --alert-red-bg: #fee2e2;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--main-bg);
+      color: var(--text-grey);
+    }
+
+    /* Loading Spinner */
+    #loader {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 9999;
+      width: 100%;
+      height: 100%;
+      background: var(--white);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spinner {
+      border: 8px solid var(--section-bg);
+      border-top: 8px solid var(--accent-blue);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: var(--primary-blue);
+      color: var(--white);
+      padding: 15px 20px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar h1 {
+      font-size: 22px;
+      font-weight: 400;
+      margin: 0;
+      text-align: right;
+    }
+
+    .navbar .left-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--accent-blue);
+    }
+
+    .back-button {
+      color: var(--white);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      transition: color 0.3s;
+    }
+
+    .back-button:hover {
+      color: var(--accent-blue);
+    }
+
+    .back-button ion-icon {
+      font-size: 24px;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding-top: 100px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: var(--white);
+      border: 1px solid var(--border-grey);
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+      max-width: 330px;
+      width: 100%;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .profile {
+      border-radius: 50%;
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      margin: 20px auto 10px;
+      display: block;
+      border: 4px solid var(--primary-blue);
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--primary-blue);
+    }
+
+    .job-title {
+      font-size: 13px;
+      color: var(--text-grey);
+      margin-bottom: 10px;
+    }
+
+    .desc {
+      color: var(--text-grey);
+      font-size: 13px;
+      padding: 0 20px;
+    }
+
+    .btn {
+      background-color: var(--accent-blue);
+      color: var(--white);
+      border: none;
+      border-radius: 20px;
+      padding: 10px 25px;
+      font-size: 14px;
+      margin: 15px 0;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #719bd6;
+    }
+
+    .content {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+    }
+
+    .grid-2 {
+      text-align: center;
+    }
+
+    .circule {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .color-b { background: var(--accent-blue); }
+    .color-c { background: #4CAF50; }
+    .color-d { background: var(--primary-blue); }
+
+    .followers {
+      font-size: 11px;
+      color: var(--text-grey);
+    }
+
+    .no-children {
+      font-size: 18px;
+      color: var(--primary-blue);
+      padding: 60px 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="spinner"></div>
+</div>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="left-section">
+    <a href="javascript:history.back()" class="back-button" aria-label="Go Back">
+      <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>
+    </a>
+    <div class="logo">Victory Academy</div>
+  </div>
+  <h1>Player Performance Panel</h1>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  {% if children %}
+  <div class="container">
+    {% for child in children %}
+    <div class="card">
+      {% if child.profile_image %}
+      <img src="{{ child.profile_image.url }}" alt="{{ child.name }}" class="profile">
+      {% else %}
+      <img src="{% static 'images/default-avatar.png' %}" alt="No image" class="profile">
+      {% endif %}
+      <h2 class="title">{{ child.name }}</h2>
+      <p class="job-title">Age Group: {{ child.age_group }}</p>
+      <p class="desc">Click below to view performance chart.</p>
+      <a href="{% url 'assessment_charts' child.id %}"><button class="btn">View Performance</button></a>
+      <div class="content">
+        <div class="grid-2">
+          <div class="circule color-b"><i class="fas fa-futbol"></i></div>
+          <p class="followers">Stamina</p>
+        </div>
+        <div class="grid-2">
+          <div class="circule color-c"><i class="fas fa-running"></i></div>
+          <p class="followers">Speed</p>
+        </div>
+        <div class="grid-2">
+          <div class="circule color-d"><i class="fas fa-brain"></i></div>
+          <p class="followers">Strategy</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p class="no-children">You don't have any registered children yet.</p>
+  {% endif %}
+</div>
+
+<!-- Loader Script -->
+<script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("loader");
+    loader.style.display = "none";
+  });
+</script>
+
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+</html>

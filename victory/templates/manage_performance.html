@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Player Performance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Boxicons for icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --rich-black: #080a1b;
+            --yinmn-blue: #334c78;
+            --french-gray: #c9d1d8;
+            --oxford-blue: #000421;
+            --royal-blue-traditional: #022660;
+            --accent-orange: #ffa500; /* Added for consistency with previous page */
+        }
+
+        body {
+            background-color: var(--french-gray);
+            font-family: 'Roboto', sans-serif;
+            color: var(--rich-black);
+            padding-top: 70px; /* Space for fixed navbar */
+        }
+
+        .navbar {
+            background-color: var(--oxford-blue);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 0.75rem 1rem;
+        }
+
+        .navbar-brand {
+            color: var(--french-gray) !important;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.75rem;
+            transition: color 0.3s ease;
+        }
+        .navbar-brand:hover {
+            color: var(--accent-orange) !important; /* Added hover effect for brand */
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--french-gray) !important;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: var(--accent-orange) !important; /* Changed hover color to accent-orange */
+        }
+
+        .page-title {
+            color: var(--royal-blue-traditional);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        h4 {
+            color: var(--yinmn-blue);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--yinmn-blue);
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            transition: all 0.3s ease-in-out;
+            background-color: #ffffff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .player-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--royal-blue-traditional);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: var(--royal-blue-traditional);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            color: var(--yinmn-blue);
+            margin-bottom: 8px;
+        }
+
+        .card-text small {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .btn-action {
+            background-color: var(--royal-blue-traditional);
+            color: var(--french-gray);
+            border: none;
+            border-radius: 30px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-action:hover {
+            background-color: var(--yinmn-blue);
+            color: var(--french-gray);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-secondary {
+            border-color: var(--yinmn-blue);
+            color: var(--yinmn-blue);
+            background-color: transparent;
+            border-radius: 30px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--yinmn-blue);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .no-children {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            color: var(--yinmn-blue);
+            text-align: center;
+            padding: 20px;
+            border: 1px dashed var(--yinmn-blue);
+            border-radius: 10px;
+            background-color: #f0f4f8;
+        }
+        .no-children .btn-action {
+            margin-top: 15px;
+        }
+
+        /* Batch Filter in Navbar */
+        .batch-filter .dropdown-toggle {
+            background-color: var(--yinmn-blue);
+            border-color: var(--yinmn-blue);
+            color: var(--french-gray);
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 0.9rem;
+        }
+        .batch-filter .dropdown-toggle:hover {
+            background-color: var(--royal-blue-traditional);
+            border-color: var(--royal-blue-traditional);
+        }
+        .batch-filter .dropdown-menu {
+            background-color: var(--oxford-blue);
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .batch-filter .dropdown-item {
+            color: var(--french-gray);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .batch-filter .dropdown-item:hover {
+            background-color: var(--royal-blue-traditional);
+            color: #ffffff;
+        }
+        .batch-filter .dropdown-item.active {
+            background-color: var(--royal-blue-traditional);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Scrollspy for active batch */
+        .batch-section {
+            padding-top: 20px;
+            margin-top: -20px;
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#batchNavbar" data-bs-offset="100">
+
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Player Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Removed Home, Teams, Analytics links -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- These items are removed as per request -->
+            </ul>
+            <!-- Batch Filter Dropdown and Back Button -->
+            <ul class="navbar-nav ms-auto batch-filter" id="batchNavbar">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBatch" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter by Batch
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownBatch">
+                        {% for group in batches %}
+                            <li><a class="dropdown-item" href="#{{ group|lower }}">{{ group }} Batch</a></li>
+                        {% endfor %}
+                        <li><hr class="dropdown-divider bg-secondary"></li>
+                        <li><a class="dropdown-item" href="#top-of-page">Show All</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <!-- Using JavaScript history.back() for dynamic back navigation -->
+                    <a class="nav-link" href="#" onclick="history.back(); return false;">
+                        <i class='bx bx-arrow-back'></i> Back
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container" id="top-of-page">
+    <h2 class="text-center page-title">Manage Player Performance</h2>
+
+    {% for group, children in grouped_children.items %}
+    <h4 class="mt-4 batch-section" id="{{ group|lower }}">{{ group }} Batch</h4>
+    <div class="row">
+        {% if children %}
+            {% for child in children %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            {% if child.profile_image %}
+                                <img src="{{ child.profile_image.url }}" alt="{{ child.name }}" class="player-avatar">
+                            {% else %}
+                                {% with simple_hex_color="334c78" %}
+                                    <img src="https://placehold.co/90/{{ simple_hex_color }}/ffffff?text={{ child.name|slice:":1"|upper }}" alt="{{ child.name }}" class="player-avatar">
+                                {% endwith %}
+                            {% endif %}
+                            <h5 class="card-title">{{ child.name }}</h5>
+                            <p class="card-text">Age Group: {{ child.age_group }}</p>
+                            
+                            {# Preferred Position from ChildProfile #}
+                            <p class="card-text">Position: {{ child.preferred_position }}</p>
+                            
+                            {# Last Assessment Date from PlayerAssessment #}
+                            {% if child.last_assessment_date %}
+                                <p class="card-text"><small>Last Assessment: {{ child.last_assessment_date|date:"M d, Y" }}</small></p>
+                            {% else %}
+                                <p class="card-text"><small>No assessments yet</small></p>
+                            {% endif %}
+
+                            <div class="d-grid gap-2 mt-3">
+                                <a href="{% url 'create_assessment' child.id %}" class="btn btn-action">
+                                    <i class='bx bxs-file-plus'></i> Upload Assessment
+                                </a>
+                                
+                                {# Removed "View Past Assessments" button as requested #}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="no-children">
+                    <p>There are no players registered in the <strong>{{ group }} Batch</strong> yet.</p>
+                    {# Removed "Add New Player to X Batch" button as requested #}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}
+
+</div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+/* Global Reset */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f7f7f7;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* Container */
+.register-container {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 2px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b, #ff9100, #2de2e6);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease infinite;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Slide-in animation */
+.register-inner {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  animation: slideIn 1s ease;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Slide animation */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #444;
+  animation: fadeIn 1s ease;
+}
+
+h4 {
+  margin-top: 25px;
+  color: #555;
+}
+
+form p {
+  margin-bottom: 15px;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  transition: 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+input:focus,
+select:focus {
+  border-color: #ff416c;
+  box-shadow: 0 0 6px rgba(255, 65, 108, 0.4);
+  outline: none;
+}
+
+/* Submit Button */
+button {
+  width: 100%;
+  padding: 12px;
+  background: #ff416c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-top: 25px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  animation: pulseShadow 2s infinite ease-in-out;
+}
+
+button:hover {
+  background: #e03b5b;
+  transform: scale(1.02);
+}
+
+/* Animations */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulseShadow {
+  0% { box-shadow: 0 0 10px rgba(255, 65, 108, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(255, 65, 108, 0.4); }
+  100% { box-shadow: 0 0 10px rgba(255, 65, 108, 0.2); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+    color: #eee;
+  }
+
+  .register-inner {
+    background: #1e1e1e;
+  }
+
+  label {
+    color: #ddd;
+  }
+
+  input,
+  select {
+    background: #2c2c2c;
+    color: white;
+    border: 1px solid #555;
+  }
+
+  input:focus,
+  select:focus {
+    border-color: #ff9100;
+    box-shadow: 0 0 6px rgba(255, 145, 0, 0.4);
+  }
+
+  button {
+    background: #ff9100;
+  }
+
+  button:hover {
+    background: #e68a00;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    padding: 20px;
+  }
+
+  .register-inner {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h4 {
+    font-size: 16px;
+  }
+
+  input,
+  select,
+  button {
+    font-size: 16px;
+    padding: 12px;
+  }
+}

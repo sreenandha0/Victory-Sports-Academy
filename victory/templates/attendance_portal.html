@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Attendance Portal</title>
+  <link href="{% static 'attendence.css' %}" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-6 font-sans">
+  <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-bold text-[#022660] mb-6">📝 Attendance Portal - {{ selected_date }}</h1>
+
+    <!-- Attendance Form -->
+    <form method="POST">
+      {% csrf_token %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div>
+          <label for="date" class="block text-sm font-semibold mb-1">📅 Date:</label>
+          <input type="date" name="date" value="{{ selected_date }}" class="w-full border border-gray-300 rounded px-3 py-2" required>
+        </div>
+        <div>
+          <label for="batch_id" class="block text-sm font-semibold mb-1">🗂️ Select Batch:</label>
+          <select name="batch_id" class="w-full border border-gray-300 rounded px-3 py-2" required>
+            <option value="">-- Select --</option>
+            {% for batch in batches %}
+              <option value="{{ batch.id }}" {% if selected_batch and selected_batch.id == batch.id %}selected{% endif %}>{{ batch.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <!-- Students Section -->
+      {% if children %}
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden mb-6">
+            <thead class="bg-[#022660] text-white text-sm">
+              <tr>
+                <th class="px-4 py-2 text-left">Student</th>
+                <th class="px-4 py-2 text-center">Status</th>
+                <th class="px-4 py-2">Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for child in children %}
+              <tr class="border-t text-sm">
+                <td class="px-4 py-3">{{ child.full_name }}</td>
+                <td class="px-4 py-3 text-center">
+                  <select name="status_{{ child.id }}" class="border rounded px-2 py-1">
+                    <option value="Present"
+                      {% if existing_data.child_status.child_id == child.id and existing_data.child_status.status == 'Present' %}selected{% endif %}>
+                      Present
+                    </option>
+                    <option value="Absent"
+                      {% if existing_data.child_status.child_id == child.id and existing_data.child_status.status == 'Absent' %}selected{% endif %}>
+                      Absent
+                    </option>
+                    <option value="Leave"
+                      {% if existing_data.child_status.child_id == child.id and existing_data.child_status.status == 'Leave' %}selected{% endif %}>
+                      Leave
+                    </option>
+                  </select>
+                </td>
+                <td class="px-4 py-3">
+                  <input type="text" name="remarks_{{ child.id }}" class="w-full border rounded px-2 py-1"
+                    value="{% if existing_data.child_status.child_id == child.id %}{{ existing_data.child_status.remarks }}{% endif %}">
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" class="bg-[#022660] hover:bg-[#011b48] text-white font-bold py-2 px-6 rounded shadow">
+          💾 Save Attendance
+        </button>
+      {% else %}
+        <p class="text-gray-500">Please select a batch to load students.</p>
+      {% endif %}
+    </form>
+
+    <!-- Recent Attendance Records -->
+    <h2 class="text-lg font-semibold mt-10 mb-4">📆 Recent Attendance Entries</h2>
+    <table class="w-full bg-white border border-gray-200 text-sm rounded-lg overflow-hidden">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-2 text-left">Date</th>
+          <th class="p-2 text-left">Batch</th>
+          <th class="p-2 text-center">Present</th>
+          <th class="p-2 text-center">Absent</th>
+          <th class="p-2 text-center">Leave</th>
+          <th class="p-2 text-center">Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in past_attendance_summary %}
+        <tr class="border-t">
+          <td class="p-2">{{ rec.date }}</td>
+          <td class="p-2">{{ rec.batch__name }}</td>
+          <td class="p-2 text-center text-green-600">{{ rec.present }}</td>
+          <td class="p-2 text-center text-red-600">{{ rec.absent }}</td>
+          <td class="p-2 text-center text-yellow-600">{{ rec.leave }}</td>
+          <td class="p-2 text-center">
+            <a href="?batch_id={{ selected_batch.id }}&date={{ rec.date }}" class="text-blue-600 underline">Edit</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center text-gray-500 p-4">No records yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Attendance Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-6 font-sans">
+  <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-bold text-[#022660] mb-6">📝 Attendance Portal - {{ selected_date }}</h1>
+
+    <!-- Attendance Form -->
+    <form method="POST">
+      {% csrf_token %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div>
+          <label for="date" class="block text-sm font-semibold mb-1">📅 Date:</label>
+          <input type="date" name="date" value="{{ selected_date }}" class="w-full border border-gray-300 rounded px-3 py-2" required>
+        </div>
+        <div>
+          <label for="batch_id" class="block text-sm font-semibold mb-1">🗂️ Select Batch:</label>
+          <select name="batch_id" class="w-full border border-gray-300 rounded px-3 py-2" required>
+            <option value="">-- Select --</option>
+            {% for batch in batches %}
+              <option value="{{ batch.id }}" {% if selected_batch and selected_batch.id == batch.id %}selected{% endif %}>{{ batch.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <!-- Students Section -->
+      {% if children %}
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden mb-6">
+            <thead class="bg-[#022660] text-white text-sm">
+              <tr>
+                <th class="px-4 py-2 text-left">Student</th>
+                <th class="px-4 py-2 text-center">Status</th>
+                <th class="px-4 py-2">Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for child in children %}
+              <tr class="border-t text-sm">
+                <td class="px-4 py-3">{{ child.full_name }}</td>
+                <td class="px-4 py-3 text-center">
+                  <select name="status_{{ child.id }}" class="border rounded px-2 py-1">
+                    <option value="Present"
+                      {% if existing_data.child_status.child_id == child.id and existing_data.child_status.status == 'Present' %}selected{% endif %}>
+                      Present
+                    </option>
+                    <option value="Absent"
+                      {% if existing_data.child_status.child_id == child.id and existing_data.child_status.status == 'Absent' %}selected{% endif %}>
+                      Absent
+                    </option>
+                    <option value="Leave"
+                      {% if existing_data.child_status.child_id == child.id and existing_data.child_status.status == 'Leave' %}selected{% endif %}>
+                      Leave
+                    </option>
+                  </select>
+                </td>
+                <td class="px-4 py-3">
+                  <input type="text" name="remarks_{{ child.id }}" class="w-full border rounded px-2 py-1"
+                    value="{% if existing_data.child_status.child_id == child.id %}{{ existing_data.child_status.remarks }}{% endif %}">
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" class="bg-[#022660] hover:bg-[#011b48] text-white font-bold py-2 px-6 rounded shadow">
+          💾 Save Attendance
+        </button>
+      {% else %}
+        <p class="text-gray-500">Please select a batch to load students.</p>
+      {% endif %}
+    </form>
+
+    <!-- Recent Attendance Records -->
+    <h2 class="text-lg font-semibold mt-10 mb-4">📆 Recent Attendance Entries</h2>
+    <table class="w-full bg-white border border-gray-200 text-sm rounded-lg overflow-hidden">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-2 text-left">Date</th>
+          <th class="p-2 text-left">Batch</th>
+          <th class="p-2 text-center">Present</th>
+          <th class="p-2 text-center">Absent</th>
+          <th class="p-2 text-center">Leave</th>
+          <th class="p-2 text-center">Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in past_attendance_summary %}
+        <tr class="border-t">
+          <td class="p-2">{{ rec.date }}</td>
+          <td class="p-2">{{ rec.batch__name }}</td>
+          <td class="p-2 text-center text-green-600">{{ rec.present }}</td>
+          <td class="p-2 text-center text-red-600">{{ rec.absent }}</td>
+          <td class="p-2 text-center text-yellow-600">{{ rec.leave }}</td>
+          <td class="p-2 text-center">
+            <a href="?batch_id={{ selected_batch.id }}&date={{ rec.date }}" class="text-blue-600 underline">Edit</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center text-gray-500 p-4">No records yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
+

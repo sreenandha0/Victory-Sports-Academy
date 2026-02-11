@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Enrolling in Victory Academy</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ionicons for navbar and other icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        /* Custom Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #EFF3FA;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8AADDE;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38547C;
+        }
+
+        /* Tab button active state styling */
+        .tab-btn.active {
+            background-color: #B8CDEC; /* Matches main content background */
+            color: #38547C;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* Inner shadow */
+            border-bottom: 2px solid #8AADDE; /* Highlight active tab */
+        }
+        .tab-btn:not(.active) {
+            background-color: #D1D9E6; /* Slightly lighter background for inactive tabs */
+            color: #38547C;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-[#EFF3FA] font-sans flex flex-col min-h-screen p-4">
+
+    <!-- Navbar (Copied from Parent Login Page) -->
+    <nav class="bg-[#38547C] p-4 rounded-b-lg mb-6">
+        <div class="container mx-auto flex justify-between items-center px-4 md:px-6 lg:px-8">
+            <div class="flex items-center w-full justify-center relative">
+                <!-- Back Button -->
+                <button onclick="history.back()" class="absolute left-0 text-[#EFF3FA] focus:outline-none p-2 rounded-full hover:bg-[#2e4161] transition duration-300 ease-in-out">
+                    <ion-icon name="caret-back-outline" class="w-8 h-8"></ion-icon>
+                </button>
+                <div class="flex items-center">
+                    <!-- Academy Logo/Icon (SVG from Parent Login Page) -->
+                    <svg class="w-8 h-8 mr-2 text-[#EFF3FA]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
+                                     10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 
+                                     0-8-3.59-8-8s3.59-8 8-8 
+                                     8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm-3 
+                                     0h2v2H8zm0 4h2v2H8zm8-4h-2v2h2zm0 
+                                     4h-2v2h2z"/>
+                    </svg>
+                    <!-- Academy Name -->
+                    <a href="#" class="text-[#EFF3FA] text-2xl font-bold tracking-wide">Victory Academy</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="tabs-container flex-grow max-w-4xl mx-auto w-full">
+        <div class="tabs flex justify-center space-x-2 sm:space-x-4 mb-4">
+            <button class="tab-btn active flex items-center py-3 px-4 sm:px-6 rounded-t-lg font-semibold text-sm sm:text-base transition-colors duration-300">
+                <ion-icon name="add-circle-outline" class="w-5 h-5 mr-2"></ion-icon><span>Enroll Children</span>
+            </button>
+            <button class="tab-btn flex items-center py-3 px-4 sm:px-6 rounded-t-lg font-semibold text-sm sm:text-base transition-colors duration-300" data-tab="tab-view">
+                <ion-icon name="people-outline" class="w-5 h-5 mr-2"></ion-icon><span>Enrolled Children</span>
+            </button>
+            <button class="tab-btn flex items-center py-3 px-4 sm:px-6 rounded-t-lg font-semibold text-sm sm:text-base transition-colors duration-300" data-tab="tab-profile">
+                <ion-icon name="person-circle-outline" class="w-5 h-5 mr-2"></ion-icon><span>Update Profile</span>
+            </button>
+        </div>
+
+        <div class="tab-content-container bg-[#B8CDEC] p-6 sm:p-8 rounded-xl shadow-lg">
+
+            <!-- Tab 1: Enroll Children -->
+            <div class="tab-content active" id="tab-enroll">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-xl sm:text-2xl font-bold text-[#38547C]">Enroll New Child</h4>
+                        <button type="button" class="bg-[#38547C] hover:bg-[#2e4161] text-[#EFF3FA] font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300 btn-add">
+                            <ion-icon name="add-outline" class="inline-block align-middle mr-1"></ion-icon> Add More
+                        </button>
+                    </div>
+
+                    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+                        {% csrf_token %}
+                        {{ formset.management_form }}
+                        <div id="form-container">
+                            {% for form in formset %}
+                                <div class="child-card bg-gray-50 p-4 rounded-lg shadow-sm mb-4 border border-gray-200">
+                                    {{ form.as_p }}
+                                    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors duration-300 text-sm btn-remove mt-2">
+                                        <ion-icon name="trash-outline" class="inline-block align-middle mr-1"></ion-icon> Remove
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="submit" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300 mt-3">
+                            Submit Enrollment
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tab 2: Enrolled Children -->
+            <div class="tab-content" id="tab-view">
+                <h4 class="text-xl sm:text-2xl font-bold text-[#38547C] mb-4">Already Enrolled Children</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for child in existing_children %}
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        {% if child.profile_image %}
+                            <img src="{{ child.profile_image.url }}" class="w-full h-48 object-cover rounded-t-lg" alt="{{ child.name }}">
+                        {% else %}
+                            <img src="https://placehold.co/600x400/D1D9E6/38547C?text=No+Image" class="w-full h-48 object-cover rounded-t-lg" alt="No Image">
+                        {% endif %}
+                        <div class="p-4">
+                            <h5 class="text-lg font-semibold text-[#38547C] mb-2">{{ child.name }}</h5>
+                            <p class="text-sm text-gray-700"><strong>Gender:</strong> {{ child.gender }}</p>
+                            <p class="text-sm text-gray-700"><strong>DOB:</strong> {{ child.dob }}</p>
+                            <p class="text-sm text-gray-700"><strong>School:</strong> {{ child.school }}</p>
+                            <p class="text-sm text-gray-700"><strong>Place:</strong> {{ child.place }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500 col-span-full">No children enrolled yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Tab 3: Update Profile (Placeholder) -->
+            <div class="tab-content" id="tab-profile">
+                <h4 class="text-xl sm:text-2xl font-bold text-[#38547C] mb-4">Update Profile</h4>
+                {% if existing_children %}
+                    <a href="{% url 'child_profile' existing_children.0.id %}" class="inline-block border border-[#8AADDE] text-[#8AADDE] hover:bg-[#8AADDE] hover:text-[#EFF3FA] font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300 mt-2">
+                        Update {{ existing_children.0.name }}'s Profile
+                    </a>
+                {% else %}
+                    <p class="text-gray-500">No children enrolled yet to update.</p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#38547C] text-[#EFF3FA] text-center py-4 mt-auto shadow-inner rounded-t-lg">
+        <p class="text-sm">&copy; 2025 Victory Academy. All rights reserved.</p>
+    </footer>
+
+    <!-- Template for dynamic form -->
+    <template id="empty-form-template">
+        <div class="child-card bg-gray-50 p-4 rounded-lg shadow-sm mb-4 border border-gray-200">
+            __FORM_HTML__
+            <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors duration-300 text-sm btn-remove mt-2">
+                <ion-icon name="trash-outline" class="inline-block align-middle mr-1"></ion-icon> Remove
+            </button>
+        </div>
+    </template>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab functionality
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const tabId = button.dataset.tab || 'tab-enroll'; // Default to enroll tab if no data-tab
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Set initial active tab
+            document.querySelector('.tab-btn').classList.add('active');
+            document.getElementById('tab-enroll').classList.add('active');
+
+            // Add form dynamically
+            const formContainer = document.getElementById('form-container');
+            const addButton = document.querySelector('.btn-add');
+            const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+            // Ensure formset.empty_form.as_p is properly escaped for JS
+            const emptyFormHtml = `{{ formset.empty_form.as_p|escapejs }}`;
+
+            addButton.addEventListener('click', () => {
+                const newFormIndex = parseInt(totalForms.value);
+                const newFormHtml = emptyFormHtml.replace(/__prefix__/g, newFormIndex);
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('child-card', 'bg-gray-50', 'p-4', 'rounded-lg', 'shadow-sm', 'mb-4', 'border', 'border-gray-200');
+                wrapper.innerHTML = newFormHtml + `
+                    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors duration-300 text-sm btn-remove mt-2">
+                        <ion-icon name="trash-outline" class="inline-block align-middle mr-1"></ion-icon> Remove
+                    </button>
+                `;
+                formContainer.appendChild(wrapper);
+                totalForms.value = newFormIndex + 1;
+            });
+
+            // Remove child form
+            formContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('btn-remove') || e.target.closest('.btn-remove')) {
+                    const button = e.target.closest('.btn-remove');
+                    if (button) {
+                        button.closest('.child-card').remove();
+                        // Optional: Re-index forms if needed for backend processing,
+                        // but Django formsets usually handle gaps.
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+from django.db import models
+
+class StudentRegistration(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+    ]
+
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    school_name = models.CharField(max_length=150)
+    date_of_birth = models.DateField()
+    whatsapp_number = models.CharField(max_length=15)
+    alternative_number = models.CharField(max_length=15, blank=True, null=True)
+    place = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name

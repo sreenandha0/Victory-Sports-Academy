@@ -1,0 +1,641 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victory Academy - Football Coaching</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="{% static 'css/index .css' %}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Extend Tailwind CSS theme with your custom colors */
+        /* Tailwind configuration moved to a script tag for dynamic loading */
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-navy-blue': '#06235d',   /* Primary: Navbar, footer, deep background */
+                        'slate-gray': '#677991',       /* Secondary: Subheadings, descriptions, labels */
+                        'light-gray-blue': '#d3d8dd',  /* Page background, containers, section background */
+                        'vibrant-orange': '#FF8C00',   /* Accent: Buttons, CTAs, highlights */
+                        'bright-green': '#4CAF50',     /* Secondary Accent: Buttons, highlights */
+                        'ebony': '#060712',            /* Footer background, primary text color */
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 12px rgba(0, 0, 0, 0.08)',
+                        'medium': '0 8px 20px rgba(0, 0, 0, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS variables for direct use if needed */
+        :root {
+            --deep-navy-blue: #06235d;
+            --slate-gray: #677991;
+            --light-gray-blue: #d3d8dd;
+            --vibrant-orange: #FF8C00;
+            --bright-green: #4CAF50;
+            --ebony: #060712;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-gray-blue); /* Page background */
+            color: var(--ebony); /* Primary text color */
+        }
+
+        /* Gradient for primary buttons and elements */
+        .btn-primary-gradient {
+            background: linear-gradient(to right, #080a1b, #022660, #334c78, #c9d1d8);
+        }
+        .btn-primary-gradient:hover {
+            background: linear-gradient(to left, #080a1b, #022660, #334c78, #c9d1d8);
+        }
+
+        /* Subtle gradient for bright green buttons (retained if needed for other elements) */
+        .btn-green-gradient {
+            background-image: linear-gradient(to right, var(--bright-green), #3E9C41);
+        }
+        .btn-green-gradient:hover {
+            background-image: linear-gradient(to right, #3E9C41, var(--bright-green));
+        }
+
+        /* Circular icon styling - NOW USING THE NEW GRADIENT */
+        .circular-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 72px; /* Increased size for prominence */
+            height: 72px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #334c78, #022660, #080a1b);
+            color: white;
+            font-size: 2.5rem; /* Larger icon size */
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .circular-icon:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Background overlay for hero section */
+        .hero-overlay {
+            background: linear-gradient(to bottom, #000421, #022660, #334c78);
+        }
+
+        /* Parallax Card Styles */
+        .parallax-card-container {
+            perspective: 1000px; /* For 3D effect */
+        }
+
+        .parallax-card {
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out; /* Smooth transition for mouse movement */
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.1s ease-out; /* Smooth transition for layers */
+        }
+
+        /* Typewriter Animation */
+        .typewriter-text {
+            overflow: hidden; /* Ensures the text is hidden until typed */
+            white-space: nowrap; /* Keeps text on a single line */
+            border-right: .15em solid var(--vibrant-orange); /* Blinking cursor */
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        /* Typing animation */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* Blinking cursor animation */
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--vibrant-orange); }
+        }
+
+        /* Gradient Border Effect - NOW USING THE NEW GRADIENT */
+        .gradient-border {
+            border: 4px solid transparent;
+            background: linear-gradient(var(--light-gray-blue), var(--light-gray-blue)) padding-box,
+                        linear-gradient(to right, #022660, #334c78) border-box;
+            background-origin: border-box;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Accordion Styles */
+        .accordion-header {
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s ease;
+        }
+        .accordion-header:hover {
+            background-color: rgba(6, 35, 93, 0.05); /* Light hover effect */
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 500px; /* Sufficiently large value for content */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-icon.rotate {
+            transform: rotate(90deg);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            max-width: 90%;
+            width: 500px;
+            position: relative;
+        }
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+        .modal-close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--slate-gray);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navbar Section -->
+    <header class="bg-deep-navy-blue text-white shadow-medium">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Logo Placeholder -->
+                <!-- IMPORTANT: Please replace 'https://placehold.co/40x40/d3d8dd/06235d?text=VA' with your actual logo's PUBLIC URL -->
+                <img src="{% static 'images\rsz_whatsapp_image_2025-05-12_at_203817_e093d0f6-removebg-preview.png' %}" alt="Victory Academy Logo" class="rounded-full w-10 h-10">
+                <a href="#" class="text-3xl font-extrabold text-light-gray-blue tracking-wide">VICTORY ACADEMY</a>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Home</a>
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Programs</a>
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Coaches</a>
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Testimonials</a>
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Contact</a>
+                <!-- Coach Button - Now with gradient -->
+                <a href="{% url 'login_coach' %}" class="px-6 py-2 rounded-lg text-white font-semibold shadow-md btn-primary-gradient transition duration-300">Coach</a>
+                <!-- Parent Button - Now with gradient -->
+                <a href="{% url 'login_parent' %}" class="px-6 py-2 rounded-lg text-white font-semibold shadow-md btn-primary-gradient transition duration-300">Parent</a>
+            </div>
+            <!-- Mobile Menu Button (Hamburger Icon) -->
+            <button class="md:hidden text-light-gray-blue focus:outline-none" id="mobile-menu-button">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden bg-deep-navy-blue py-4">
+            <div class="flex flex-col items-center space-y-4">
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Home</a>
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Programs</a>
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Coaches</a>
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Testimonials</a>
+                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Contact</a>
+                <a href="#" class="px-6 py-2 rounded-lg text-white font-semibold shadow-md w-max btn-primary-gradient transition duration-300">Coach</a>
+                <a href="#" class="px-6 py-2 rounded-lg text-white font-semibold shadow-md w-max btn-primary-gradient transition duration-300">Parent</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="flex-grow">
+        <section class="relative bg-cover bg-center h-[600px] md:h-[700px] flex items-center justify-center text-center"
+                         style="background-image: url('https://placehold.co/1920x1080/06235d/677991?text=KIDS+TRAINING+FOOTBALL');">
+            <div class="absolute inset-0 hero-overlay"></div>
+            <div class="container mx-auto px-4 relative z-10">
+                <h1 id="hero-title" class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-tight text-light-gray-blue drop-shadow-lg typewriter-text">
+                    <!-- Text will be typed by JS -->
+                </h1>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto text-light-gray-blue opacity-90 mb-10">
+                    Victory Academy offers elite football coaching, fostering talent, discipline, and passion in every aspiring athlete.
+                </p>
+                <a href="#" class="px-10 py-4 rounded-full btn-primary-gradient text-white font-bold text-xl hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    Discover Programs
+                </a>
+            </div>
+        </section>
+
+       <!-- Parallax Card Section -->
+{% comment %} <section class="bg-white py-16 md:py-24">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-ebony mb-12">Experience Our Dynamic Training</h2>
+
+    <div class="flex justify-center items-center">
+      <div id="parallax-card-container" class="parallax-card-container relative w-full max-w-lg h-80 rounded-xl overflow-hidden shadow-medium mx-auto">
+        <div id="parallax-card" class="parallax-card absolute inset-0 flex items-center justify-center bg-deep-navy-blue rounded-xl overflow-hidden">
+
+          <!-- Floating Football Icon -->
+          <div class="parallax-layer animate-bounce-slow z-10" data-depth="0.2">
+            <img src="https://placehold.co/150x150/d3d8dd/06235d?text=⚽" alt="Football Icon" class="w-32 h-32 opacity-80" />
+          </div>
+
+          <!-- Center Text -->
+          <div class="parallax-layer z-20" data-depth="0.4">
+            <p class="text-light-gray-blue text-3xl font-bold animate-fade-in-up">Skill. Dedication. Victory.</p>
+          </div>
+
+          <!-- Trophy Icon with Floating Animation -->
+          <div class="parallax-layer absolute bottom-4 right-4 animate-float z-10" data-depth="0.6">
+            <img src="https://placehold.co/80x80/FF8C00/FFFFFF?text=🏆" alt="Trophy Icon" class="w-20 h-20 opacity-90" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> {% endcomment %}
+
+
+        <!-- About Us Section -->
+        <section class="bg-light-gray-blue py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">About Victory Academy</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="relative rounded-xl overflow-hidden shadow-medium">
+                        <img src="https://placehold.co/600x400/677991/d3d8dd?text=ACADEMY+OVERVIEW" alt="Academy Overview" class="w-full h-auto object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-deep-navy-blue to-transparent opacity-60"></div>
+                    </div>
+                    <div class="text-center lg:text-left">
+                        <p class="text-slate-gray text-lg leading-relaxed mb-6">
+                            Victory Academy is dedicated to developing the next generation of football stars. Our comprehensive training methodology focuses on technical proficiency, tactical understanding, physical conditioning, and mental fortitude.
+                        </p>
+                        <p class="text-slate-gray text-lg leading-relaxed mb-8">
+                            We provide a supportive and challenging environment where every player can thrive, guided by experienced coaches who are passionate about the beautiful game.
+                        </p>
+                        <a href="#" class="px-8 py-3 rounded-lg bg-deep-navy-blue text-light-gray-blue font-semibold hover:bg-deep-navy-blue/80 transition duration-300 shadow-md">Our Philosophy</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Training Programs Section -->
+        <section class="bg-white py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">Our Training Programs</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Program Card 1 -->
+                    <div class="bg-light-gray-blue p-6 rounded-xl shadow-soft gradient-border transform hover:-translate-y-2 transition duration-300">
+                        <div class="circular-icon mx-auto mb-4">⚽</div>
+                        <h3 class="text-2xl font-semibold text-deep-navy-blue mb-3">Foundational Skills</h3>
+                        <p class="text-slate-gray mb-4">Mastering the basics: dribbling, passing, and shooting for young players.</p>
+                        <a href="#" class="text-vibrant-orange hover:text-bright-green font-medium transition duration-300">Learn More &rarr;</a>
+                    </div>
+                    <!-- Program Card 2 -->
+                    <div class="bg-light-gray-blue p-6 rounded-xl shadow-soft gradient-border transform hover:-translate-y-2 transition duration-300">
+                        <div class="circular-icon mx-auto mb-4">📈</div>
+                        <h3 class="text-2xl font-semibold text-deep-navy-blue mb-3">Advanced Tactics</h3>
+                        <p class="text-slate-gray mb-4">In-depth tactical understanding and strategic play for competitive teams.</p>
+                        <a href="#" class="text-vibrant-orange hover:text-bright-green font-medium transition duration-300">Learn More &rarr;</a>
+                    </div>
+                    <!-- Program Card 3 -->
+                    <div class="bg-light-gray-blue p-6 rounded-xl shadow-soft gradient-border transform hover:-translate-y-2 transition duration-300">
+                        <div class="circular-icon mx-auto mb-4">💪</div>
+                        <h3 class="text-2xl font-semibold text-deep-navy-blue mb-3">Physical Conditioning</h3>
+                        <p class="text-slate-gray mb-4">Building strength, speed, and endurance tailored for football athletes.</p>
+                        <a href="#" class="text-vibrant-orange hover:text-bright-green font-medium transition duration-300">Learn More &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coach Profiles Section -->
+        <section class="bg-light-gray-blue py-16 md:py-24">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">Meet Our Coaches</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for coach in coaches %}
+            <div class="bg-white p-6 rounded-xl shadow-soft gradient-border text-center transform hover:-translate-y-2 transition duration-300">
+                <img src="{% if coach.photo %}{{ coach.photo.url }}{% else %}https://placehold.co/120x120/677991/d3d8dd?text=Coach{% endif %}" 
+                     alt="Coach Profile" 
+                     class="rounded-full w-32 h-32 object-cover mx-auto mb-4 border-4 
+                     {% cycle 'border-vibrant-orange' 'border-bright-green' 'border-deep-navy-blue' %}">
+                
+                <h3 class="text-2xl font-semibold text-deep-navy-blue mb-2">{{ coach.full_name }}</h3>
+                <p class="text-slate-gray text-lg mb-3">{{ coach.qualification }}</p>
+                <p class="text-slate-gray text-sm">{{ coach.experience_years }} years of experience</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Image Gallery Section -->
+<section class="bg-white py-16 md:py-24">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">Image Gallery</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {% for image in images %}
+      <div class="bg-light-gray-blue rounded-xl overflow-hidden shadow-soft transform hover:scale-105 transition duration-300">
+        <img src="{{ image.image.url }}" alt="{{ image.title }}"
+             class="w-full h-60 object-cover object-center" />
+        <div class="p-4 text-center">
+          <p class="text-deep-navy-blue font-semibold text-sm">{{ image.title }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+        <!-- Accordion Section (FAQ Example) -->
+        <section class="bg-white py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">Frequently Asked Questions</h2>
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <!-- Accordion Item 1 -->
+                    <div class="rounded-lg shadow-soft overflow-hidden border border-slate-gray">
+                        <button class="accordion-header flex justify-between items-center w-full p-5 bg-light-gray-blue text-deep-navy-blue font-semibold text-lg" aria-expanded="false" aria-controls="accordion-content-1">
+                            <span>What age groups do you coach?</span>
+                            <svg class="accordion-icon w-6 h-6 text-slate-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                        <div id="accordion-content-1" class="accordion-content px-5 text-slate-gray" aria-hidden="true">
+                            <p>We offer coaching programs for various age groups, typically starting from U6 (Under 6) up to U18 (Under 18). Please check our Programs section for specific age group availability.</p>
+                        </div>
+                    </div>
+                    <!-- Accordion Item 2 -->
+                    <div class="rounded-lg shadow-soft overflow-hidden border border-slate-gray">
+                        <button class="accordion-header flex justify-between items-center w-full p-5 bg-light-gray-blue text-deep-navy-blue font-semibold text-lg" aria-expanded="false" aria-controls="accordion-content-2">
+                            <span>What is your coaching philosophy?</span>
+                            <svg class="accordion-icon w-6 h-6 text-slate-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                        <div id="accordion-content-2" class="accordion-content px-5 text-slate-gray" aria-hidden="true">
+                            <p>Our philosophy centers on holistic player development, focusing on technical skills, tactical understanding, physical fitness, and mental resilience. We aim to foster a love for the game while building character.</p>
+                        </div>
+                    </div>
+                    <!-- Accordion Item 3 -->
+                    <div class="rounded-lg shadow-soft overflow-hidden border border-slate-gray">
+                        <button class="accordion-header flex justify-between items-center w-full p-5 bg-light-gray-blue text-deep-navy-blue font-semibold text-lg" aria-expanded="false" aria-controls="accordion-content-3">
+                            <span>How can I register my child?</span>
+                            <svg class="accordion-icon w-6 h-6 text-slate-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                        <div id="accordion-content-3" class="accordion-content px-5 text-slate-gray" aria-hidden="true">
+                            <p>You can register your child by visiting our Programs page and selecting the desired program. Follow the instructions to complete the registration form and payment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Call to Action for Modal -->
+        <section class="bg-deep-navy-blue py-16 md:py-24 text-center">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-light-gray-blue mb-6">Ready to Join Victory Academy?</h2>
+                <p class="text-lg md:text-xl text-light-gray-blue opacity-90 mb-10">
+                    Get in touch with us to learn more about our programs and how we can help your child achieve their football dreams.
+                </p>
+                <button id="open-contact-modal" class="px-10 py-4 rounded-full btn-primary-gradient text-white font-bold text-xl hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                    Contact Us Today!
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-ebony text-light-gray-blue py-8 md:py-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left md:text-center mb-8">
+                <div>
+                    <h3 class="text-xl font-bold text-vibrant-orange mb-4">Victory Academy</h3>
+                    <p class="text-slate-gray text-sm">
+                        Dedicated to developing football talent and fostering a love for the game.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-vibrant-orange mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300">Home</a></li>
+                        <li><a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300">Programs</a></li>
+                        <li><a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300">About Us</a></li>
+                        <li><a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-vibrant-orange mb-4">Contact Us</h3>
+                    <p class="text-slate-gray text-sm mb-2">Email: info@victoryacademy.com</p>
+                    <p class="text-slate-gray text-sm mb-4">Phone: +1 (123) 456-7890</p>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <!-- Social Media Icons (placeholders) -->
+                        <a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300 text-2xl">FB</a>
+                        <a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300 text-2xl">TW</a>
+                        <a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300 text-2xl">IG</a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-slate-gray opacity-30 my-8">
+            <p class="text-sm text-slate-gray">&copy; 2024 Victory Academy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal Structure -->
+    <div id="contact-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close-button" aria-label="Close modal">&times;</button>
+            <h3 class="text-2xl font-bold text-deep-navy-blue mb-4">Get in Touch</h3>
+            <p class="text-slate-gray mb-6">Fill out the form below and we'll get back to you shortly.</p>
+            <form class="space-y-4">
+                <div>
+                    <label for="modal-name" class="block text-slate-gray text-sm font-medium mb-1">Name</label>
+                    <input type="text" id="modal-name" class="w-full p-3 border border-light-gray-blue rounded-md focus:outline-none focus:ring-2 focus:ring-vibrant-orange" placeholder="Your Name">
+                </div>
+                <div>
+                    <label for="modal-email" class="block text-slate-gray text-sm font-medium mb-1">Email</label>
+                    <input type="email" id="modal-email" class="w-full p-3 border border-light-gray-blue rounded-md focus:outline-none focus:ring-2 focus:ring-vibrant-orange" placeholder="Your Email">
+                </div>
+                <div>
+                    <label for="modal-message" class="block text-slate-gray text-sm font-medium mb-1">Message</label>
+                    <textarea id="modal-message" rows="4" class="w-full p-3 border border-light-gray-blue rounded-md focus:outline-none focus:ring-2 focus:ring-vibrant-orange" placeholder="Your Message"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 rounded-md btn-primary-gradient text-white font-semibold hover:shadow-lg transition duration-300">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Parallax Card Effect ---
+        const parallaxCardContainer = document.getElementById('parallax-card-container');
+        const parallaxCard = document.getElementById('parallax-card');
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+
+        if (parallaxCardContainer && parallaxCard && parallaxLayers.length > 0) {
+            parallaxCardContainer.addEventListener('mousemove', (e) => {
+                const rect = parallaxCardContainer.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                const offsetX = (e.clientX - centerX) / (rect.width / 2); // -1 to 1
+                const offsetY = (e.clientY - centerY) / (rect.height / 2); // -1 to 1
+
+                // Apply a slight rotation to the whole card
+                const rotateY = offsetX * 10; // Max 10 degrees
+                const rotateX = -offsetY * 10; // Max 10 degrees
+
+                parallaxCard.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+
+                // Move individual layers
+                parallaxLayers.forEach(layer => {
+                    const depth = parseFloat(layer.dataset.depth);
+                    const layerX = offsetX * depth * 20; // Adjust multiplier for stronger/weaker effect
+                    const layerY = offsetY * depth * 20;
+
+                    layer.style.transform = `translate3d(${layerX}px, ${layerY}px, 0)`;
+                });
+            });
+
+            // Reset effect when mouse leaves
+            parallaxCardContainer.addEventListener('mouseleave', () => {
+                parallaxCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
+                parallaxLayers.forEach(layer => {
+                    layer.style.transform = `translate3d(0, 0, 0)`;
+                });
+            });
+        }
+
+        // --- Typewriter Animation ---
+        const heroTitle = document.getElementById('hero-title');
+        const textToType = "Train Like a Champion. Achieve Greatness.";
+        let charIndex = 0;
+        const typingSpeed = 75; // milliseconds per character
+
+        function typeWriter() {
+            if (heroTitle && charIndex < textToType.length) {
+                heroTitle.innerHTML += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, typingSpeed);
+            }
+        }
+
+        // --- Accordion Functionality ---
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling; // The content div
+                const icon = header.querySelector('.accordion-icon'); // The SVG icon
+
+                // Toggle 'open' class on content
+                content.classList.toggle('open');
+                // Toggle 'rotate' class on icon
+                icon.classList.toggle('rotate');
+
+                // Update ARIA attributes for accessibility
+                const isExpanded = header.getAttribute('aria-expanded') === 'true';
+                header.setAttribute('aria-expanded', !isExpanded);
+                content.setAttribute('aria-hidden', isExpanded);
+            });
+        });
+
+        // --- Modal Functionality ---
+        const openContactModalButton = document.getElementById('open-contact-modal');
+        const contactModal = document.getElementById('contact-modal');
+        const modalCloseButton = contactModal.querySelector('.modal-close-button');
+        const modalContent = contactModal.querySelector('.modal-content'); // Get the content to prevent closing when clicking inside
+
+        // Function to open the modal
+        function openModal() {
+            contactModal.classList.add('open');
+            contactModal.setAttribute('aria-hidden', 'false');
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            contactModal.classList.remove('open');
+            contactModal.setAttribute('aria-hidden', 'true');
+        }
+
+        // Event listener to open modal
+        if (openContactModalButton) {
+            openContactModalButton.addEventListener('click', openModal);
+        }
+
+        // Event listener to close modal from close button
+        if (modalCloseButton) {
+            modalCloseButton.addEventListener('click', closeModal);
+        }
+
+        // Event listener to close modal when clicking outside content
+        if (contactModal) {
+            contactModal.addEventListener('click', (e) => {
+                if (!modalContent.contains(e.target) && e.target === contactModal) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Initialize typewriter effect on page load
+        window.onload = typeWriter;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/parallax-js@3.1.0/dist/parallax.min.js"></script>
+<script>
+  const scene = document.getElementById('parallax-card');
+  new Parallax(scene);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Virtual environment
+venv/
+../venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Database
+db.sqlite3
+
+# Media files
+media/
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db

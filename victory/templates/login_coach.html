@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Login | Victory Sports Academy</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN (Mandatory, even if not directly used for this specific page) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom styles for the chart container, as per instructions */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Example max-width */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px; /* Max height */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #EFF3FA; /* Alice Blue */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8AADDE; /* Jordy Blue */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38547C; /* Yinmn Blue */
+        }
+
+        /* Style for Django messages */
+        .message-error {
+            color: #dc2626; /* Tailwind red-600 */
+            background-color: #fee2e2; /* Tailwind red-100 */
+            border: 1px solid #ef4444; /* Tailwind red-500 */
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .message-success {
+            color: #16a34a; /* Tailwind green-600 */
+            background-color: #dcfce7; /* Tailwind green-100 */
+            border: 1px solid #22c55e; /* Tailwind green-500 */
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .message-info {
+            color: #2563eb; /* Tailwind blue-600 */
+            background-color: #eff6ff; /* Tailwind blue-100 */
+            border: 1px solid #3b82f6; /* Tailwind blue-500 */
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="bg-[#EFF3FA] font-sans flex flex-col items-center justify-center min-h-screen p-4">
+    <!-- Chosen Palette: Website Elements Color Palette -->
+    <!-- Application Structure Plan: This single-page application is designed for coach login, featuring a prominent header for branding and a central motto. The main content is structured into a responsive two-column layout: a Left Pane showcasing "Coach Tools & Benefits" with a list of features, and a Right Pane containing the "Sign In Form" with standard login fields and navigational links. On smaller screens, the columns stack vertically (Motto -> Sign In Form -> Benefits). A subtle footer provides additional information. This structure was chosen to inform coaches about the value proposition while providing a clear and accessible login mechanism, enhancing user understanding and engagement. -->
+    <!-- Visualization & Content Choices: The primary goal is user authentication and informing coaches about the academy's benefits. This is achieved through: 1) Textual content for branding, motto, and benefit lists, using Unicode characters (📊, 📝, etc.) for visual appeal. 2) Standard HTML form elements for login. 3) Buttons for submission and external links. No complex data visualizations are needed for this page; the focus is on clear information architecture and interactive form elements. NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Global Header / Branding -->
+    <header class="text-center mb-8 max-w-2xl w-full">
+        <div class="flex items-center justify-center mb-4">
+            <img src="{% static 'images\vic logo.png' %}" alt="Victory Sports Academy Logo" class="rounded-full border-2 border-[#8AADDE] mr-4">
+            <h1 class="text-4xl font-bold text-[#38547C]">Victory Sports Academy</h1>
+        </div>
+        <p class="text-xl italic font-light text-[#8AADDE] px-4">“Empowering coaches to shape future champions.”</p>
+    </header>
+
+    <!-- Main Content - Two Column Layout -->
+    <div class="bg-[#B8CDEC] p-8 rounded-xl shadow-lg w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+
+        <!-- Left Pane – Coach Benefits -->
+        <div class="md:border-r md:border-[#BBC7D8] md:pr-8 pb-8 md:pb-0">
+            <h2 class="text-2xl font-bold text-[#38547C] mb-4 flex items-center">
+                <span class="mr-2 text-3xl">⚽</span> Coach Tools & Benefits
+            </h2>
+            <ul class="space-y-3 text-[#38547C]">
+                <li class="flex items-center"><span class="text-xl mr-2">📊</span> Manage student performance</li>
+                <li class="flex items-center"><span class="text-xl mr-2">📝</span> Record attendance & events</li>
+                <li class="flex items-center"><span class="text-xl mr-2">💬</span> Send feedback to parents</li>
+                <li class="flex items-center"><span class="text-xl mr-2">🏋️</span> Schedule training sessions</li>
+                <li class="flex items-center"><span class="text-xl mr-2">📅</span> Access match history & progress</li>
+            </ul>
+        </div>
+
+        <!-- Right Pane – Sign In Form -->
+        <div>
+            <h2 class="text-2xl font-bold text-[#38547C] mb-6 text-center">Coach Login</h2>
+
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'error' %}message-error{% elif message.tags == 'success' %}message-success{% else %}message-info{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label for="username" class="block text-[#38547C] text-sm font-bold mb-2">Username:</label>
+                    <input type="text" name="username" id="username" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-[#38547C] text-sm font-bold mb-2">Password:</label>
+                    <input type="password" name="password" id="password" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent">
+                </div>
+
+                <button type="submit" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
+                    Login
+                </button>
+            </form>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center mt-6 text-sm space-y-2 sm:space-y-0">
+                <a class="text-[#38547C] hover:text-[#8AADDE] transition-colors duration-300" href="#">Forgot Password?</a>
+                <a class="text-[#38547C] hover:text-[#8AADDE] transition-colors duration-300" href="{% url 'register_coach' %}">Register as Coach</a>
+            </div>
+        </div>
+
+        <!-- Mandatory Chart Container (hidden as not needed for this specific page) -->
+        <div class="chart-container hidden mt-8">
+            <canvas id="myChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-8 text-center text-sm text-gray-600">
+        <small>&copy; 2025 Victory Sports Academy. All rights reserved.</small>
+    </footer>
+
+    <script>
+        // Initialize Chart.js even if not used, as per instructions
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, /* Critical for responsiveness */
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label.length > 16 ? context[0].label.substring(0, 16) + '...' : context[0].label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function(value, index, ticks) {
+                                    const label = this.getLabelForValue(value);
+                                    return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

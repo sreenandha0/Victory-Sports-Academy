@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Login - Victory Sports Academy</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Ionicons for navbar icon -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        /* Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #EFF3FA;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8AADDE;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38547C;
+        }
+
+        /* Message Styling */
+        .message-error {
+            color: #dc2626;
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .message-success {
+            color: #16a34a;
+            background-color: #dcfce7;
+            border: 1px solid #22c55e;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+        .message-info {
+            color: #2563eb;
+            background-color: #eff6ff;
+            border: 1px solid #3b82f6;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="bg-[#EFF3FA] font-sans flex flex-col min-h-screen p-4">
+
+    <!-- Navbar -->
+    <nav class="bg-[#38547C] p-4 navbar-container rounded-b-lg mb-6">
+        <div class="container mx-auto flex justify-between items-center px-4 md:px-6 lg:px-8">
+            <div class="flex items-center w-full justify-center relative">
+                <!-- Back Button -->
+                <button onclick="history.back()" class="absolute left-0 text-[#EFF3FA] focus:outline-none p-2 rounded-full hover:bg-[#2e4161] transition duration-300 ease-in-out">
+                    <ion-icon name="caret-back-outline" class="w-8 h-8"></ion-icon>
+                </button>
+                <div class="flex items-center">
+                    <!-- Academy Logo/Icon -->
+                    <svg class="w-8 h-8 mr-2 text-[#EFF3FA]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
+                                 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 
+                                 0-8-3.59-8-8s3.59-8 8-8 
+                                 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm-3 
+                                 0h2v2H8zm0 4h2v2H8zm8-4h-2v2h2zm0 
+                                 4h-2v2h2z"/>
+                    </svg>
+                    <!-- Academy Name -->
+                    <a href="#" class="text-[#EFF3FA] text-2xl font-bold tracking-wide">Victory Academy</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <div class="bg-[#B8CDEC] p-8 rounded-xl shadow-lg w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start flex-grow">
+
+        <!-- Left Column: Why Parents Use Victory Academy -->
+        <div class="md:border-r md:border-[#BBC7D8] md:pr-8 pb-8 md:pb-0">
+            <h2 class="text-2xl font-bold text-[#38547C] mb-4 flex items-center">
+                <span class="mr-2 text-3xl">👨‍👩‍👧‍👦</span> Why Parents Use Victory Academy
+            </h2>
+            <ul class="space-y-3 text-[#38547C]">
+                <li class="flex items-center"><span class="text-xl mr-2">&#x2705;</span> Monitor training attendance <span class="ml-auto text-xl">📅</span></li>
+                <li class="flex items-center"><span class="text-xl mr-2">&#x2705;</span> View performance reports <span class="ml-auto text-xl">📈</span></li>
+                <li class="flex items-center"><span class="text-xl mr-2">&#x2705;</span> Communicate with coaches <span class="ml-auto text-xl">📬</span></li>
+                <li class="flex items-center"><span class="text-xl mr-2">&#x2705;</span> Event calendar and alerts <span class="ml-auto text-xl">🗓️</span></li>
+                <li class="flex items-center"><span class="text-xl mr-2">&#x2705;</span> Access media gallery of matches <span class="ml-auto text-xl">🎥</span></li>
+                <li class="flex items-center"><span class="text-xl mr-2">&#x2705;</span> Feedback and progress tracking <span class="ml-auto text-xl">📝</span></li>
+                <li class="flex items-center"><span class="text-xl mr-2">&#x2705;</span> View fee & payment info <span class="ml-auto text-xl">💳</span></li>
+            </ul>
+        </div>
+
+        <!-- Right Column: Login Form -->
+        <div>
+            <h2 class="text-2xl font-bold text-[#38547C] mb-6 text-center">Parent Login</h2>
+
+            {% if messages %}
+                <div class="mb-4">
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'error' %}message-error{% elif message.tags == 'success' %}message-success{% else %}message-info{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label for="username" class="block text-[#38547C] text-sm font-bold mb-2">Username / Email:</label>
+                    <input type="text" name="username" id="username" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-[#38547C] text-sm font-bold mb-2">Password:</label>
+                    <input type="password" name="password" id="password" required
+                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent">
+                </div>
+
+                <button type="submit" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center mt-6 text-sm space-y-2 sm:space-y-0">
+                <a class="text-[#38547C] hover:text-[#8AADDE] transition-colors duration-300" href="#">Forgot Password?</a>
+                <a class="text-[#38547C] hover:text-[#8AADDE] transition-colors duration-300" href="{% url 'register_parent' %}">New Parent? Register Now</a>
+            </div>
+        </div>
+
+        <!-- Hidden Chart -->
+        <div class="chart-container hidden mt-8 md:col-span-2">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#38547C] text-[#EFF3FA] text-center py-4 mt-auto shadow-inner rounded-t-lg">
+        <p class="text-sm">&copy; 2025 Victory Academy. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Chart.js initialization remains largely the same.
+            // Consider if this chart is truly "hidden" and when/how it should be displayed.
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    // Truncate long labels for tooltips
+                                    return context[0].label.length > 16 ? context[0].label.substring(0, 16) + '...' : context[0].label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function(value) {
+                                    // Truncate long labels for x-axis ticks
+                                    const label = this.getLabelForValue(value);
+                                    return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

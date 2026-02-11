@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles if needed, but primarily using Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Basic styling for the donut chart placeholder */
+        .donut-chart-placeholder {
+            position: relative;
+            width: 128px; /* w-32 */
+            height: 128px; /* h-32 */
+            border-radius: 9999px; /* rounded-full */
+            background: conic-gradient(
+                #3b82f6 0% 30%, /* Blue for Sub A */
+                #22c55e 30% 60%, /* Green for Sub B */
+                #a855f7 60% 100% /* Purple for Sub C */
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .donut-chart-inner {
+            width: 80px; /* w-20 */
+            height: 80px; /* h-20 */
+            border-radius: 9999px; /* rounded-full */
+            background-color: white;
+            position: absolute;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen bg-gray-100 font-sans text-gray-800">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 text-white p-6 flex flex-col rounded-r-xl shadow-lg">
+        <div class="flex items-center mb-10">
+            <div class="w-8 h-8 bg-blue-500 rounded-full mr-3 flex items-center justify-center text-lg font-bold">N</div>
+            <h1 class="text-xl font-semibold">NoxaVoroe</h1>
+        </div>
+        <nav class="flex-grow">
+            <ul>
+                <li class="mb-2">
+                    <a href="#" id="nav-dashboard" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 bg-blue-700 text-white">
+                        <span class="mr-3 text-lg">🏠</span>
+                        <span class="font-medium">Dashboard Overview</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-performance" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">🏃</span>
+                        <span class="font-medium">Player Performance</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-schedule" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">🗓️</span>
+                        <span class="font-medium">Training Schedule</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-programs" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">📤</span>
+                        <span class="font-medium">Program Upload</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-attendance" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">✅</span>
+                        <span class="font-medium">Attendance Management</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-messaging" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">💬</span>
+                        <span class="font-medium">Messaging & Communication</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-notifications" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">🔔</span>
+                        <span class="font-medium">Notifications System</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-reports" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">📄</span>
+                        <span class="font-medium">Progress Reports</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-events" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">🏆</span>
+                        <span class="font-medium">Event & Tournament</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" id="nav-profile" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                        <span class="mr-3 text-lg">🧑‍🏫</span>
+                        <span class="font-medium">Coach Profile & Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="mt-auto pt-6 border-t border-gray-700">
+            <a href="#" id="nav-logout" class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 hover:bg-gray-700 text-gray-300">
+                <span class="mr-3 text-lg">🚪</span>
+                <span class="font-medium">Log out</span>
+            </a>
+            <p id="user-id-display" class="text-xs text-gray-500 mt-2">User ID: Loading...</p>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 lg:p-10">
+        <!-- Header -->
+        <header class="flex flex-col sm:flex-row items-center justify-between mb-8">
+            <h2 id="main-title" class="text-3xl font-bold mb-4 sm:mb-0">Dashboard Overview</h2>
+            <div class="flex items-center space-x-4 w-full sm:w-auto">
+                <div class="relative w-full sm:w-64">
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        class="w-full pl-10 pr-4 py-2 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+                    />
+                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
+                </div>
+                <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-lg font-bold text-gray-700">
+                    👤
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Section -->
+        <div id="content-area">
+            <!-- Content will be injected here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Firebase SDKs -->
+    
+</body>
+</html>
