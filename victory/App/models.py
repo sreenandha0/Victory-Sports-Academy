@@ -35,7 +35,11 @@ class Coach(models.Model):
 # ----------------------------
 # BATCH MODEL
 # ----------------------------
+# ----------------------------
+# BATCH MODEL
+# ----------------------------
 class Batch(models.Model):
+
     AGE_GROUP_CHOICES = [
         ('U8', 'Under 8'),
         ('U10', 'Under 10'),
@@ -46,11 +50,45 @@ class Batch(models.Model):
     ]
 
     name = models.CharField(max_length=100)
+
     sport = models.CharField(max_length=50)
-    age_group = models.CharField(max_length=20, choices=AGE_GROUP_CHOICES)
-    coach = models.ForeignKey(Coach, on_delete=models.SET_NULL, null=True, related_name='batches')
+
+    age_group = models.CharField(
+        max_length=20,
+        choices=AGE_GROUP_CHOICES
+    )
+
+    coach = models.ForeignKey(
+        Coach,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='batches'
+    )
+
+    # Batch Timing
+    start_time = models.TimeField(
+        null=True,
+        blank=True
+    )
+
+    end_time = models.TimeField(
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
+
+        if self.start_time and self.end_time:
+
+            return (
+                f"{self.name} "
+                f"({self.age_group}) "
+                f"- "
+                f"{self.start_time.strftime('%I:%M %p')} "
+                f"to "
+                f"{self.end_time.strftime('%I:%M %p')}"
+            )
+
         return f"{self.name} ({self.age_group})"
 
 
@@ -157,28 +195,58 @@ class ChildProfile(models.Model):
 # ATTENDANCE MODEL
 # ----------------------------
 class Attendance(models.Model):
+
     STATUS_CHOICES = [
         ('Present', 'Present'),
         ('Absent', 'Absent'),
         ('Leave', 'Leave'),
     ]
 
-    child = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='attendances')
-    coach = models.ForeignKey(Coach, on_delete=models.CASCADE, related_name='attendances_taken')
-    batch = models.ForeignKey(Batch, on_delete=models.CASCADE, related_name='attendance_batch', null=True, blank=True)
+    child = models.ForeignKey(
+        Child,
+        on_delete=models.CASCADE,
+        related_name='attendances'
+    )
+
+    coach = models.ForeignKey(
+        Coach,
+        on_delete=models.CASCADE,
+        related_name='attendances_taken'
+    )
+
+    batch = models.ForeignKey(
+        Batch,
+        on_delete=models.CASCADE,
+        related_name='attendance_batch',
+        null=True,
+        blank=True
+    )
+
     date = models.DateField(default=timezone.now)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Present')
-    remarks = models.TextField(blank=True, null=True)
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='Present'
+    )
+
+    remarks = models.TextField(
+        blank=True,
+        null=True
+    )
 
     class Meta:
-        unique_together = ('child', 'date')
+        unique_together = ('child', 'batch', 'date')
 
     def __str__(self):
+
         return f"{self.child.name} - {self.status} on {self.date}"
 
     def save(self, *args, **kwargs):
+
         if not self.batch and self.child:
             self.batch = self.child.batch
+
         super().save(*args, **kwargs)
 
 

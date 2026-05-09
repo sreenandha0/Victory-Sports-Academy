@@ -2,41 +2,207 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Vitory Football Coaching</title>
+    <title>Victory Football Coaching</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="author" content="FoodMart Team">
+    <meta name="author" content="Victory Academy Team">
     <meta name="keywords" content="eCommerce, Grocery, HTML Template, Bootstrap, Store">
-    <meta name="description" content="A clean and modern eCommerce template for grocery stores. Built with Bootstrap and responsive design.">
+    <meta name="description" content="Victory Football Academy Management Hub.">
 
-    <!-- Swiper Slider CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <!-- Bootstrap CSS + Icons CDN (place in <head> if not already added) -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Custom CSS (fixing broken static path) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
     <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'victory/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-style.css' %}">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --v-dark-bg: #080a1b;
+        --v-navy: #06235d;
+        --v-steel: #2d4373;
+        --v-teal: #2596be;
+        --v-blue: #0038a8;
+        --v-green: #4ca63b;
+        --v-orange: #ff8c00;
+        --v-gold: #d4af37;
+        --v-gray: #b2beb5;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--v-dark-bg);
+        color: #ffffff;
+        overflow-x: hidden;
+      }
+
+      /* Seamless Navigation Styling */
+      .navbar {
+        background: rgba(6, 35, 93, 0.4) !important;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(45, 67, 115, 0.2) !important;
+      }
+
+      .nav-link {
+        color: var(--v-gray) !important;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover, .nav-link.active {
+        color: #ffffff !important;
+        text-shadow: 0 0 10px rgba(37, 150, 190, 0.4);
+      }
+
+      .nav-link.active {
+        border-bottom: 2px solid var(--v-teal);
+      }
+
+      /* Ambient Glow Elements */
+      .ambient-glow-1 {
+        position: absolute;
+        top: -10%;
+        left: -10%;
+        width: 50vw;
+        height: 50vw;
+        background: rgba(0, 56, 168, 0.15);
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .ambient-glow-2 {
+        position: absolute;
+        bottom: 10%;
+        right: -10%;
+        width: 45vw;
+        height: 45vw;
+        background: rgba(37, 150, 190, 0.1);
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* Typography Updates */
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      .section-title {
+        color: #ffffff;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--v-orange), var(--v-teal));
+        border-radius: 2px;
+      }
+
+      /* Glassmorphic Card Redesign */
+      .glass-card {
+        background: rgba(6, 35, 93, 0.25) !important;
+        border: 1px solid rgba(45, 67, 115, 0.2) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-radius: 1.25rem !important;
+      }
+
+      .glass-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(37, 150, 190, 0.4) !important;
+        box-shadow: 0 15px 30px rgba(8, 10, 27, 0.5), 0 0 20px rgba(37, 150, 190, 0.15) !important;
+      }
+
+      /* Premium Buttons */
+      .btn-outline-custom {
+        border: 1px solid rgba(45, 67, 115, 0.6);
+        color: var(--v-gray);
+        background: rgba(6, 35, 93, 0.2);
+        backdrop-filter: blur(5px);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.75rem;
+        transition: all 0.3s ease;
+      }
+
+      .btn-outline-custom:hover {
+        border-color: var(--v-teal);
+        color: #ffffff;
+        background: var(--v-teal);
+        box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
+      }
+
+      /* Swiper Buttons */
+      .swiper-buttons .btn {
+        background: rgba(6, 35, 93, 0.4);
+        border: 1px solid rgba(45, 67, 115, 0.4);
+        color: #ffffff;
+        transition: all 0.3s ease;
+      }
+
+      .swiper-buttons .btn:hover {
+        background: var(--v-teal);
+        border-color: var(--v-teal);
+        box-shadow: 0 0 10px rgba(37, 150, 190, 0.3);
+      }
+
+      /* Custom Category items */
+      .category-item img {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid rgba(45, 67, 115, 0.3);
+        padding: 5px;
+        transition: all 0.4s ease;
+      }
+
+      .category-item:hover img {
+        border-color: var(--v-teal);
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(37, 150, 190, 0.25);
+      }
+
+      /* Footer Styling Override */
+      footer {
+        background-color: #050714 !important;
+        border-top: 1px solid rgba(45, 67, 115, 0.2) !important;
+      }
+    </style>
   </head>
 
-  <body>
+  <body class="selection:bg-victory-teal selection:text-white">
 
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <defs>
@@ -89,349 +255,306 @@
     </svg>
 
     <div class="preloader-wrapper">
-      <div class="preloader">
-      </div>
+      <div class="preloader"></div>
     </div>
 
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
 
- <header class="animate-fade">
-  <!-- Top Section -->
-  <div class="container-fluid">
-    <div class="row py-3 border-bottom align-items-center">
-
-      <!-- Logo / Title -->
-      <div class="col-lg-3 col-md-4 col-sm-12 text-center text-lg-start mb-3 mb-lg-0">
-        <div class="main-logo">
-          <a href="#" class="animate-charcter fs-4 fw-bold text-dark">VICTORY ACADEMY</a>
-          <div class="text-muted fs-6">Admin Panel</div>
-        </div>
-      </div>
-
-      <!-- Welcome Message -->
-      <div class="col-lg-3 col-md-4 col-sm-12 text-center text-md-start mb-3 mb-lg-0">
-        <h5 class="mb-0 text-muted">Welcome, <strong>{{ user.username }}</strong></h5>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="col-lg-6 col-md-12 d-flex flex-wrap justify-content-center justify-content-lg-end gap-2 align-items-center">
-
-        <!-- Notifications -->
-        <a href="#" class="btn btn-outline-success rounded-pill px-3 position-relative">
-          <i class="bi bi-bell"></i> Updates
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            3
-          </span>
-        </a>
-
-        <!-- Messages -->
-        <a href="#" class="btn btn-outline-secondary rounded-pill px-3">
-          <i class="bi bi-chat-dots"></i> Messages
-        </a>
-
-        <!-- Manage Fees -->
-        <a href="#" class="btn btn-outline-warning rounded-pill px-3">
-          <i class="bi bi-currency-rupee"></i> Fees
-        </a>
-
-        <!-- Logout -->
-        <a href="{% url 'logout' %}" class="btn btn-outline-danger rounded-pill px-3">
-          <i class="bi bi-box-arrow-right"></i> Logout
-        </a>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Admin Navigation Bar -->
-  <div class="container-fluid border-top">
-    <nav class="navbar navbar-expand-lg navbar-light">
-      <div class="container-fluid">
-
-        <!-- Toggler for Mobile -->
-        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Admin Nav Links -->
-        <div class="collapse navbar-collapse justify-content-center" id="adminNavbar">
-          <ul class="navbar-nav d-flex flex-column flex-lg-row gap-3 py-3 py-lg-0">
-            
-            <li class="nav-item">
-              <a class="nav-link active" href="">Dashboard</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'pending_coach_approvals' %}">Manage Coaches</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">Manage Parents</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">Manage Children</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">Events</a>
-            </li>
-
-          </ul>
-        </div>
-
-      </div>
-    </nav>
-  </div>
-</header>
-
-
-<section class="py-3 hero-section" style="background-image: url('{% static 'images/coaching2.jpg' %}'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;">
-  <!-- Dark Overlay -->
-  <div class="overlay" style="background-color: rgba(0, 0, 0, 0.6); position: absolute; top: 0; left: 0; height: 100%; width: 100%; z-index: 1;"></div>
-
-  <div class="container-fluid position-relative" style="z-index: 2;">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="banner-blocks">
-
-          <!-- Block 1 with Background Image -->
-          <div class="banner-ad large block-1 d-flex align-items-center">
-            <div class="row banner-content p-5 w-100">
-              <div class="content-wrapper col-lg-8 col-md-10 text-light">
-                <div class="categories my-3 text-warning fw-semibold text-uppercase">Admin Panel</div>
-                <h3 class="display-4 fw-bold">Victory Football Academy</h3>
-                <p class="lead">
-                  Welcome to the control center of excellence. Here, you manage registrations, monitor coaches and parents, track events, and steer Victory Academy toward success. Let’s shape the future — one kick at a time.
-                </p>
-                <a href="#dashboard-cards" class="btn btn-outline-light btn-lg text-uppercase fs-6 rounded-1 px-4 py-3 mt-3">Go to Dashboard</a>
+    <header class="relative z-10">
+      <div class="container-fluid py-4 px-4 px-lg-5" style="background: rgba(6, 35, 93, 0.15);">
+        <div class="row align-items-center g-3">
+          
+          <div class="col-lg-3 col-md-4 col-sm-12 text-center text-md-start">
+            <div class="main-logo">
+              <a href="#" class="fs-3 font-black text-white text-decoration-none tracking-tighter italic">
+                VICTORY <span class="text-victory-teal not-italic font-extrabold" style="color: var(--v-teal);">ACADEMY</span>
+              </a>
+              <div class="text-uppercase tracking-widest text-victory-gold font-bold small mt-1" style="color: var(--v-gold); font-size: 0.65rem;">
+                Admin Workspace
               </div>
             </div>
           </div>
 
+          <div class="col-lg-3 col-md-4 col-sm-12 text-center text-md-start">
+            <div class="d-inline-flex align-items-center gap-2 bg-navy-subtle px-3 py-2 rounded-pill border border-white-50" style="background: rgba(45,67,115,0.15); border-color: rgba(45,67,115,0.2) !important;">
+              <span class="bg-success rounded-circle" style="width: 8px; height: 8px; display: inline-block;"></span>
+              <span class="text-white-50 small font-semibold">Active: <strong class="text-white">{{ user.username }}</strong></span>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-12 d-flex flex-wrap justify-content-center justify-content-lg-end gap-2 align-items-center">
+            
+            <a href="#" class="btn btn-outline-custom rounded-pill px-3 position-relative">
+              <i class="bi bi-bell me-1"></i> Updates
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow" style="font-size: 0.6rem;">
+                3
+              </span>
+            </a>
+
+            <a href="#" class="btn btn-outline-custom rounded-pill px-3">
+              <i class="bi bi-chat-dots me-1"></i> Messages
+            </a>
+
+            <a href="#" class="btn btn-outline-custom rounded-pill px-3">
+              <i class="bi bi-currency-rupee me-1"></i> Fees
+            </a>
+
+            <a href="{% url 'logout' %}" class="btn rounded-pill px-3 font-bold text-uppercase tracking-wider text-xs border border-danger text-danger hover:bg-danger" style="font-size: 0.75rem; background: rgba(220,53,69,0.05); transition: 0.3s ease;" onmouseover="this.style.background='#dc3545';this.style.color='#fff';" onmouseout="this.style.background='rgba(220,53,69,0.05)';this.style.color='#dc3545';">
+              <i class="bi bi-box-arrow-right me-1"></i> Logout
+            </a>
+          </div>
+
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
+      <nav class="navbar navbar-expand-lg py-0">
+        <div class="container-fluid px-4 px-lg-5">
+          <button class="navbar-toggler ms-auto my-3 border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation" style="filter: invert(1);">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
+          <div class="collapse navbar-collapse justify-content-center" id="adminNavbar">
+            <ul class="navbar-nav d-flex flex-column flex-lg-row gap-lg-4 py-3 py-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" href="">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'pending_coach_approvals' %}">Manage Coaches</a>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'manage_enrolled_children' %}">Manage Students</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="">Events</a>
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'manage_batches' %}">Batch</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'add_batch' %}">Assign Coaches</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
 
+    <section class="py-5 position-relative overflow-hidden d-flex align-items-center" style="background-image: url('{% static 'images/coaching2.jpg' %}'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 420px; border-bottom: 1px solid rgba(45,67,115,0.25);">
+      <div class="overlay" style="background: linear-gradient(180deg, rgba(8,10,27,0.7) 0%, rgba(8,10,27,0.9) 100%); position: absolute; top: 0; left: 0; height: 100%; width: 100%; z-index: 1;"></div>
 
+      <div class="container-fluid position-relative px-4 px-lg-5" style="z-index: 2;">
+        <div class="row">
+          <div class="col-lg-8 col-md-11 text-light">
+            <span class="inline-block text-[10px] font-extrabold tracking-widest text-uppercase px-3 py-1.5 rounded-pill mb-3 border border-warning-50 text-warning" style="background: rgba(255,140,0,0.1); border: 1px solid rgba(255,140,0,0.2) !important; font-size: 0.75rem;">
+              Admin Control Panel
+            </span>
+            <h1 class="display-3 font-black text-white tracking-tight mt-2 mb-3">
+              Victory Football Academy
+            </h1>
+            <p class="text-white-50 leading-relaxed mb-4" style="max-width: 720px; font-size: 1.05rem;">
+              Welcome to the control center of excellence. Here, you manage registrations, monitor coaches and parents, track events, and steer Victory Academy toward success. Let’s shape the future — one kick at a time.
+            </p>
+           
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <section class="py-5 overflow-hidden">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-
-        <!-- Section Heading with Title and Navigation Buttons -->
-        <div class="section-header d-flex flex-wrap justify-content-between align-items-center mb-5">
-          <h2 class="section-title">Top Performers</h2>
-          <div class="d-flex align-items-center gap-3">
-            <a href="#" class="btn-link text-decoration-none">View All Performers →</a>
-            <div class="swiper-buttons">
-              <button class="swiper-prev top-performers-prev btn btn-outline-primary">❮</button>
-              <button class="swiper-next top-performers-next btn btn-outline-primary">❯</button>
+    <section class="py-5 relative z-10 overflow-hidden">
+      <div class="container-fluid px-4 px-lg-5">
+        
+        <div class="section-header d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
+          <h2 class="section-title mb-0">Top Performers</h2>
+          <div class="d-flex align-items-center gap-4">
+            <a href="#" class="text-decoration-none font-bold tracking-wide text-white-50 hover:text-white transition" style="font-size: 0.85rem;">View All Performers <i class="bi bi-arrow-right ms-1"></i></a>
+            <div class="swiper-buttons d-flex gap-2">
+              <button class="swiper-prev top-performers-prev btn p-2 rounded-circle" style="width: 40px; height: 40px; line-height: 1;"><i class="bi bi-chevron-left"></i></button>
+              <button class="swiper-next top-performers-next btn p-2 rounded-circle" style="width: 40px; height: 40px; line-height: 1;"><i class="bi bi-chevron-right"></i></button>
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-
-        <!-- Swiper Carousel for Top Performers -->
-        <div class="swiper top-performers-carousel">
+        <div class="swiper top-performers-carousel pb-4">
           <div class="swiper-wrapper">
 
-            <!-- Performer 1 -->
             <div class="swiper-slide text-center nav-link category-item">
               <img src="images/player-athira.png" alt="Athira - Midfielder">
-              <h3 class="category-title mt-2">Athira S</h3>
-              <p class="text-muted">Midfielder - U17 Girls</p>
+              <h3 class="mt-3 mb-1 text-white" style="font-size: 1.15rem; font-weight: 700;">Athira S</h3>
+              <p class="text-white-50 small">Midfielder - U17 Girls</p>
             </div>
 
-            <!-- Performer 2 -->
             <div class="swiper-slide text-center nav-link category-item">
               <img src="images/player-joseph.png" alt="Joseph - Goalkeeper">
-              <h3 class="category-title mt-2">Joseph K</h3>
-              <p class="text-muted">Goalkeeper - U15 Boys</p>
+              <h3 class="mt-3 mb-1 text-white" style="font-size: 1.15rem; font-weight: 700;">Joseph K</h3>
+              <p class="text-white-50 small">Goalkeeper - U15 Boys</p>
             </div>
 
-            <!-- Performer 3 -->
             <div class="swiper-slide text-center nav-link category-item">
               <img src="images/player-keerthana.png" alt="Keerthana - Forward">
-              <h3 class="category-title mt-2">Keerthana R</h3>
-              <p class="text-muted">Forward - U19 Girls</p>
+              <h3 class="mt-3 mb-1 text-white" style="font-size: 1.15rem; font-weight: 700;">Keerthana R</h3>
+              <p class="text-white-50 small">Forward - U19 Girls</p>
             </div>
 
-            <!-- Performer 4 -->
             <div class="swiper-slide text-center nav-link category-item">
               <img src="images/player-team-alpha.png" alt="Team Alpha">
-              <h3 class="category-title mt-2">Team Alpha</h3>
-              <p class="text-muted">Winners - Victory Cup 2025</p>
+              <h3 class="mt-3 mb-1 text-white" style="font-size: 1.15rem; font-weight: 700;">Team Alpha</h3>
+              <p class="text-white-50 small">Winners - Victory Cup 2025</p>
             </div>
-
-            <!-- Add more top performers here -->
 
           </div>
         </div>
 
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
+    <section class="py-5 relative z-10 overflow-hidden">
+      <div class="container-fluid px-4 px-lg-5">
 
-
-
-    <section class="py-5 overflow-hidden">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-
-        <!-- Section Header -->
-        <div class="section-header d-flex flex-wrap justify-content-between mb-5">
-          <h2 class="section-title">News & Updates</h2>
-
-          <div class="d-flex align-items-center">
-            <a href="#" class="btn-link text-decoration-none">View All News →</a>
-            <div class="swiper-buttons">
-              <button class="swiper-prev brand-carousel-prev btn btn-yellow">❮</button>
-              <button class="swiper-next brand-carousel-next btn btn-yellow">❯</button>
+        <div class="section-header d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
+          <h2 class="section-title mb-0">News & Updates</h2>
+          <div class="d-flex align-items-center gap-4">
+            <a href="#" class="text-decoration-none font-bold tracking-wide text-white-50 hover:text-white transition" style="font-size: 0.85rem;">View All News <i class="bi bi-arrow-right ms-1"></i></a>
+            <div class="swiper-buttons d-flex gap-2">
+              <button class="swiper-prev brand-carousel-prev btn p-2 rounded-circle" style="width: 40px; height: 40px; line-height: 1;"><i class="bi bi-chevron-left"></i></button>
+              <button class="swiper-next brand-carousel-next btn p-2 rounded-circle" style="width: 40px; height: 40px; line-height: 1;"><i class="bi bi-chevron-right"></i></button>
             </div>  
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-
-        <!-- Swiper for News Cards -->
-        <div class="brand-carousel swiper">
+        <div class="brand-carousel swiper pb-4">
           <div class="swiper-wrapper">
 
-            <!-- News Card 1 -->
             <div class="swiper-slide">
-              <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                <div class="row g-0">
+              <div class="card glass-card p-3 h-100 border-0">
+                <div class="row g-3 align-items-center">
                   <div class="col-md-4">
-                    <img src="images/news-training.jpg" class="img-fluid rounded" alt="Training Update">
+                    <img src="images/news-training.jpg" class="img-fluid rounded-3 w-100" style="object-fit: cover; aspect-ratio: 1;" alt="Training Update">
                   </div>
                   <div class="col-md-8">
-                    <div class="card-body py-0">
-                      <p class="text-muted mb-0">Training Update</p>
-                      <h5 class="card-title">U15 team starts new endurance drills this week</h5>
+                    <div class="card-body p-0 ps-md-2">
+                      <span class="text-uppercase tracking-widest font-extrabold text-white-50" style="font-size: 0.65rem; color: var(--v-teal) !important;">Training Update</span>
+                      <h5 class="card-title text-white mt-1 mb-0" style="font-size: 1rem; line-height: 1.4;">U15 team starts new endurance drills this week</h5>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- News Card 2 -->
             <div class="swiper-slide">
-              <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                <div class="row g-0">
+              <div class="card glass-card p-3 h-100 border-0">
+                <div class="row g-3 align-items-center">
                   <div class="col-md-4">
-                    <img src="images/news-victorycup.jpg" class="img-fluid rounded" alt="Victory Cup">
+                    <img src="images/news-victorycup.jpg" class="img-fluid rounded-3 w-100" style="object-fit: cover; aspect-ratio: 1;" alt="Victory Cup">
                   </div>
                   <div class="col-md-8">
-                    <div class="card-body py-0">
-                      <p class="text-muted mb-0">Victory Cup</p>
-                      <h5 class="card-title">Team Alpha crowned champions of 2025 tournament</h5>
+                    <div class="card-body p-0 ps-md-2">
+                      <span class="text-uppercase tracking-widest font-extrabold text-white-50" style="font-size: 0.65rem; color: var(--v-orange) !important;">Victory Cup</span>
+                      <h5 class="card-title text-white mt-1 mb-0" style="font-size: 1rem; line-height: 1.4;">Team Alpha crowned champions of 2025 tournament</h5>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- News Card 3 -->
             <div class="swiper-slide">
-              <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                <div class="row g-0">
+              <div class="card glass-card p-3 h-100 border-0">
+                <div class="row g-3 align-items-center">
                   <div class="col-md-4">
-                    <img src="images/news-nutrition.jpg" class="img-fluid rounded" alt="Nutrition Talk">
+                    <img src="images/news-nutrition.jpg" class="img-fluid rounded-3 w-100" style="object-fit: cover; aspect-ratio: 1;" alt="Nutrition Talk">
                   </div>
                   <div class="col-md-8">
-                    <div class="card-body py-0">
-                      <p class="text-muted mb-0">Health & Nutrition</p>
-                      <h5 class="card-title">Coach Priya leads new session on athlete diets</h5>
+                    <div class="card-body p-0 ps-md-2">
+                      <span class="text-uppercase tracking-widest font-extrabold text-white-50" style="font-size: 0.65rem; color: var(--v-gold) !important;">Health & Nutrition</span>
+                      <h5 class="card-title text-white mt-1 mb-0" style="font-size: 1rem; line-height: 1.4;">Coach Priya leads new session on athlete diets</h5>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- News Card 4 -->
             <div class="swiper-slide">
-              <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                <div class="row g-0">
+              <div class="card glass-card p-3 h-100 border-0">
+                <div class="row g-3 align-items-center">
                   <div class="col-md-4">
-                    <img src="images/news-parentmeet.jpg" class="img-fluid rounded" alt="Parent Meeting">
+                    <img src="images/news-parentmeet.jpg" class="img-fluid rounded-3 w-100" style="object-fit: cover; aspect-ratio: 1;" alt="Parent Meeting">
                   </div>
                   <div class="col-md-8">
-                    <div class="card-body py-0">
-                      <p class="text-muted mb-0">Parent Engagement</p>
-                      <h5 class="card-title">Monthly parent meet scheduled for June 20th</h5>
+                    <div class="card-body p-0 ps-md-2">
+                      <span class="text-uppercase tracking-widest font-extrabold text-white-50" style="font-size: 0.65rem; color: var(--v-gray) !important;">Parent Engagement</span>
+                      <h5 class="card-title text-white mt-1 mb-0" style="font-size: 1rem; line-height: 1.4;">Monthly parent meet scheduled for June 20th</h5>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <!-- Add more cards as needed -->
 
           </div>
         </div>
 
       </div>
-    </div>
-  </div>
-</section>
- 
-  <footer class="bg-light text-center py-4 border-top">
-  <div class="container">
-    <img src="{% static 'images\victorylogo.png' %}" alt="Victory Academy Logo" style="max-height: 40px;" class="mb-2">
-    <p class="mb-1 text-muted small">© 2025 Victory Academy. All rights reserved.</p>
-    <p class="text-muted small">Made with ❤️ for sports excellence.</p>
-  </div>
-</footer>
+    </section>
+
+    <footer class="text-center py-5">
+      <div class="container">
+        <img src="{% static 'images/victorylogo.png' %}" alt="Victory Academy Logo" style="max-height: 48px; filter: drop-shadow(0 0 10px rgba(37,150,190,0.25));" class="mb-3">
+        <p class="mb-1 text-white-50 small">© 2025 Victory Academy. All rights reserved.</p>
+        <p class="text-muted small mb-0">Made with ❤️ for sports excellence.</p>
+      </div>
+    </footer>
 
     <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
-<script src="{% static 'js/plugins.js' %}"></script>
-<script src="{% static 'js/script.js' %}"></script>
-<script>
-  const swiper = new Swiper('.category-carousel', {
-    slidesPerView: 5,
-    spaceBetween: 20,
-    navigation: {
-      nextEl: '.category-carousel-next',
-      prevEl: '.category-carousel-prev',
-    },
-    breakpoints: {
-      0: { slidesPerView: 2 },
-      576: { slidesPerView: 3 },
-      768: { slidesPerView: 4 },
-      992: { slidesPerView: 5 }
-    }
-  });
-</script>
-<script>swiper = new Swiper(".top-performers-carousel", {
-  slidesPerView: 4,
-  spaceBetween: 20,
-  navigation: {
-    nextEl: ".top-performers-next",
-    prevEl: ".top-performers-prev",
-  },
-  breakpoints: {
-    768: { slidesPerView: 2 },
-    1024: { slidesPerView: 4 }
-  }
-});</script> 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <script>
+      const swiperCategory = new Swiper('.category-carousel', {
+        slidesPerView: 5,
+        spaceBetween: 20,
+        navigation: {
+          nextEl: '.category-carousel-next',
+          prevEl: '.category-carousel-prev',
+        },
+        breakpoints: {
+          0: { slidesPerView: 2 },
+          576: { slidesPerView: 3 },
+          768: { slidesPerView: 4 },
+          992: { slidesPerView: 5 }
+        }
+      });
+
+      const swiperPerformers = new Swiper(".top-performers-carousel", {
+        slidesPerView: 4,
+        spaceBetween: 24,
+        navigation: {
+          nextEl: ".top-performers-next",
+          prevEl: ".top-performers-prev",
+        },
+        breakpoints: {
+          0: { slidesPerView: 1 },
+          576: { slidesPerView: 2 },
+          992: { slidesPerView: 4 }
+        }
+      });
+
+      const swiperNews = new Swiper(".brand-carousel", {
+        slidesPerView: 3,
+        spaceBetween: 24,
+        navigation: {
+          nextEl: ".brand-carousel-next",
+          prevEl: ".brand-carousel-prev",
+        },
+        breakpoints: {
+          0: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1200: { slidesPerView: 3 }
+        }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </body>
 </html>

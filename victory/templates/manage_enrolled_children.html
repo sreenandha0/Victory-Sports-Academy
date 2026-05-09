@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Enrolled Children | Victory Academy</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --v-dark-bg: #080a1b;
+            --v-navy: #06235d;
+            --v-steel: #2d4373;
+            --v-teal: #2596be;
+            --v-blue: #0038a8;
+            --v-green: #4ca63b;
+            --v-orange: #ff8c00;
+            --v-gold: #d4af37;
+            --v-gray: #e2e8f0; 
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glow Elements */
+        .ambient-glow-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(0, 56, 168, 0.15);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: rgba(37, 150, 190, 0.1);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Navigation Styling */
+        .navbar {
+            background: rgba(6, 35, 93, 0.4) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.2) !important;
+            z-index: 10;
+        }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-style: italic;
+            color: #ffffff !important;
+        }
+
+        .navbar-brand span {
+            color: var(--v-teal);
+            font-style: normal;
+        }
+
+        .nav-link {
+            color: var(--v-gray) !important;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link.active {
+            color: #ffffff !important;
+            text-shadow: 0 0 10px rgba(37, 150, 190, 0.4);
+            border-bottom: 2px solid var(--v-teal);
+        }
+
+        /* Sleek Nav Back Button Styling */
+        .btn-nav-back {
+            color: var(--v-gray) !important;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            border-radius: 30px;
+            background: rgba(6, 35, 93, 0.2);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .btn-nav-back:hover {
+            color: #ffffff !important;
+            border-color: var(--v-teal);
+            background: rgba(37, 150, 190, 0.15);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .container-content {
+            padding: 40px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography */
+        h2 {
+            color: #ffffff !important;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            position: relative;
+            padding-bottom: 12px;
+            margin-bottom: 0;
+            font-size: 1.75rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--v-orange), var(--v-teal));
+            border-radius: 2px;
+        }
+
+        /* Profile Glassmorphic Card */
+        .child-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 30px rgba(8, 10, 27, 0.4);
+        }
+
+        .child-profile-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid rgba(45, 67, 115, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .child-avatar {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--v-teal);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
+        }
+
+        .child-avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(37, 150, 190, 0.15);
+            border: 3px solid rgba(37, 150, 190, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: var(--v-teal);
+        }
+
+        .child-name {
+            font-weight: 800;
+            font-size: 1.6rem;
+            letter-spacing: -0.01em;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        /* Information Grid Grid */
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Badges styling */
+        .badge-pill-custom {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .badge-batch {
+            background: rgba(37, 150, 190, 0.15);
+            color: #26b3e7;
+            border: 1px solid rgba(37, 150, 190, 0.3);
+        }
+
+        .badge-age {
+            background: rgba(212, 175, 55, 0.15);
+            color: #ffe072;
+            border: 1px solid rgba(212, 175, 55, 0.35);
+        }
+
+        /* Assessments Styling */
+        .assessment-section-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            margin: 30px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .assessment-card {
+            background: rgba(6, 35, 93, 0.3);
+            border: 1px solid rgba(45, 67, 115, 0.25);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 15px;
+        }
+
+        .assessment-meta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(45, 67, 115, 0.2);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .assessment-date {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--v-teal);
+        }
+
+        .assessment-coach {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Technical Assessment Skill Metrics Grid */
+        .metric-pill {
+            background: rgba(8, 10, 27, 0.4);
+            border: 1px solid rgba(45, 67, 115, 0.2);
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-align: center;
+        }
+
+        .metric-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 3px;
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        /* Text summaries */
+        .summary-box {
+            background: rgba(8, 10, 27, 0.2);
+            border-left: 3px solid var(--v-teal);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 15px;
+        }
+
+        .summary-box-strengths {
+            border-left-color: var(--v-green);
+        }
+
+        .summary-box-improvements {
+            border-left-color: var(--v-orange);
+        }
+
+        .no-data {
+            color: var(--v-gray) !important;
+            font-style: italic;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.95rem;
+            background: rgba(6, 35, 93, 0.05) !important;
+            border: 1px solid rgba(45, 67, 115, 0.15) !important;
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark mb-5">
+        <div class="container-fluid px-4 px-lg-5">
+            <a class="navbar-brand" href="#">VICTORY <span>ACADEMY</span></a>
+            <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="filter: invert(1);">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-lg-3 align-items-lg-center">
+                    <li class="nav-item">
+                        <span class="nav-link active">Enrolled Children</span>
+                    </li>
+                    <li class="nav-item mt-2 mt-lg-0">
+                        <a class="btn-nav-back" href="javascript:history.back()">
+                            <i class="bi bi-arrow-left"></i> Back
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid container-content px-4 px-lg-5">
+        
+        <div class="mb-5">
+            <h2>Enrolled Children</h2>
+        </div>
+
+        {% for child in children %}
+            <div class="child-card">
+                
+                <div class="child-profile-container">
+                    {% if child.profile_image %}
+                        <img class="child-avatar" src="{{ child.profile_image.url }}" alt="{{ child.name }}">
+                    {% else %}
+                        <div class="child-avatar-placeholder">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h3 class="child-name">{{ child.name }}</h3>
+                        <div class="d-flex gap-2 mt-2 flex-wrap">
+                            <span class="badge-pill-custom badge-batch">
+                                <i class="bi bi-tag-fill"></i> {{ child.batch }}
+                            </span>
+                            <span class="badge-pill-custom badge-age">
+                                <i class="bi bi-trophy-fill"></i> Age: {{ child.age_group }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <div class="info-label">Parent Name</div>
+                        <div class="info-value">{{ child.parent.full_name }}</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="info-label">Gender</div>
+                        <div class="info-value">{{ child.gender }}</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="info-label">Date of Birth</div>
+                        <div class="info-value">{{ child.dob }}</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="info-label">School</div>
+                        <div class="info-value">{{ child.school }}</div>
+                    </div>
+                    <div class="col-6 col-md-3 mt-md-3">
+                        <div class="info-label">Location / Place</div>
+                        <div class="info-value">{{ child.place }}</div>
+                    </div>
+                </div>
+
+                <h4 class="assessment-section-title">
+                    <i class="bi bi-clipboard2-data"></i> Core Assessments
+                </h4>
+
+                {% for assessment in child.playerassessment_set.all %}
+                    <div class="assessment-card">
+                        
+                        <div class="assessment-meta">
+                            <div class="assessment-date">
+                                <i class="bi bi-calendar3"></i> Verified On: {{ assessment.date }}
+                            </div>
+                            <div class="assessment-coach d-flex gap-3">
+                                <span><strong>Position:</strong> <span class="text-white fw-bold">{{ assessment.position }}</span></span>
+                                <span><strong>Evaluated By:</strong> <span class="text-white">{{ assessment.coach }}</span></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 g-md-3 mb-4">
+                            <div class="col-4 col-md-2">
+                                <div class="metric-pill">
+                                    <div class="metric-title">Ball Control</div>
+                                    <div class="metric-value">{{ assessment.ball_control }}</div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <div class="metric-pill">
+                                    <div class="metric-title">Passing</div>
+                                    <div class="metric-value">{{ assessment.passing }}</div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <div class="metric-pill">
+                                    <div class="metric-title">Shooting</div>
+                                    <div class="metric-value">{{ assessment.shooting }}</div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <div class="metric-pill">
+                                    <div class="metric-title">Speed</div>
+                                    <div class="metric-value">{{ assessment.speed }}</div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <div class="metric-pill">
+                                    <div class="metric-title">Stamina</div>
+                                    <div class="metric-value">{{ assessment.stamina }}</div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <div class="metric-pill">
+                                    <div class="metric-title">Confidence</div>
+                                    <div class="metric-value">{{ assessment.confidence }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-12 col-md-4">
+                                <div class="metric-pill mb-3">
+                                    <div class="metric-title">Teamwork</div>
+                                    <div class="metric-value">{{ assessment.teamwork }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="info-label mb-2">Coach Evaluation Summary</div>
+                                <div class="summary-box">
+                                    {{ assessment.coach_summary }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="info-label mb-2">Player Key Strengths</div>
+                                <div class="summary-box summary-box-strengths">
+                                    {{ assessment.strengths }}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="info-label mb-2">Required Improvements</div>
+                                <div class="summary-box summary-box-improvements">
+                                    {{ assessment.improvements }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                {% empty %}
+                    <p class="no-data py-3 mt-3"><i class="bi bi-journal-x me-2"></i> No assessments registered yet for this player.</p>
+                {% endfor %}
+
+            </div>
+        {% empty %}
+            <div class="no-data py-5">
+                <i class="bi bi-people-fill fs-2 d-block mb-3 text-muted"></i>
+                No enrolled children found at this time.
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

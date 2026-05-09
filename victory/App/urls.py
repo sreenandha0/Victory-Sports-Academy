@@ -35,7 +35,27 @@ urlpatterns = [
     path('dashboard/admin/', views.admin_dashboard_view, name='admin_dashboard'),
     path('pending-approvals/', views.pending_coach_approvals, name='pending_coach_approvals'),
     path('approve/coach/<int:coach_id>/', views.approve_coach, name='approve_coach'),
+  path(
+    'dashboard/admin/manage-batches/',
+    views.manage_batches,
+    name='manage_batches'
+),
 
+path(
+    'admin/batch/<int:batch_id>/assign-coach/',
+    views.assign_coach_to_batch,
+    name='assign_coach_to_batch'
+),
+path(
+    'dashboard/admin/add-batch/',
+    views.add_batch,
+    name='add_batch'
+),
+path(
+    'manage-enrolled-children/',
+    views.manage_enrolled_children,
+    name='manage_enrolled_children'
+),
     # ✅ Utilities
     path('logout/', views.logout_view, name='logout'),
     path('ajax/check-username/', views.check_username, name='check_username'),

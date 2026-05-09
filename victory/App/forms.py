@@ -118,3 +118,44 @@ class PlayerAssessmentForm(forms.ModelForm):
             for field in PlayerAssessment._meta.fields
             if isinstance(field, models.IntegerField)
         }
+
+from django import forms
+from .models import Batch, Coach
+
+
+class AssignCoachForm(forms.ModelForm):
+
+    class Meta:
+        model = Batch
+        fields = ['coach']
+
+    coach = forms.ModelChoiceField(
+        queryset=Coach.objects.filter(is_approved=True),
+        empty_label="Select Coach"
+    )
+
+class BatchForm(forms.ModelForm):
+
+    class Meta:
+
+        model = Batch
+
+        fields = [
+            'name',
+            'sport',
+            'age_group',
+            'coach',
+            'start_time',
+            'end_time'
+        ]
+
+        widgets = {
+
+            'start_time': forms.TimeInput(
+                attrs={'type': 'time'}
+            ),
+
+            'end_time': forms.TimeInput(
+                attrs={'type': 'time'}
+            ),
+        }

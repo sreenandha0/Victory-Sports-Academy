@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assign Coach</title>
+</head>
+<body>
+
+<h2>Assign Coach to {{ batch.name }}</h2>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        Save
+    </button>
+
+</form>
+
+</body>
+</html>

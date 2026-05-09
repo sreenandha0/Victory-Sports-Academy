@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Management | Assign Batch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        victory: {
+                            darkBg: '#080a1b',
+                            navy: '#06235d',
+                            steel: '#2d4373',
+                            teal: '#2596be',
+                            blue: '#0038a8',
+                            green: '#4ca63b',
+                            orange: '#ff8c00',
+                            gold: '#d4af37',
+                            gray: '#b2beb5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Crucial Django integration */
+        form p {
+            margin-bottom: 1.25rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        form label {
+            font-size: 0.75rem !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            color: #b2beb5 !important; /* victory-gray */
+            margin-bottom: 0.375rem !important;
+            letter-spacing: 0.05em !important;
+        }
+
+        form input, form select, form textarea {
+            background-color: rgba(8, 10, 27, 0.6) !important; /* victory-darkBg with opacity */
+            border: 1px solid rgba(45, 67, 115, 0.5) !important; /* victory-steel border */
+            border-radius: 0.75rem !important; /* rounded-xl */
+            padding: 0.75rem 1rem !important;
+            color: #ffffff !important;
+            outline: none !important;
+            transition: all 0.2s ease-in-out !important;
+            width: 100% !important;
+        }
+
+        form input:focus, form select:focus, form textarea:focus {
+            border-color: #2596be !important; /* victory-teal focus */
+            box-shadow: 0 0 0 2px rgba(37, 150, 190, 0.2) !important;
+        }
+    </style>
+</head>
+<body class="bg-victory-darkBg text-white min-h-screen flex flex-col relative overflow-y-auto">
+
+    <div class="absolute top-10 left-10 w-72 h-72 bg-victory-blue/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 right-10 w-80 h-80 bg-victory-teal/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <nav class="relative z-10 w-full bg-victory-navy/80 border-b border-victory-steel/30 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-extrabold tracking-tighter italic">
+                        VICTORY <span class="text-victory-teal not-italic">ACADEMY</span>
+                    </span>
+                </div>
+                <div class="hidden md:flex space-x-6 text-sm font-semibold tracking-wide text-victory-gray">
+                    <a href="#" class="hover:text-white transition-colors">Dashboard</a>
+                    <a href="#" class="hover:text-white transition-colors">Batches</a>
+                    <a href="#" class="hover:text-white transition-colors">Coaches</a>
+                    <a href="#" class="hover:text-white transition-colors">Players</a>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-xs font-bold text-victory-gold bg-victory-gold/10 px-3 py-1 rounded-full border border-victory-gold/25 uppercase">
+                        Admin Mode
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex items-center justify-center p-4 sm:p-8 md:p-12 relative z-10">
+        <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+            
+            <div class="md:col-span-5 flex flex-col justify-between bg-victory-navy/20 border border-victory-steel/20 rounded-2xl p-8 backdrop-blur-sm min-h-[300px] md:min-h-full">
+                <div>
+                    <span class="inline-block text-[10px] font-bold tracking-widest text-victory-orange uppercase bg-victory-orange/10 px-3 py-1 rounded-full mb-6 border border-victory-orange/20">
+                        Management Hub
+                    </span>
+                    <h2 class="text-3xl font-extrabold tracking-tight mb-4 leading-tight">
+                        Streamline Your <br>
+                        <span class="text-victory-teal">Training Batches</span>
+                    </h2>
+                    <p class="text-victory-gray text-sm leading-relaxed mb-6">
+                        Assign professional coaches, allocate timeslots, and map student athlete groups seamlessly to maximize coaching efficiency.
+                    </p>
+                </div>
+                
+                <div class="bg-victory-navy/40 border border-victory-steel/30 rounded-xl p-4 flex items-center space-x-4">
+                    <div class="p-3 bg-victory-teal/10 text-victory-teal rounded-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-victory-gold">Rule Guide</h4>
+                        <p class="text-[11px] text-victory-gray">Make sure coaches do not have overlapping schedules across batches.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-7 relative bg-victory-navy/40 border border-victory-steel/30 backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+                <div class="h-1.5 w-full bg-gradient-to-r from-victory-orange via-victory-teal to-victory-blue"></div>
+
+                <div class="p-6 sm:p-8 flex-grow">
+                    <h3 class="text-xl font-extrabold tracking-tight mb-6">
+                        Configure <span class="text-victory-teal">Assignment</span>
+                    </h3>
+
+                    <form method="POST" class="space-y-4">
+                        {% csrf_token %}
+
+                        <div class="space-y-1">
+                            {{ form.as_p }}
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-victory-steel/20 mt-6">
+                            <button type="button" class="group flex items-center justify-center gap-2 order-2 sm:order-1 sm:w-1/3 bg-transparent border border-victory-steel hover:border-white text-victory-gray hover:text-white py-3 px-4 rounded-xl transition-all duration-200 text-xs uppercase tracking-wider font-semibold" onclick="history.back()">
+                                <svg class="transition-transform duration-200 group-hover:-translate-x-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                                Back
+                            </button>
+
+                            <button type="submit" 
+                                class="order-1 sm:order-2 sm:w-2/3 bg-victory-teal hover:bg-victory-teal/90 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg shadow-victory-teal/25 hover:shadow-victory-teal/40 text-center uppercase tracking-wider text-xs">
+                                Confirm Assignment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
