@@ -1,341 +1,464 @@
 {% load static %}
 {% load custom_filters %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Attendance Portal</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Portal | AttendX Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           1. GLOBAL VARIABLES & COLOR PALETTE
+           ========================================================================== */
+        :root {
+            --v-dark-bg: #080a1b;   /* Deep space midnight blue background */
+            --v-navy: #06235d;      /* Solid base theme dark navy */
+            --v-steel: #2d4373;      /* Muted structural border tone */
+            --v-teal: #2596be;      /* Vibrant glowing neon cyan accent */
+            --v-blue: #0038a8;      /* Primary atmospheric lighting source */
+            --v-green: #4ca63b;      /* Success metric / positive value pill */
+            --v-orange: #ff8c00;    /* Alert metric / gradient accent */
+            --v-gold: #d4af37;      /* Secondary key marker / medal color */
+            --v-gray: #b2beb5;      /* High-contrast ash grey secondary text */
+        }
 
+        /* ==========================================================================
+           2. BODY & AMBIENT GLOW BACKDROPS
+           ========================================================================== */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(0, 56, 168, 0.15);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: rgba(37, 150, 190, 0.1);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ==========================================================================
+           3. SEAMLESS GLASSMORPHIC NAVIGATION BAR
+           ========================================================================== */
+        .navbar {
+            background: rgba(6, 35, 93, 0.4) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.2) !important;
+            z-index: 50;
+        }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-style: italic;
+            color: #ffffff !important;
+        }
+
+        .navbar-brand span {
+            color: var(--v-teal);
+            font-style: normal;
+        }
+
+        /* ==========================================================================
+           4. INTERACTIVE BUTTON SIGNATURES
+           ========================================================================== */
+        .btn-nav-back {
+            color: var(--v-gray) !important;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            border-radius: 30px;
+            background: rgba(6, 35, 93, 0.2);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .btn-nav-back:hover {
+            color: #ffffff !important;
+            border-color: var(--v-teal);
+            background: rgba(37, 150, 190, 0.15);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .btn-custom {
+            padding: 10px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--v-blue);
+            color: white;
+            border: 1px solid rgba(37, 150, 190, 0.3);
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 56, 168, 0.4);
+        }
+
+        /* ==========================================================================
+           5. COMPONENT CONTAINERS (GLASS CARDS & TABLES)
+           ========================================================================== */
+        .child-card, .table-container, .glass-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.2) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(8, 10, 27, 0.4);
+        }
+
+        /* ==========================================================================
+           6. METRIC BLOCKS & TYPOGRAPHY METRICS
+           ========================================================================== */
+        .metric-box {
+            background: rgba(8, 10, 27, 0.4);
+            border: 1px solid rgba(45, 67, 115, 0.15);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-box:hover {
+            border-color: var(--v-teal);
+            background: rgba(8, 10, 27, 0.6);
+        }
+
+        .metric-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--v-gray);
+            margin-bottom: 4px;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+        }
+
+        .metric-score {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .data-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--v-gray);
+            margin-bottom: 2px;
+        }
+
+        .data-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .text-box-summary {
+            background: rgba(8, 10, 27, 0.2);
+            border-left: 3px solid var(--v-teal);
+            padding: 10px 14px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Custom Inputs */
+        .v-input {
+            background: rgba(8, 10, 27, 0.4);
+            border: 1px solid rgba(45, 67, 115, 0.3);
+            color: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .v-input:focus {
+            border-color: var(--v-teal);
+            box-shadow: 0 0 10px rgba(37, 150, 190, 0.2);
+            outline: none;
+        }
+
+        .status-select {
+            background: rgba(6, 35, 93, 0.5);
+            border: 1px solid rgba(45, 67, 115, 0.5);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .status-present { color: var(--v-green); border-color: var(--v-green); }
+        .status-absent { color: #ff4d4d; border-color: #ff4d4d; }
+        .status-leave { color: var(--v-gold); border-color: var(--v-gold); }
+    </style>
 </head>
+<body>
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
 
-<body class="bg-gray-100 text-gray-800 p-6 font-sans">
+    <div class="relative z-10">
+        <!-- Navigation -->
+        <nav class="navbar sticky top-0 px-6 py-4 mb-8">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-6">
+                    <a href="javascript:history.back()" class="btn-nav-back">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        Back
+                    </a>
+                    <div class="navbar-brand text-xl">
+                        Attend<span>X</span> Dashboard
+                    </div>
+                </div>
+                <div class="text-xs font-bold text-[var(--v-gray)] uppercase tracking-widest bg-white/5 px-4 py-2 rounded-full border border-white/10 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[var(--v-teal)] animate-pulse"></span>
+                    Operational Date: {{ selected_date|date:"d M Y" }}
+                </div>
+            </div>
+        </nav>
 
-<div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-6">
-
-    <h1 class="text-2xl font-bold text-[#022660] mb-6">
-
-        📝 Attendance Portal - {{ selected_date }}
-
-    </h1>
-
-    <!-- Messages -->
-
-    {% if messages %}
-
-        {% for message in messages %}
-
-            <div class="mb-4 px-4 py-3 rounded bg-green-100 text-green-700">
-
-                {{ message }}
-
+        <div class="max-w-7xl mx-auto px-6 pb-20">
+            
+            <!-- Quick Metrics Grid (New Feature) -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="metric-box">
+                    <div class="metric-label">Operational Status</div>
+                    <div class="metric-score text-[var(--v-teal)]">ACTIVE</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Total Personnel</div>
+                    <div class="metric-score">{{ children|length }}</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Target Batch</div>
+                    <div class="metric-score uppercase text-sm">{% if selected_batch %}{{ selected_batch.name }}{% else %}N/A{% endif %}</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Sync Status</div>
+                    <div class="metric-score text-xs font-mono text-[var(--v-gray)]">LAST SYNC: NOW</div>
+                </div>
             </div>
 
-        {% endfor %}
-
-    {% endif %}
-
-    <!-- Attendance Form -->
-
-    <form method="POST">
-
-        {% csrf_token %}
-
-        <!-- Hidden Batch ID -->
-
-        {% if selected_batch %}
-
-        <input type="hidden"
-               name="batch_id"
-               value="{{ selected_batch.id }}">
-
-        {% endif %}
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-
-            <!-- Date -->
-
-            <div>
-
-                <label class="block text-sm font-semibold mb-1">
-
-                    📅 Date
-
-                </label>
-
-                <input type="date"
-                       name="date"
-                       value="{{ selected_date|date:'Y-m-d' }}"
-                       class="w-full border border-gray-300 rounded px-3 py-2"
-                       required>
-
+            <!-- Messages -->
+            {% if messages %}
+            <div class="mb-8 space-y-3">
+                {% for message in messages %}
+                <div class="p-4 rounded-xl bg-[var(--v-green)]/10 border border-[var(--v-green)]/30 text-[var(--v-green)] flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <span class="text-sm font-semibold uppercase tracking-wide">{{ message }}</span>
+                </div>
+                {% endfor %}
             </div>
+            {% endif %}
 
-            <!-- Batch -->
+            <!-- Configuration Section -->
+            <form method="POST">
+                {% csrf_token %}
+                {% if selected_batch %}
+                <input type="hidden" name="batch_id" value="{{ selected_batch.id }}">
+                {% endif %}
 
-            <div>
-
-                <label class="block text-sm font-semibold mb-1">
-
-                    🗂️ Select Batch
-
-                </label>
-
-                <select class="w-full border border-gray-300 rounded px-3 py-2"
-                        required
-                        onchange="window.location.href='{% url 'mark_attendance' %}?batch_id=' + this.value + '&date={{ selected_date|date:"Y-m-d" }}'">
-
-                    <option value="">-- Select Batch --</option>
-
-                    {% for batch in batches %}
-
-                        <option value="{{ batch.id }}"
-                        {% if selected_batch and selected_batch.id == batch.id %}
-                            selected
-                        {% endif %}>
-
-                            {{ batch.name }}
-
-                        </option>
-
-                    {% endfor %}
-
-                </select>
-
-            </div>
-
-        </div>
-
-        {% if children %}
-
-        <div class="overflow-x-auto">
-
-            <table class="min-w-full border rounded-lg overflow-hidden">
-
-                <thead class="bg-[#022660] text-white text-sm">
-
-                    <tr>
-
-                        <th class="px-4 py-3 text-left">
-
-                            Student
-
-                        </th>
-
-                        <th class="px-4 py-3 text-center">
-
-                            Status
-
-                        </th>
-
-                        <th class="px-4 py-3 text-left">
-
-                            Remarks
-
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {% for child in children %}
-
-                    {% with attendance=existing_data|get_item:child.id %}
-
-                    <tr class="border-t hover:bg-gray-50">
-
-                        <!-- Student Name -->
-
-                        <td class="px-4 py-3">
-
-                            {{ child.name }}
-
-                        </td>
-
-                        <!-- Status -->
-
-                        <td class="px-4 py-3 text-center">
-
-                            <select name="status_{{ child.id }}"
-                                    class="border rounded px-2 py-1">
-
-                                <option value="Present"
-                                {% if attendance and attendance.status == "Present" %}
-                                    selected
-                                {% endif %}>
-
-                                    Present
-
+                <div class="glass-card p-6 mb-8">
+                    <h3 class="text-[0.65rem] font-black text-[var(--v-teal)] uppercase tracking-[0.2em] mb-4">Deployment Configuration</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="data-label">📅 Log Generation Date</label>
+                            <input type="date" name="date" value="{{ selected_date|date:'Y-m-d' }}"
+                                   class="v-input w-full px-4 py-3" required>
+                        </div>
+                        <div>
+                            <label class="data-label">🗂️ Active Operational Batch</label>
+                            <select class="v-input w-full px-4 py-3 appearance-none" required
+                                    onchange="window.location.href='{% url 'mark_attendance' %}?batch_id=' + this.value + '&date={{ selected_date|date:"Y-m-d" }}'">
+                                <option value="">-- SELECT BATCH FOR ANALYSIS --</option>
+                                {% for batch in batches %}
+                                <option value="{{ batch.id }}" {% if selected_batch and selected_batch.id == batch.id %}selected{% endif %}>
+                                    {{ batch.name|upper }} (ID: {{ batch.id }})
                                 </option>
-
-                                <option value="Absent"
-                                {% if attendance and attendance.status == "Absent" %}
-                                    selected
-                                {% endif %}>
-
-                                    Absent
-
-                                </option>
-
-                                <option value="Leave"
-                                {% if attendance and attendance.status == "Leave" %}
-                                    selected
-                                {% endif %}>
-
-                                    Leave
-
-                                </option>
-
+                                {% endfor %}
                             </select>
+                        </div>
+                    </div>
+                </div>
 
-                        </td>
+                <!-- Main Data Grid -->
+                {% if children %}
+                <div class="table-container">
+                    <table class="w-full text-left">
+                        <thead class="bg-[var(--v-navy)]/60 text-[0.7rem] uppercase tracking-widest text-[var(--v-gray)]">
+                            <tr>
+                                <th class="px-6 py-4 font-bold border-b border-white/5">Operational Personnel</th>
+                                <th class="px-6 py-4 font-bold border-b border-white/5 text-center">Metric Status</th>
+                                <th class="px-6 py-4 font-bold border-b border-white/5">Sync Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            {% for child in children %}
+                            {% with attendance=existing_data|get_item:child.id %}
+                            <tr class="hover:bg-white/[0.02] transition-colors">
+                                <td class="px-6 py-5">
+                                    <div class="data-value">{{ child.name }}</div>
+                                    <div class="text-[0.6rem] text-[var(--v-gray)] font-mono uppercase tracking-tighter opacity-60">ID: PERS-{{ child.id }}</div>
+                                </td>
+                                <td class="px-6 py-5 text-center">
+                                    <select name="status_{{ child.id }}" 
+                                            class="status-select 
+                                            {% if attendance.status == 'Present' %}status-present{% elif attendance.status == 'Absent' %}status-absent{% elif attendance.status == 'Leave' %}status-leave{% endif %}">
+                                        <option value="Present" {% if attendance and attendance.status == "Present" %}selected{% endif %}>Present</option>
+                                        <option value="Absent" {% if attendance and attendance.status == "Absent" %}selected{% endif %}>Absent</option>
+                                        <option value="Leave" {% if attendance and attendance.status == "Leave" %}selected{% endif %}>Leave</option>
+                                    </select>
+                                </td>
+                                <td class="px-6 py-5">
+                                    <input type="text" name="remarks_{{ child.id }}" 
+                                           class="v-input w-full px-3 py-2 text-xs" 
+                                           placeholder="Enter operational notes..."
+                                           value="{% if attendance %}{{ attendance.remarks }}{% endif %}">
+                                </td>
+                            </tr>
+                            {% endwith %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-                        <!-- Remarks -->
+                <div class="mt-8 flex justify-between items-center">
+                    <div class="text-box-summary max-w-md">
+                        <strong>Deployment Note:</strong> Confirm status metrics before synchronization. All records are time-stamped.
+                    </div>
+                    <button type="submit" class="btn-custom">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        Push to Database
+                    </button>
+                </div>
+                {% else %}
+                <div class="glass-card py-24 text-center">
+                    <div class="text-[var(--v-steel)] mb-6">
+                        <svg class="mx-auto animate-bounce" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    </div>
+                    <p class="text-[var(--v-gray)] font-black uppercase tracking-[0.25em] text-sm">Offline: Select Batch to Begin Data Stream</p>
+                </div>
+                {% endif %}
+            </form>
 
-                        <td class="px-4 py-3">
+            <!-- Logs History Section -->
+            <div class="mt-16">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-[0.7rem] font-black uppercase tracking-[0.3em] text-[var(--v-teal)] flex items-center gap-3">
+                        <span class="w-10 h-[1px] bg-[var(--v-teal)]"></span>
+                        Historical Sync Archive
+                    </h2>
+                    <div class="h-[1px] flex-grow mx-8 bg-white/5"></div>
+                </div>
 
-                            <input type="text"
-                                   name="remarks_{{ child.id }}"
-                                   class="w-full border rounded px-2 py-1"
-                                   value="{% if attendance %}{{ attendance.remarks }}{% endif %}">
-
-                        </td>
-
-                    </tr>
-
-                    {% endwith %}
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-        <!-- Save Button -->
-
-        <button type="submit"
-                class="mt-5 bg-[#022660] hover:bg-[#011b48] text-white font-bold py-2 px-6 rounded shadow">
-
-            💾 Save Attendance
-
-        </button>
-
-        {% else %}
-
-            <div class="text-center text-gray-500 py-8">
-
-                Please select a batch to load students.
-
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="table-container">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-[var(--v-navy)]/40 text-[var(--v-gray)] uppercase text-[0.65rem] font-bold tracking-widest">
+                                <tr>
+                                    <th class="px-6 py-4 border-b border-white/5">Sync Date</th>
+                                    <th class="px-6 py-3 border-b border-white/5">Batch Signature</th>
+                                    <th class="px-6 py-3 border-b border-white/5 text-center">Metrics Analysis</th>
+                                    <th class="px-6 py-3 border-b border-white/5 text-center">Command</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                {% for rec in past_attendance_summary %}
+                                <tr class="hover:bg-white/[0.04] transition-all group">
+                                    <td class="px-6 py-4 font-mono text-[var(--v-teal)] group-hover:pl-8 transition-all">{{ rec.date|date:"Y.m.d" }}</td>
+                                    <td class="px-6 py-4">
+                                        <div class="data-value text-xs uppercase">{{ rec.batch__name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="inline-flex gap-4">
+                                            <div class="text-center">
+                                                <div class="text-[10px] text-[var(--v-gray)] font-bold">P</div>
+                                                <div class="text-[var(--v-green)] font-black">{{ rec.present }}</div>
+                                            </div>
+                                            <div class="text-center">
+                                                <div class="text-[10px] text-[var(--v-gray)] font-bold">A</div>
+                                                <div class="text-[#ff4d4d] font-black">{{ rec.absent }}</div>
+                                            </div>
+                                            <div class="text-center">
+                                                <div class="text-[10px] text-[var(--v-gray)] font-bold">L</div>
+                                                <div class="text-[var(--v-gold)] font-black">{{ rec.leave }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <a href="?batch_id={{ rec.batch__id }}&date={{ rec.date|date:'Y-m-d' }}" 
+                                           class="text-[0.65rem] font-black uppercase bg-white/5 hover:bg-[var(--v-teal)]/20 border border-white/10 hover:border-[var(--v-teal)]/50 px-4 py-2 rounded-full transition-all text-[var(--v-gray)] hover:text-white inline-flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                            Edit Log
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="px-6 py-12 text-center text-[var(--v-steel)] font-bold uppercase tracking-[0.2em] text-xs">Zero Archive Logs Detected</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
 
-        {% endif %}
-
-    </form>
-
-    <!-- Recent Attendance -->
-
-    <h2 class="text-lg font-semibold mt-10 mb-4">
-
-        📆 Recent Attendance Entries
-
-    </h2>
-
-    <table class="w-full bg-white border text-sm rounded-lg overflow-hidden">
-
-        <thead class="bg-gray-200">
-
-            <tr>
-
-                <th class="p-3 text-left">Date</th>
-
-                <th class="p-3 text-left">Batch</th>
-
-                <th class="p-3 text-center">Present</th>
-
-                <th class="p-3 text-center">Absent</th>
-
-                <th class="p-3 text-center">Leave</th>
-
-                <th class="p-3 text-center">Edit</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            {% for rec in past_attendance_summary %}
-
-            <tr class="border-t hover:bg-gray-50">
-
-                <td class="p-3">
-
-                    {{ rec.date }}
-
-                </td>
-
-                <td class="p-3">
-
-                    {{ rec.batch__name }}
-
-                </td>
-
-                <td class="p-3 text-center text-green-600 font-semibold">
-
-                    {{ rec.present }}
-
-                </td>
-
-                <td class="p-3 text-center text-red-600 font-semibold">
-
-                    {{ rec.absent }}
-
-                </td>
-
-                <td class="p-3 text-center text-yellow-600 font-semibold">
-
-                    {{ rec.leave }}
-
-                </td>
-
-                <td class="p-3 text-center">
-
-                    <a href="?batch_id={{ rec.batch__id }}&date={{ rec.date|date:'Y-m-d' }}">
-
-                </td>
-
-            </tr>
-
-            {% empty %}
-
-            <tr>
-
-                <td colspan="6"
-                    class="text-center text-gray-500 p-4">
-
-                    No records yet.
-
-                </td>
-
-            </tr>
-
-            {% endfor %}
-
-        </tbody>
-
-    </table>
-
-</div>
-
+    <script>
+        // Adjust dropdown colors on change to maintain dashboard aesthetics
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', function() {
+                this.classList.remove('status-present', 'status-absent', 'status-leave');
+                if (this.value === 'Present') this.classList.add('status-present');
+                if (this.value === 'Absent') this.classList.add('status-absent');
+                if (this.value === 'Leave') this.classList.add('status-leave');
+            });
+        });
+    </script>
 </body>
-
 </html>

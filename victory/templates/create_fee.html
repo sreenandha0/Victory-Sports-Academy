@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Fee</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --v-dark-bg: #080a1b;   /* Deep space midnight blue background */
+            --v-navy: #06235d;      /* Solid base theme dark navy */
+            --v-steel: #2d4373;     /* Muted structural border tone */
+            --v-teal: #2596be;      /* Vibrant glowing neon cyan accent */
+            --v-blue: #0038a8;      /* Primary atmospheric lighting source */
+            --v-green: #4ca63b;     /* Success metric / positive value pill */
+            --v-orange: #ff8c00;    /* Alert metric / gradient accent */
+            --v-gold: #d4af37;      /* Secondary key marker / medal color */
+            --v-gray: #b2beb5;      /* High-contrast ash grey secondary text */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient glowing background bubbles */
+        .ambient-glow-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(0, 56, 168, 0.15);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: rgba(37, 150, 190, 0.1);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glassmorphism Navigation Bar Style */
+        .navbar {
+            background: rgba(6, 35, 93, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-style: italic;
+            color: #ffffff;
+            font-size: 1.25rem;
+        }
+
+        .navbar-brand span { color: var(--v-teal); font-style: normal; }
+
+        /* Navigation Back Button Pill */
+        .btn-nav-back {
+            color: var(--v-gray);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            border-radius: 30px;
+            background: rgba(6, 35, 93, 0.2);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .btn-nav-back:hover {
+            color: #ffffff;
+            border-color: var(--v-teal);
+            background: rgba(37, 150, 190, 0.15);
+            transform: translateX(-3px);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
+        }
+
+        /* Responsive glass containers */
+        .glass-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Section Heading Decorator */
+        .section-header {
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border-left: 4px solid var(--v-teal);
+            padding-left: 12px;
+        }
+
+        /* Glassmorphic Form Input Enhancements */
+        .portal-input, .portal-textarea, .portal-select {
+            background: rgba(8, 10, 27, 0.4) !important;
+            border: 1px solid rgba(45, 67, 115, 0.4) !important;
+            color: #ffffff !important;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .portal-input:focus, .portal-textarea:focus, .portal-select:focus {
+            border-color: var(--v-teal) !important;
+            box-shadow: 0 0 12px rgba(37, 150, 190, 0.3) !important;
+            outline: none;
+        }
+
+        /* Input Date Picker Icon Override */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        /* High-Contrast Label Headers */
+        .field-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--v-gray);
+            font-weight: 700;
+        }
+
+        /* Action Create Launch Button */
+        .btn-submit-glow {
+            background: linear-gradient(135deg, var(--v-orange), #d46b08);
+            color: #ffffff;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-radius: 14px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.2);
+        }
+
+        .btn-submit-glow:hover {
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit-glow:active {
+            transform: translateY(1px);
+        }
+
+        /* Styling drop-down option elements */
+        option {
+            background-color: var(--v-navy) !important;
+            color: #ffffff !important;
+        }
+
+        .text-v-gray { color: var(--v-gray); }
+        .text-v-teal { color: var(--v-teal); }
+        .text-v-orange { color: var(--v-orange); }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient glowing backgrounds -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <nav class="navbar px-8 py-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="#" class="navbar-brand">ACADEMY <span>PORTAL</span></a>
+            <div class="hidden md:flex gap-8">
+                <a href="#" class="text-xs uppercase font-bold tracking-widest text-v-gray hover:text-white transition">Dashboard</a>
+                <a href="#" class="text-xs uppercase font-bold tracking-widest text-v-gray hover:text-white transition">Events</a>
+                <a href="#" class="text-xs uppercase font-bold tracking-widest text-white border-b-2 border-v-teal pb-1">Fees</a>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-v-blue border border-v-teal flex items-center justify-center text-[10px] font-bold">JS</div>
+        </div>
+    </nav>
+
+    <div class="relative z-10 p-6 md:p-8 max-w-2xl mx-auto">
+        
+        <!-- Navigation Back Link Pill -->
+        <div class="mb-8">
+            <a href="#" class="btn-nav-back">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Fees
+            </a>
+        </div>
+
+        <!-- Section Title Headers -->
+        <div class="mb-10">
+            <h2 class="section-header text-xl md:text-2xl">
+                💸 Create <span class="text-v-orange">New Fee</span>
+            </h2>
+            <p class="text-v-gray text-[10px] ml-4 mt-1 tracking-[0.2em] font-bold opacity-60 uppercase">Issue an invoice or recurring fee</p>
+        </div>
+
+        <div class="glass-card p-6 md:p-8">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Title Input Field -->
+                <div>
+                    <label class="block field-label mb-2">Fee Title</label>
+                    <input type="text" name="title" required
+                        class="w-full p-4 text-sm portal-input placeholder-white/20"
+                        placeholder="e.g., Monthly Football Fee">
+                </div>
+
+                <!-- Description Input Area -->
+                <div>
+                    <label class="block field-label mb-2">Description</label>
+                    <textarea name="description" rows="3"
+                        class="w-full p-4 text-sm portal-textarea placeholder-white/20 resize-none"
+                        placeholder="e.g., Covers specialized coach-led training sessions & pitch facilities..."></textarea>
+                </div>
+
+                <!-- Split Grid Container: Amount & Due Date -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Amount Field -->
+                    <div>
+                        <label class="block field-label mb-2">Amount (₹)</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-v-teal font-black font-mono">₹</span>
+                            <input type="number" name="amount" required
+                                class="w-full pl-9 pr-4 py-4 text-sm portal-input font-mono placeholder-white/20"
+                                placeholder="2000">
+                        </div>
+                    </div>
+
+                    <!-- Due Date Field -->
+                    <div>
+                        <label class="block field-label mb-2">Due Date</label>
+                        <input type="date" name="due_date" required
+                            class="w-full p-4 text-sm portal-input font-mono">
+                    </div>
+                </div>
+
+                <!-- Batch Selection Field -->
+                <div>
+                    <label class="block field-label mb-2">Select Batch Target</label>
+                    <div class="relative">
+                        <select name="batch" required
+                            class="w-full p-4 text-sm portal-select appearance-none cursor-pointer">
+                            <option value="" class="opacity-50">-- Choose Target Batch --</option>
+                            {% for batch in batches %}
+                                <option value="{{ batch.id }}">
+                                    {{ batch.name }} ({{ batch.age_group }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-v-gray">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit"
+                        class="w-full py-4 text-sm btn-submit-glow flex items-center justify-center gap-2">
+                        Create Fee Notification
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

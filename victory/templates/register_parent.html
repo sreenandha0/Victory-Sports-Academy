@@ -1,209 +1,650 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register - Personal & Account Info</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Victory Sports Academy</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <!-- Ionicons Script for Navbar Icon -->
+    <!-- Ionicons for premium crisp iconography -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <style>
+        /* ==========================================================================
+           1. GLOBAL VARIABLES & COLOR PALETTE
+           ========================================================================== */
+        :root {
+            --v-dark-bg: #080a1b;   /* Deep space midnight blue background */
+            --v-navy: #06235d;      /* Solid base theme dark navy */
+            --v-steel: #2d4373;     /* Muted structural border tone */
+            --v-teal: #2596be;      /* Vibrant glowing neon cyan accent */
+            --v-blue: #0038a8;      /* Primary atmospheric lighting source */
+            --v-green: #4ca63b;     /* Success metric / positive value pill */
+            --v-orange: #ff8c00;    /* Alert metric / gradient accent */
+            --v-gold: #d4af37;      /* Secondary key marker / medal color */
+            --v-gray: #b2beb5;      /* High-contrast ash grey secondary text */
+        }
+
+        /* ==========================================================================
+           2. BODY & AMBIENT GLOW BACKDROPS
+           ========================================================================== */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #EFF3FA;
-        }
-        .navbar-container {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .bg-yinmn-blue { background-color: #38547C; }
-        .text-alice-blue { color: #EFF3FA; }
-        .hover-text-jordy-blue:hover { color: #8AADDE; }
-        .text-powder-blue { color: #B8CDEC; }
-        .border-french-gray { border-color: #BBC7D8; }
-        .bg-french-gray { background-color: #BBC7D8; }
-
-        .chart-container {
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
             position: relative;
+        }
+
+        .ambient-glow-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(0, 56, 168, 0.25);
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: rgba(37, 150, 190, 0.2);
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ==========================================================================
+           3. SEAMLESS GLASSMORPHIC ELEMENTS
+           ========================================================================== */
+        .navbar {
+            background: rgba(6, 35, 93, 0.3) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.3) !important;
+            z-index: 50;
+        }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-style: italic;
+            color: #ffffff !important;
+        }
+
+        .navbar-brand span {
+            color: var(--v-teal);
+            font-style: normal;
+        }
+
+        /* Glass Cards */
+        .child-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.25) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(8, 10, 27, 0.6);
+        }
+
+        /* Interactive digital pass premium card style */
+        .live-preview-pass {
+            background: linear-gradient(135deg, rgba(6, 35, 93, 0.45) 0%, rgba(8, 10, 27, 0.9) 100%);
+            border: 1px solid rgba(37, 150, 190, 0.35);
+            box-shadow: 0 10px 30px rgba(37, 150, 190, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .live-preview-pass::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
             width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
+            height: 100%;
+            background: radial-gradient(circle, rgba(37, 150, 190, 0.25) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
+        /* ==========================================================================
+           4. FORM WIDGETS & SPORT SELECTION CARDS
+           ========================================================================== */
+        .sport-selector-card {
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            background: rgba(6, 35, 93, 0.25);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
         }
 
+        .sport-selector-card:hover {
+            border-color: var(--v-teal);
+            background: rgba(37, 150, 190, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .sport-selector-card.selected {
+            border-color: var(--v-teal);
+            background: rgba(37, 150, 190, 0.3);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.4);
+        }
+
+        /* Interactive Buttons */
+        .btn-nav-back {
+            color: var(--v-gray) !important;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            border-radius: 30px;
+            background: rgba(6, 35, 93, 0.2);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+        }
+
+        .btn-nav-back:hover {
+            color: #ffffff !important;
+            border-color: var(--v-teal);
+            background: rgba(37, 150, 190, 0.15);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .btn-custom {
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .btn-glow-teal {
+            background: linear-gradient(135deg, var(--v-teal), rgba(0, 56, 168, 0.8));
+            border: 1px solid rgba(37, 150, 190, 0.5);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(37, 150, 190, 0.2);
+        }
+
+        .btn-glow-teal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 150, 190, 0.4);
+            border-color: var(--v-teal);
+        }
+
+        /* Labels and errors */
+        .data-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--v-gray);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .errorlist {
+            color: #ff6b6b;
+            font-size: 0.75rem;
+            list-style: none;
+            padding-left: 0;
+            margin-top: 4px;
+            margin-bottom: 8px;
+            background: rgba(220, 38, 38, 0.1);
+            border-left: 3px solid #dc2626;
+            padding: 4px 10px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .message-error {
+            color: #ff6b6b;
+            background-color: rgba(220, 38, 38, 0.15);
+            border: 1px solid #dc2626;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Custom Scrollbars */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #EFF3FA;
-            border-radius: 10px;
+            background: var(--v-dark-bg);
         }
         ::-webkit-scrollbar-thumb {
-            background: #8AADDE;
+            background: var(--v-steel);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #38547C;
-        }
-
-        .errorlist {
-            color: #dc2626;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            list-style: none;
-            padding-left: 0;
+            background: var(--v-teal);
         }
     </style>
 </head>
-<body class="bg-[#EFF3FA] font-sans min-h-screen flex flex-col">
+<body class="flex flex-col min-h-screen relative">
 
-    <!-- 🔹 Navbar -->
-    <nav class="bg-yinmn-blue p-4 navbar-container rounded-b-lg">
-        <div class="container mx-auto flex justify-between items-center px-4 md:px-6 lg:px-8">
-            <div class="flex items-center w-full justify-center relative">
-                <button class="absolute left-0 text-alice-blue focus:outline-none p-2 rounded-full hover:bg-yinmn-blue/80 transition duration-300 ease-in-out">
-                    <ion-icon name="caret-back-outline" class="w-8 h-8"></ion-icon>
+    <!-- Ambient glows -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <!-- Navbar Header -->
+    <nav class="navbar py-4 px-4 md:px-8 mb-6 sticky top-0">
+        <div class="max-w-7xl mx-auto flex justify-between items-center w-full">
+            <!-- Back Button -->
+            <div>
+                <button onclick="history.back()" class="btn-nav-back">
+                    <ion-icon name="caret-back-outline" class="w-4 h-4"></ion-icon>
+                    <span>Back</span>
                 </button>
-                <div class="flex items-center">
-                    <svg class="w-8 h-8 mr-2 text-alice-blue" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm-3 0h2v2H8zm0 4h2v2H8zm8-4h-2v2h2zm0 4h-2v2h2z"/>
-                    </svg>
-                    <a href="#" class="text-alice-blue text-2xl font-bold tracking-wide">Victory Academy</a>
-                </div>
+            </div>
+            
+            <!-- Academy Branding -->
+            <div class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-[#2596be] filter drop-shadow-[0_0_8px_rgba(37,150,190,0.6)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+                <a href="#" class="navbar-brand text-xl md:text-2xl font-black">
+                    Victory <span>Academy</span>
+                </a>
+            </div>
+
+            <!-- Dashboard Connection status -->
+            <div class="hidden sm:flex items-center gap-2 bg-slate-900/40 px-3 py-1.5 rounded-full border border-slate-700/40 text-xs">
+                <span class="w-2.5 h-2.5 bg-cyan-500 rounded-full animate-ping"></span>
+                <span class="text-xs text-slate-300 font-medium">Interactive Registration</span>
             </div>
         </div>
     </nav>
 
-    <!-- 🔹 Main Content Area - Combined Container -->
-    <div class="p-4 flex-grow flex flex-col items-center justify-center">
-        <!-- Registration Form Container -->
-        <div class="bg-[#B8CDEC] p-8 rounded-xl shadow-lg w-full max-w-lg">
-            <h1 class="text-3xl font-bold text-[#38547C] mb-6 text-center">Register</h1>
+    <!-- Main Content Panel (Dual-pane layout) -->
+    <main class="flex-grow flex items-center justify-center p-4 z-10">
+        <div class="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT PANEL: Dynamic Digital Passport Card & Academy Benefits Preview -->
+            <div class="lg:col-span-5 flex flex-col gap-6 order-2 lg:order-1">
+                
+                <!-- Live Updating Digital Membership Passport -->
+                <div class="live-preview-pass rounded-2xl p-6 relative overflow-hidden border border-cyan-500/20">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-full">
+                                Parent Member Card
+                            </span>
+                            <h3 class="text-white text-lg font-black mt-2">Victory Academy</h3>
+                        </div>
+                        <div class="text-right">
+                            <span id="cardStatusBadge" class="text-xxs font-black px-2 py-1 rounded bg-orange-500/20 border border-orange-500/30 text-orange-400 uppercase animate-pulse">
+                                Step 1 of 2
+                            </span>
+                        </div>
+                    </div>
 
-            <div class="flex mb-6 rounded-lg overflow-hidden border border-[#BBC7D8]">
-                <button id="personalInfoTab" class="flex-1 py-3 text-center text-lg font-medium rounded-l-lg transition-all duration-300 bg-[#8AADDE] text-[#EFF3FA] focus:outline-none">
-                    <ion-icon name="person-outline" class="inline-block align-middle mr-2"></ion-icon> Personal Info
-                </button>
-                <button id="accountInfoTab" class="flex-1 py-3 text-center text-lg font-medium rounded-r-lg transition-all duration-300 bg-[#EFF3FA] text-[#38547C] hover:bg-[#BBC7D8] focus:outline-none">
-                    <ion-icon name="key-outline" class="inline-block align-middle mr-2"></ion-icon> Account Info
-                </button>
+                    <!-- Card Holder Details -->
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xxs uppercase text-slate-400 tracking-wider">Registered Parent Name</p>
+                            <p id="cardParentName" class="text-lg font-bold text-white tracking-wide transition-all duration-300">YOUR NAME HERE</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xxs uppercase text-slate-400 tracking-wider">Contact Phone</p>
+                                <p id="cardPhone" class="text-sm font-semibold text-slate-200 tracking-wider transition-all duration-300">-</p>
+                            </div>
+                            <div>
+                                <p class="text-xxs uppercase text-slate-400 tracking-wider">Primary Interest</p>
+                                <p id="cardSport" class="text-sm font-semibold text-cyan-300 transition-all duration-300">Select Sport below</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Bar with hologram and mock barcode -->
+                    <div class="mt-8 pt-4 border-t border-slate-700/40 flex justify-between items-center">
+                        <div class="opacity-40">
+                            <!-- SVG Barcode representation -->
+                            <svg class="w-32 h-6 text-slate-300" fill="currentColor" viewBox="0 0 100 20">
+                                <rect width="2" height="20" x="0"/>
+                                <rect width="1" height="20" x="4"/>
+                                <rect width="3" height="20" x="7"/>
+                                <rect width="1" height="20" x="12"/>
+                                <rect width="2" height="20" x="15"/>
+                                <rect width="1" height="20" x="20"/>
+                                <rect width="4" height="20" x="23"/>
+                                <rect width="2" height="20" x="30"/>
+                                <rect width="1" height="20" x="34"/>
+                                <rect width="3" height="20" x="38"/>
+                                <rect width="1" height="20" x="43"/>
+                                <rect width="2" height="20" x="46"/>
+                                <rect width="1" height="20" x="50"/>
+                                <rect width="3" height="20" x="53"/>
+                                <rect width="2" height="20" x="58"/>
+                                <rect width="1" height="20" x="62"/>
+                                <rect width="4" height="20" x="65"/>
+                                <rect width="2" height="20" x="71"/>
+                                <rect width="1" height="20" x="75"/>
+                                <rect width="3" height="20" x="78"/>
+                                <rect width="1" height="20" x="83"/>
+                                <rect width="2" height="20" x="86"/>
+                                <rect width="1" height="20" x="90"/>
+                                <rect width="3" height="20" x="93"/>
+                            </svg>
+                        </div>
+                        <div class="flex items-center gap-1 text-[var(--v-gray)] text-xxs font-mono">
+                            <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping"></span>
+                            <span>ACTIVE STYLES PREVIEW</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academy Features List Cards -->
+                <div class="child-card p-6 bg-slate-900/35 border border-slate-800/40">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 text-cyan-400 flex items-center gap-2">
+                        <ion-icon name="ribbon-outline" class="text-lg"></ion-icon>
+                        Why Join Victory Sports Academy?
+                    </h4>
+                    <div class="space-y-3.5">
+                        <div class="flex gap-3.5 items-start">
+                            <div class="p-1.5 bg-cyan-500/10 rounded-lg text-cyan-400 flex-shrink-0 border border-cyan-500/20">
+                                <ion-icon name="analytics-outline" class="w-5 h-5"></ion-icon>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-100">Live Skill Tracker</h5>
+                                <p class="text-xxs text-[var(--v-gray)] mt-0.5">Observe development diagnostics, endurance rates, and visual performance charts.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3.5 items-start">
+                            <div class="p-1.5 bg-cyan-500/10 rounded-lg text-cyan-400 flex-shrink-0 border border-cyan-500/20">
+                                <ion-icon name="chatbubbles-outline" class="w-5 h-5"></ion-icon>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-100">Direct Coach Messaging</h5>
+                                <p class="text-xxs text-[var(--v-gray)] mt-0.5">Communicate straight with certified athletic instructors regarding training sessions.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3.5 items-start">
+                            <div class="p-1.5 bg-cyan-500/10 rounded-lg text-cyan-400 flex-shrink-0 border border-cyan-500/20">
+                                <ion-icon name="calendar-outline" class="w-5 h-5"></ion-icon>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-100">Schedule & Billing Controls</h5>
+                                <p class="text-xxs text-[var(--v-gray)] mt-0.5">Review upcoming event dates, verify attendance records, and complete fast monthly payments.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <form method="post" action="{% url 'register_parent' %}" id="registrationForm">
-                {% csrf_token %}
-                <div id="personalInfoContent" class="tab-content">
-                    <h2 class="text-2xl font-semibold text-[#38547C] mb-4">Your Details</h2>
-                    {% if parent_form.non_field_errors %}
-                        <ul class="errorlist mb-4">
+            <!-- RIGHT PANEL: Registration Form -->
+            <div class="lg:col-span-7 child-card p-6 md:p-8 order-1 lg:order-2">
+                
+                <!-- Progress Header -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center text-xs text-[var(--v-gray)] font-bold mb-2 uppercase tracking-widest">
+                        <span>Onboarding Progress</span>
+                        <span id="progressPercentage" class="text-cyan-400 font-black">50% Complete</span>
+                    </div>
+                    <!-- Sleek connecting-node progress timeline bar -->
+                    <div class="relative w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                        <div id="progressFill" class="absolute left-0 top-0 h-full bg-gradient-to-r from-cyan-500 to-blue-600 transition-all duration-500" style="width: 50%;"></div>
+                    </div>
+                </div>
+
+                <!-- Registration Title -->
+                <div class="text-center md:text-left mb-6">
+                    <h2 class="text-2xl font-black text-white uppercase tracking-tight">Parent Portal Onboarding</h2>
+                    <p class="text-xs text-[var(--v-gray)] mt-1">Configure your personal login credentials and link athlete records</p>
+                </div>
+
+                <!-- Django Non-Field Errors -->
+                {% if parent_form.non_field_errors %}
+                    <div class="message-error">
+                        <ion-icon name="alert-circle-outline" class="w-5 h-5 flex-shrink-0"></ion-icon>
+                        <div>
                             {% for error in parent_form.non_field_errors %}
-                                <li>{{ error }}</li>
+                                <p class="text-sm font-semibold">{{ error }}</p>
                             {% endfor %}
-                        </ul>
-                    {% endif %}
-                    <div class="mb-4 relative">
-                        <label for="{{ parent_form.full_name.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Full Name</label>
-                        {{ parent_form.full_name.errors }}
-                        <div class="relative">
-                            <ion-icon name="person-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
-                            <input type="text" name="{{ parent_form.full_name.name }}" id="{{ parent_form.full_name.id_for_label }}"
-                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                                placeholder="John Doe" value="{{ parent_form.full_name.value|default:'' }}">
                         </div>
                     </div>
-                    <div class="mb-6 relative">
-                        <label for="{{ parent_form.phone.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Phone Number</label>
-                        {{ parent_form.phone.errors }}
-                        <div class="relative">
-                            <ion-icon name="call-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
-                            <input type="tel" name="{{ parent_form.phone.name }}" id="{{ parent_form.phone.id_for_label }}"
-                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                                placeholder="+123 456 7890" value="{{ parent_form.phone.value|default:'' }}">
-                        </div>
-                    </div>
-                    <button type="button" id="nextToAccountInfo" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
-                        Next: Account Info
-                    </button>
-                </div>
+                {% endif %}
 
-                <div id="accountInfoContent" class="tab-content hidden">
-                    <h2 class="text-2xl font-semibold text-[#38547C] mb-4">Account Details</h2>
-                    {% if user_form.non_field_errors %}
-                        <ul class="errorlist mb-4">
+                {% if user_form.non_field_errors %}
+                    <div class="message-error">
+                        <ion-icon name="alert-circle-outline" class="w-5 h-5 flex-shrink-0"></ion-icon>
+                        <div>
                             {% for error in user_form.non_field_errors %}
-                                <li>{{ error }}</li>
+                                <p class="text-sm font-semibold">{{ error }}</p>
                             {% endfor %}
-                        </ul>
-                    {% endif %}
-                    <div class="mb-4 relative">
-                        <label for="{{ user_form.username.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Username</label>
-                        {{ user_form.username.errors }}
-                        <div class="relative">
-                            <ion-icon name="person-circle-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
-                            <input type="text" name="{{ user_form.username.name }}" id="{{ user_form.username.id_for_label }}"
-                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                                placeholder="Choose a username" value="{{ user_form.username.value|default:'' }}">
                         </div>
                     </div>
-                    <div class="mb-4 relative">
-                        <label for="{{ user_form.email.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Email Address</label>
-                        {{ user_form.email.errors }}
-                        <div class="relative">
-                            <ion-icon name="mail-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
-                            <input type="email" name="{{ user_form.email.name }}" id="{{ user_form.email.id_for_label }}"
-                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                                placeholder="your.email@example.com" value="{{ user_form.email.value|default:'' }}">
-                        </div>
-                    </div>
-                    <div class="mb-4 relative">
-                        <label for="{{ user_form.password.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Password</label>
-                        {{ user_form.password.errors }}
-                        <div class="relative">
-                            <ion-icon name="lock-closed-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
-                            <input type="password" name="{{ user_form.password.name }}" id="{{ user_form.password.id_for_label }}"
-                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                                placeholder="••••••••">
-                        </div>
-                    </div>
-                    <div class="mb-6 relative">
-                        <label for="confirmPassword" class="block text-[#38547C] text-sm font-bold mb-2">Confirm Password</label>
-                        <div class="relative">
-                            <ion-icon name="lock-closed-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-[#38547C] text-xl"></ion-icon>
-                            <input type="password" id="confirmPassword"
-                                class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 pl-10 pr-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                                placeholder="••••••••">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
-                        Register Account
+                {% endif %}
+
+                <!-- Multi-step Visual Navigation Tabs -->
+                <div class="flex mb-6 rounded-xl overflow-hidden border border-slate-700/50 bg-slate-900/40 p-1">
+                    <button id="personalInfoTab" type="button" class="flex-1 py-2.5 text-center text-xs md:text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-300 bg-cyan-500/15 text-cyan-400 border border-cyan-500/25 focus:outline-none">
+                        <ion-icon name="person-outline" class="inline-block align-middle mr-1.5 text-base"></ion-icon> Personal Info
+                    </button>
+                    <button id="accountInfoTab" type="button" class="flex-1 py-2.5 text-center text-xs md:text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-300 text-[var(--v-gray)] hover:text-white hover:bg-white/5 focus:outline-none">
+                        <ion-icon name="key-outline" class="inline-block align-middle mr-1.5 text-base"></ion-icon> Account Info
                     </button>
                 </div>
-            </form>
 
-            <div class="chart-container hidden mt-8">
-                <canvas id="myChart"></canvas>
+                <!-- Main Form Form (Action points to backend URL) -->
+                <form method="post" action="{% url 'register_parent' %}" id="registrationForm" class="space-y-5">
+                    {% csrf_token %}
+                    
+                    <!-- STEP 1: Personal Details -->
+                    <div id="personalInfoContent" class="tab-content space-y-5">
+                        <div class="border-b border-slate-800/80 pb-3">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider text-cyan-400">Step 1: Contact Details & Preferences</h3>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div>
+                            <label for="{{ parent_form.full_name.id_for_label }}" class="data-label">Full Name</label>
+                            {% if parent_form.full_name.errors %}
+                                {{ parent_form.full_name.errors }}
+                            {% endif %}
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-cyan-400 transition-colors">
+                                    <ion-icon name="person-outline" class="w-5 h-5"></ion-icon>
+                                </div>
+                                <input type="text" name="{{ parent_form.full_name.name }}" id="{{ parent_form.full_name.id_for_label }}" required
+                                       class="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--v-teal)] focus:border-transparent transition duration-300 text-sm"
+                                       placeholder="John Doe" value="{{ parent_form.full_name.value|default:'' }}" oninput="updateCardPreview()">
+                            </div>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div>
+                            <label for="{{ parent_form.phone.id_for_label }}" class="data-label">Phone Number</label>
+                            {% if parent_form.phone.errors %}
+                                {{ parent_form.phone.errors }}
+                            {% endif %}
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-cyan-400 transition-colors">
+                                    <ion-icon name="call-outline" class="w-5 h-5"></ion-icon>
+                                </div>
+                                <input type="tel" name="{{ parent_form.phone.name }}" id="{{ parent_form.phone.id_for_label }}" required
+                                       class="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--v-teal)] focus:border-transparent transition duration-300 text-sm"
+                                       placeholder="+1 (123) 456-7890" value="{{ parent_form.phone.value|default:'' }}" oninput="updateCardPreview()">
+                            </div>
+                        </div>
+
+                        
+
+                        <!-- Next Tab Button (Visual step transition) -->
+                        <div class="pt-4">
+                            <button type="button" id="nextToAccountInfo" class="w-full btn-custom btn-glow-teal text-sm py-3 px-6 shadow-lg shadow-cyan-500/10">
+                                <span>Proceed to Account Details</span>
+                                <ion-icon name="arrow-forward-outline" class="w-5 h-5"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: Account Security Details -->
+                    <div id="accountInfoContent" class="tab-content hidden space-y-5">
+                        <div class="border-b border-slate-800/80 pb-3">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider text-cyan-400">Step 2: Login Credentials & Security</h3>
+                        </div>
+
+                        <!-- Username -->
+                        <div>
+                            <label for="{{ user_form.username.id_for_label }}" class="data-label">Choose Username</label>
+                            {% if user_form.username.errors %}
+                                {{ user_form.username.errors }}
+                            {% endif %}
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-cyan-400 transition-colors">
+                                    <ion-icon name="person-circle-outline" class="w-5 h-5"></ion-icon>
+                                </div>
+                                <input type="text" name="{{ user_form.username.name }}" id="{{ user_form.username.id_for_label }}" required
+                                       class="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--v-teal)] focus:border-transparent transition duration-300 text-sm"
+                                       placeholder="johndoe12" value="{{ user_form.username.value|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div>
+                            <label for="{{ user_form.email.id_for_label }}" class="data-label">Email Address</label>
+                            {% if user_form.email.errors %}
+                                {{ user_form.email.errors }}
+                            {% endif %}
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-cyan-400 transition-colors">
+                                    <ion-icon name="mail-outline" class="w-5 h-5"></ion-icon>
+                                </div>
+                                <input type="email" name="{{ user_form.email.name }}" id="{{ user_form.email.id_for_label }}" required
+                                       class="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--v-teal)] focus:border-transparent transition duration-300 text-sm"
+                                       placeholder="name@domain.com" value="{{ user_form.email.value|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Password and Strength Indicator -->
+                        <div>
+                            <label for="{{ user_form.password.id_for_label }}" class="data-label">Create Password</label>
+                            {% if user_form.password.errors %}
+                                {{ user_form.password.errors }}
+                            {% endif %}
+                            <div class="relative group mb-2">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-cyan-400 transition-colors">
+                                    <ion-icon name="lock-closed-outline" class="w-5 h-5"></ion-icon>
+                                </div>
+                                <input type="password" name="{{ user_form.password.name }}" id="{{ user_form.password.id_for_label }}" required
+                                       class="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--v-teal)] focus:border-transparent transition duration-300 text-sm"
+                                       placeholder="••••••••" onkeyup="checkPasswordStrength(this.value)">
+                            </div>
+                            
+                            <!-- Real-time visual password strength progress indicator -->
+                            <div class="space-y-1.5 p-3 rounded-xl bg-slate-900/40 border border-slate-800/80">
+                                <div class="flex justify-between items-center text-xxs uppercase tracking-wider">
+                                    <span class="text-slate-400">Security Strength:</span>
+                                    <span id="strengthLabel" class="text-red-400 font-bold">Too Weak</span>
+                                </div>
+                                <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                                    <div id="strengthProgress" class="h-full bg-red-500 transition-all duration-300" style="width: 25%;"></div>
+                                </div>
+                                <!-- Password requirements checklist elements -->
+                                <div class="grid grid-cols-2 gap-x-2 gap-y-1 pt-1 text-[10px] text-slate-400 font-medium">
+                                    <div id="checkLen" class="flex items-center gap-1.5">
+                                        <ion-icon name="close-circle-outline" class="text-red-400 w-3.5 h-3.5"></ion-icon> 8+ characters
+                                    </div>
+                                    <div id="checkNum" class="flex items-center gap-1.5">
+                                        <ion-icon name="close-circle-outline" class="text-red-400 w-3.5 h-3.5"></ion-icon> At least 1 number
+                                    </div>
+                                    <div id="checkUpper" class="flex items-center gap-1.5">
+                                        <ion-icon name="close-circle-outline" class="text-red-400 w-3.5 h-3.5"></ion-icon> Uppercase letter
+                                    </div>
+                                    <div id="checkSpecial" class="flex items-center gap-1.5">
+                                        <ion-icon name="close-circle-outline" class="text-red-400 w-3.5 h-3.5"></ion-icon> Special character
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div>
+                            <label for="confirmPassword" class="data-label">Confirm Password</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-cyan-400 transition-colors">
+                                    <ion-icon name="shield-checkmark-outline" class="w-5 h-5"></ion-icon>
+                                </div>
+                                <input type="password" id="confirmPassword" required
+                                       class="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[var(--v-teal)] focus:border-transparent transition duration-300 text-sm"
+                                       placeholder="••••••••">
+                            </div>
+                            <p id="passwordMismatchError" class="text-xs text-red-400 mt-1.5 hidden flex items-center gap-1">
+                                <ion-icon name="warning-outline"></ion-icon> Passwords do not match.
+                            </p>
+                        </div>
+
+                        <!-- Submit Registration Button -->
+                        <div class="pt-4">
+                            <button type="submit" class="w-full btn-custom btn-glow-teal text-sm py-3 px-6 shadow-lg shadow-cyan-500/20">
+                                <span>Complete Registration</span>
+                                <ion-icon name="checkmark-done-outline" class="w-5 h-5"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Navigation Anchors -->
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-6 pt-4 border-t border-slate-700/30 text-xs gap-3">
+                    <p class="text-slate-400 flex items-center gap-1.5">
+                        <ion-icon name="help-circle-outline" class="text-sm text-cyan-400"></ion-icon> Already registered?
+                    </p>
+                    <a class="text-[var(--v-teal)] hover:underline hover:text-cyan-300 transition duration-300 flex items-center gap-1.5 font-bold" href="{% url 'login_parent' %}">
+                        <ion-icon name="log-in-outline" class="text-sm"></ion-icon> Return to Parent Login
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- 🔹 Footer -->
-    <footer class="bg-yinmn-blue py-6 mt-auto rounded-t-lg">
-        <div class="container mx-auto px-4 md:px-6 lg:px-8 text-center text-alice-blue text-sm">
-            &copy; 2025 Victory Academy. All rights reserved.
+    <!-- Footer Section -->
+    <footer class="bg-slate-950/40 border-t border-slate-800/40 backdrop-blur-md py-5 text-[#EFF3FA] text-center z-10 mt-8">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p class="text-xs text-[var(--v-gray)]">&copy; 2026 Victory Sports Academy. All rights reserved.</p>
+            <div class="flex gap-4 text-xs">
+                <a href="#" class="text-slate-400 hover:text-[var(--v-teal)] transition">Privacy Policy</a>
+                <span class="text-slate-700">•</span>
+                <a href="#" class="text-slate-400 hover:text-[var(--v-teal)] transition">Contact Support</a>
+            </div>
         </div>
     </footer>
 
@@ -213,87 +654,231 @@
         const personalInfoContent = document.getElementById('personalInfoContent');
         const accountInfoContent = document.getElementById('accountInfoContent');
         const nextToAccountInfoButton = document.getElementById('nextToAccountInfo');
+        const registrationForm = document.getElementById('registrationForm');
+        
+        // Form field handles for live updating member card
+        const fullNameInput = document.getElementById('{{ parent_form.full_name.id_for_label }}');
+        const phoneInput = document.getElementById('{{ parent_form.phone.id_for_label }}');
+        const cardParentName = document.getElementById('cardParentName');
+        const cardPhone = document.getElementById('cardPhone');
+        const cardSport = document.getElementById('cardSport');
+        const cardStatusBadge = document.getElementById('cardStatusBadge');
 
+        // Progress bar variables
+        const progressFill = document.getElementById('progressFill');
+        const progressPercentage = document.getElementById('progressPercentage');
+
+        // Security indicators
+        const passwordInput = document.querySelector('input[name="{{ user_form.password.name }}"]');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordMismatchError = document.getElementById('passwordMismatchError');
+
+        /**
+         * Dynamic multi-step navigation controller
+         */
         function showTab(tabName) {
             if (tabName === 'personal') {
                 personalInfoContent.classList.remove('hidden');
                 accountInfoContent.classList.add('hidden');
-                personalInfoTab.classList.add('bg-[#8AADDE]', 'text-[#EFF3FA]');
-                personalInfoTab.classList.remove('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
-                accountInfoTab.classList.remove('bg-[#8AADDE]', 'text-[#EFF3FA]');
-                accountInfoTab.classList.add('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+                
+                // Style Active Tab
+                personalInfoTab.classList.add('bg-cyan-500/15', 'text-cyan-400', 'border', 'border-cyan-500/25');
+                personalInfoTab.classList.remove('text-[var(--v-gray)]', 'hover:text-white', 'hover:bg-white/5');
+                
+                // Style Inactive Tab
+                accountInfoTab.classList.remove('bg-cyan-500/15', 'text-cyan-400', 'border', 'border-cyan-500/25');
+                accountInfoTab.classList.add('text-[var(--v-gray)]', 'hover:text-white', 'hover:bg-white/5');
+
+                // Update Onboarding Progress metrics
+                progressFill.style.width = '50%';
+                progressPercentage.textContent = '50% Onboarded';
+                cardStatusBadge.textContent = 'Step 1 of 2';
+                cardStatusBadge.className = "text-xxs font-black px-2 py-1 rounded bg-orange-500/20 border border-orange-500/30 text-orange-400 uppercase animate-pulse";
             } else {
                 accountInfoContent.classList.remove('hidden');
                 personalInfoContent.classList.add('hidden');
-                accountInfoTab.classList.add('bg-[#8AADDE]', 'text-[#EFF3FA]');
-                accountInfoTab.classList.remove('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
-                personalInfoTab.classList.remove('bg-[#8AADDE]', 'text-[#EFF3FA]');
-                personalInfoTab.classList.add('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+                
+                // Style Active Tab
+                accountInfoTab.classList.add('bg-cyan-500/15', 'text-cyan-400', 'border', 'border-cyan-500/25');
+                accountInfoTab.classList.remove('text-[var(--v-gray)]', 'hover:text-white', 'hover:bg-white/5');
+                
+                // Style Inactive Tab
+                personalInfoTab.classList.remove('bg-cyan-500/15', 'text-cyan-400', 'border', 'border-cyan-500/25');
+                personalInfoTab.classList.add('text-[var(--v-gray)]', 'hover:text-white', 'hover:bg-white/5');
+
+                // Update Onboarding Progress metrics
+                progressFill.style.width = '90%';
+                progressPercentage.textContent = '90% Onboarded';
+                cardStatusBadge.textContent = 'Almost Ready!';
+                cardStatusBadge.className = "text-xxs font-black px-2 py-1 rounded bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 uppercase animate-pulse";
             }
         }
 
+        // Trigger step listeners
         personalInfoTab.addEventListener('click', () => showTab('personal'));
         accountInfoTab.addEventListener('click', () => showTab('account'));
         nextToAccountInfoButton.addEventListener('click', () => showTab('account'));
 
+        /**
+         * Update the left pane digital membership passport live
+         */
+        function updateCardPreview() {
+            if (fullNameInput && fullNameInput.value.trim() !== "") {
+                cardParentName.textContent = fullNameInput.value.toUpperCase();
+            } else {
+                cardParentName.textContent = "YOUR NAME HERE";
+            }
+
+            if (phoneInput && phoneInput.value.trim() !== "") {
+                cardPhone.textContent = phoneInput.value;
+            } else {
+                cardPhone.textContent = "-";
+            }
+        }
+
+        /**
+         * Sport Selection Card handler
+         */
+        function selectSport(sportName) {
+            // Remove selection border styles from all cards
+            document.querySelectorAll('.sport-selector-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected highlight to current choice
+            const cardId = 'sport' + sportName;
+            const targetCard = document.getElementById(cardId);
+            if (targetCard) {
+                targetCard.classList.add('selected');
+            }
+
+            // Sync with hidden input cache to match Django POST actions
+            const selectedSportInput = document.getElementById('selectedSportInput');
+            if (selectedSportInput) {
+                selectedSportInput.value = sportName;
+            }
+
+            // Update Left Passport view live
+            if (cardSport) {
+                cardSport.textContent = sportName;
+            }
+        }
+
+        /**
+         * Real-time Interactive Password Strength Evaluator
+         */
+        function checkPasswordStrength(password) {
+            const strengthProgress = document.getElementById('strengthProgress');
+            const strengthLabel = document.getElementById('strengthLabel');
+            
+            const checkLen = document.getElementById('checkLen');
+            const checkNum = document.getElementById('checkNum');
+            const checkUpper = document.getElementById('checkUpper');
+            const checkSpecial = document.getElementById('checkSpecial');
+
+            let criteriaScore = 0;
+
+            // 1. Length Check
+            if (password.length >= 8) {
+                criteriaScore++;
+                setRequirementState(checkLen, true);
+            } else {
+                setRequirementState(checkLen, false);
+            }
+
+            // 2. Numbers Check
+            if (/\d/.test(password)) {
+                criteriaScore++;
+                setRequirementState(checkNum, true);
+            } else {
+                setRequirementState(checkNum, false);
+            }
+
+            // 3. Uppercase Check
+            if (/[A-Z]/.test(password)) {
+                criteriaScore++;
+                setRequirementState(checkUpper, true);
+            } else {
+                setRequirementState(checkUpper, false);
+            }
+
+            // 4. Special Characters Check
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                criteriaScore++;
+                setRequirementState(checkSpecial, true);
+            } else {
+                setRequirementState(checkSpecial, false);
+            }
+
+            // Update Progress bar visuals based on matched score
+            if (password === "") {
+                strengthProgress.style.width = '0%';
+                strengthProgress.className = "h-full bg-slate-800 transition-all duration-300";
+                strengthLabel.textContent = "Empty";
+                strengthLabel.className = "text-slate-400 font-bold";
+            } else if (criteriaScore <= 1) {
+                strengthProgress.style.width = '25%';
+                strengthProgress.className = "h-full bg-red-500 transition-all duration-300";
+                strengthLabel.textContent = "Too Weak";
+                strengthLabel.className = "text-red-400 font-bold";
+            } else if (criteriaScore === 2) {
+                strengthProgress.style.width = '50%';
+                strengthProgress.className = "h-full bg-yellow-500 transition-all duration-300";
+                strengthLabel.textContent = "Fair";
+                strengthLabel.className = "text-yellow-400 font-bold";
+            } else if (criteriaScore === 3) {
+                strengthProgress.style.width = '75%';
+                strengthProgress.className = "h-full bg-cyan-500 transition-all duration-300";
+                strengthLabel.textContent = "Strong";
+                strengthLabel.className = "text-cyan-400 font-bold";
+            } else if (criteriaScore === 4) {
+                strengthProgress.style.width = '100%';
+                strengthProgress.className = "h-full bg-emerald-500 transition-all duration-300";
+                strengthLabel.textContent = "Excellent";
+                strengthLabel.className = "text-emerald-400 font-bold";
+            }
+        }
+
+        // Helper helper updates check status visually
+        function setRequirementState(element, isSuccess) {
+            const icon = element.querySelector('ion-icon');
+            if (isSuccess) {
+                icon.setAttribute('name', 'checkmark-circle-outline');
+                icon.className = "text-emerald-400 w-3.5 h-3.5";
+                element.className = "flex items-center gap-1.5 text-emerald-400 font-bold transition-all";
+            } else {
+                icon.setAttribute('name', 'close-circle-outline');
+                icon.className = "text-red-400 w-3.5 h-3.5";
+                element.className = "flex items-center gap-1.5 text-slate-400 font-medium transition-all";
+            }
+        }
+
+        // Handle Django redirected errors states on load
         document.addEventListener('DOMContentLoaded', () => {
             const hasUserFormErrors = document.querySelector('#accountInfoContent .errorlist li');
             const hasParentFormErrors = document.querySelector('#personalInfoContent .errorlist li');
-            if (hasUserFormErrors) showTab('account');
-            else if (hasParentFormErrors) showTab('personal');
-            else showTab('personal');
+            if (hasUserFormErrors) {
+                showTab('account');
+            } else if (hasParentFormErrors) {
+                showTab('personal');
+            } else {
+                showTab('personal');
+            }
+
+            // Set initial default sport interest
+            selectSport('Soccer');
         });
 
-        // Chart.js example (kept for context, but hidden by default)
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            title: function (context) {
-                                return context[0].label.length > 16 ? context[0].label.substring(0, 16) + '...' : context[0].label;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            callback: function (value, index, ticks) {
-                                const label = this.getLabelForValue(value);
-                                return label.length > 16 ? label.substring(0, 16) + '...' : label;
-                            }
-                        }
-                    }
-                }
+        // Match verification helper on Form Submit
+        registrationForm.addEventListener('submit', (e) => {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                e.preventDefault();
+                passwordMismatchError.classList.remove('hidden');
+                confirmPasswordInput.classList.add('border-red-500');
+                confirmPasswordInput.focus();
+            } else {
+                passwordMismatchError.classList.add('hidden');
+                confirmPasswordInput.classList.remove('border-red-500');
             }
         });
     </script>

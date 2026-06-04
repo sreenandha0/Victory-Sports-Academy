@@ -5,180 +5,387 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Child Enrolling in Victory Academy</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Ionicons for navbar and other icons -->
+    <!-- Ionicons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <style>
+        /* ==========================================================================
+           1. GLOBAL VARIABLES & COLOR PALETTE
+           ========================================================================== */
+        :root {
+            --v-dark-bg: #080a1b;   /* Deep space midnight blue background */
+            --v-navy: #06235d;      /* Solid base theme dark navy */
+            --v-steel: #2d4373;     /* Muted structural border tone */
+            --v-teal: #2596be;      /* Vibrant glowing neon cyan accent */
+            --v-blue: #0038a8;      /* Primary atmospheric lighting source */
+            --v-green: #4ca63b;     /* Success metric / positive value pill */
+            --v-orange: #ff8c00;    /* Alert metric / gradient accent */
+            --v-gold: #d4af37;      /* Secondary key marker / medal color */
+            --v-gray: #b2beb5;      /* High-contrast ash grey secondary text */
+        }
+
         /* Custom Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #EFF3FA;
-            border-radius: 10px;
+            background: var(--v-dark-bg);
         }
         ::-webkit-scrollbar-thumb {
-            background: #8AADDE;
+            background: var(--v-steel);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #38547C;
+            background: var(--v-teal);
         }
 
-        /* Tab button active state styling */
+        /* ==========================================================================
+           2. BODY & AMBIENT GLOW BACKDROPS
+           ========================================================================== */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .ambient-glow-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(0, 56, 168, 0.15);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: rgba(37, 150, 190, 0.1);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ==========================================================================
+           3. SEAMLESS GLASSMORPHIC NAVIGATION BAR
+           ========================================================================== */
+        .navbar {
+            background: rgba(6, 35, 93, 0.4) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.2) !important;
+            z-index: 10;
+        }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-style: italic;
+            color: #ffffff !important;
+        }
+
+        .navbar-brand span {
+            color: var(--v-teal);
+            font-style: normal;
+        }
+
+        /* Tab Buttons System overriden by structural theme specs */
+        .tab-btn {
+            color: var(--v-gray) !important;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            background: rgba(6, 35, 93, 0.2);
+            border: 1px solid rgba(45, 67, 115, 0.2);
+            border-bottom: none;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            color: #ffffff !important;
+            text-shadow: 0 0 10px rgba(37, 150, 190, 0.4);
+            background: rgba(6, 35, 93, 0.4);
+        }
+
         .tab-btn.active {
-            background-color: #B8CDEC; /* Matches main content background */
-            color: #38547C;
-            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* Inner shadow */
-            border-bottom: 2px solid #8AADDE; /* Highlight active tab */
+            border-top: 2px solid var(--v-teal);
+            background: rgba(6, 35, 93, 0.5) !important;
+            backdrop-filter: blur(10px);
         }
-        .tab-btn:not(.active) {
-            background-color: #D1D9E6; /* Slightly lighter background for inactive tabs */
-            color: #38547C;
-        }
+
         .tab-content {
             display: none;
         }
         .tab-content.active {
             display: block;
         }
+
+        /* ==========================================================================
+           4. INTERACTIVE BUTTON SIGNATURES
+           ========================================================================== */
+        .btn-nav-back {
+            color: var(--v-gray) !important;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            border-radius: 30px;
+            background: rgba(6, 35, 93, 0.2);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .btn-nav-back:hover {
+            color: #ffffff !important;
+            border-color: var(--v-teal);
+            background: rgba(37, 150, 190, 0.15);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .btn-custom {
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ==========================================================================
+           5. COMPONENT CONTAINERS (GLASS CARDS)
+           ========================================================================== */
+        .child-card, .table-container, .main-tab-panel {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.2) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(8, 10, 27, 0.4);
+        }
+
+        .assessment-sub-card {
+            background: rgba(6, 35, 93, 0.25);
+            border: 1px solid rgba(45, 67, 115, 0.25);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Django functional elements native field layout overrides */
+        .child-card p {
+            margin-bottom: 1rem;
+        }
+        .child-card input, .child-card select, .child-card textarea {
+            width: 100%;
+            background: rgba(8, 10, 27, 0.6);
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .child-card input:focus, .child-card select:focus, .child-card textarea:focus {
+            border-color: var(--v-teal);
+            box-shadow: 0 0 10px rgba(37, 150, 190, 0.2);
+        }
+
+        /* Metrics & Typography Utilities */
+        .data-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--v-gray);
+            margin-bottom: 2px;
+        }
+        .data-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
     </style>
 </head>
-<body class="bg-[#EFF3FA] font-sans flex flex-col min-h-screen p-4">
+<body class="flex flex-col min-h-screen p-4">
 
-    <!-- Navbar (Copied from Parent Login Page) -->
-    <nav class="bg-[#38547C] p-4 rounded-b-lg mb-6">
+    <!-- Ambient Glowing Backdrops inside <body> -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <!-- Seamless Glassmorphic Navigation Bar -->
+    <nav class="navbar p-4 rounded-xl mb-6 relative z-10">
         <div class="container mx-auto flex justify-between items-center px-4 md:px-6 lg:px-8">
             <div class="flex items-center w-full justify-center relative">
-                <!-- Back Button -->
-                <button onclick="history.back()" class="absolute left-0 text-[#EFF3FA] focus:outline-none p-2 rounded-full hover:bg-[#2e4161] transition duration-300 ease-in-out">
-                    <ion-icon name="caret-back-outline" class="w-8 h-8"></ion-icon>
+                <!-- Back Button formatted into Pill Back Button design -->
+                <button onclick="history.back()" class="absolute left-0 btn-nav-back focus:outline-none">
+                    <ion-icon name="arrow-back-outline" class="w-4 h-4"></ion-icon>
+                    <span>Back</span>
                 </button>
+                
                 <div class="flex items-center">
-                    <!-- Academy Logo/Icon (SVG from Parent Login Page) -->
-                    <svg class="w-8 h-8 mr-2 text-[#EFF3FA]" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
-                                     10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 
-                                     0-8-3.59-8-8s3.59-8 8-8 
-                                     8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm-3 
-                                     0h2v2H8zm0 4h2v2H8zm8-4h-2v2h2zm0 
-                                     4h-2v2h2z"/>
+                    <!-- Academy Logo/Icon -->
+                    <svg class="w-7 h-7 mr-2 text-[#2596be]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm-3 0h2v2H8zm0 4h2v2H8zm8-4h-2v2h2zm0 4h-2v2h2z"/>
                     </svg>
-                    <!-- Academy Name -->
-                    <a href="#" class="text-[#EFF3FA] text-2xl font-bold tracking-wide">Victory Academy</a>
+                    <!-- Academy Name formatted to match .navbar-brand -->
+                    <a href="#" class="navbar-brand text-2xl tracking-wide">Victory <span>Academy</span></a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content Area -->
-    <div class="tabs-container flex-grow max-w-4xl mx-auto w-full">
-        <div class="tabs flex justify-center space-x-2 sm:space-x-4 mb-4">
-            <button class="tab-btn active flex items-center py-3 px-4 sm:px-6 rounded-t-lg font-semibold text-sm sm:text-base transition-colors duration-300">
-                <ion-icon name="add-circle-outline" class="w-5 h-5 mr-2"></ion-icon><span>Enroll Children</span>
+    <div class="flex-grow max-w-4xl mx-auto w-full relative z-10">
+        <!-- Structural Layout Tabs -->
+        <div class="tabs flex justify-center space-x-1 sm:space-x-2 mb-0">
+            <button class="tab-btn active flex items-center py-3 px-4 sm:px-6 rounded-t-xl font-semibold transition-all duration-300" data-tab="tab-enroll">
+                <ion-icon name="add-circle-outline" class="w-4 h-4 mr-2"></ion-icon><span>Enroll Children</span>
             </button>
-            <button class="tab-btn flex items-center py-3 px-4 sm:px-6 rounded-t-lg font-semibold text-sm sm:text-base transition-colors duration-300" data-tab="tab-view">
-                <ion-icon name="people-outline" class="w-5 h-5 mr-2"></ion-icon><span>Enrolled Children</span>
+            <button class="tab-btn flex items-center py-3 px-4 sm:px-6 rounded-t-xl font-semibold transition-all duration-300" data-tab="tab-view">
+                <ion-icon name="people-outline" class="w-4 h-4 mr-2"></ion-icon><span>Enrolled Children</span>
             </button>
-            <button class="tab-btn flex items-center py-3 px-4 sm:px-6 rounded-t-lg font-semibold text-sm sm:text-base transition-colors duration-300" data-tab="tab-profile">
-                <ion-icon name="person-circle-outline" class="w-5 h-5 mr-2"></ion-icon><span>Update Profile</span>
+            <button class="tab-btn flex items-center py-3 px-4 sm:px-6 rounded-t-xl font-semibold transition-all duration-300" data-tab="tab-profile">
+                <ion-icon name="person-circle-outline" class="w-4 h-4 mr-2"></ion-icon><span>Update Profile</span>
             </button>
         </div>
 
-        <div class="tab-content-container bg-[#B8CDEC] p-6 sm:p-8 rounded-xl shadow-lg">
+        <!-- Glassmorphic Card Container Component Panels -->
+        <div class="main-tab-panel p-6 sm:p-8 rounded-b-xl rounded-tl-xl sm:rounded-tl-none">
 
-            <!-- Tab 1: Enroll Children -->
+            <!-- Tab 1: Enroll Children Component Block -->
             <div class="tab-content active" id="tab-enroll">
-                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-xl sm:text-2xl font-bold text-[#38547C]">Enroll New Child</h4>
-                        <button type="button" class="bg-[#38547C] hover:bg-[#2e4161] text-[#EFF3FA] font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300 btn-add">
-                            <ion-icon name="add-outline" class="inline-block align-middle mr-1"></ion-icon> Add More
-                        </button>
-                    </div>
+                <div class="flex justify-between items-center mb-6">
+                    <h4 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Enroll New Child</h4>
+                    <button type="button" class="btn-custom bg-[var(--v-navy)] hover:bg-[var(--v-steel)] border border-[rgba(45,67,115,0.6)] text-white focus:outline-none transition-all duration-300 btn-add">
+                        <ion-icon name="add-outline" class="w-4 h-4"></ion-icon> Add More
+                    </button>
+                </div>
 
-                    <form method="POST" enctype="multipart/form-data" class="space-y-4">
-                        {% csrf_token %}
-                        {{ formset.management_form }}
-                        <div id="form-container">
-                            {% for form in formset %}
-                                <div class="child-card bg-gray-50 p-4 rounded-lg shadow-sm mb-4 border border-gray-200">
-                                    {{ form.as_p }}
-                                    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors duration-300 text-sm btn-remove mt-2">
-                                        <ion-icon name="trash-outline" class="inline-block align-middle mr-1"></ion-icon> Remove
+                <form method="POST" enctype="multipart/form-data" class="space-y-4">
+                    {% csrf_token %}
+                    {{ formset.management_form }}
+                    <div id="form-container">
+                        {% for form in formset %}
+                            <div class="child-card bg-[rgba(6,35,93,0.25)] p-5 rounded-xl border border-[rgba(45,67,115,0.3)] mb-4 relative">
+                                <div class="text-xs font-bold text-[var(--v-teal)] uppercase tracking-wider mb-3">Child Entry</div>
+                                {{ form.as_p }}
+                                <div class="flex justify-end mt-2">
+                                    <button type="button" class="btn-custom bg-red-950/40 hover:bg-red-900 border border-red-800 text-red-200 transition-all duration-300 btn-remove">
+                                        <ion-icon name="trash-outline" class="w-3.5 h-3.5"></ion-icon> Remove
                                     </button>
                                 </div>
-                            {% endfor %}
-                        </div>
-                        <button type="submit" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300 mt-3">
-                            Submit Enrollment
-                        </button>
-                    </form>
-                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="w-full btn-custom justify-center py-3.5 text-sm bg-[var(--v-teal)] hover:bg-[var(--v-blue)] text-white font-bold tracking-wider shadow-lg shadow-[rgba(37,150,190,0.2)] transition-all duration-300 mt-4">
+                        Submit Enrollment Portfolio
+                    </button>
+                </form>
             </div>
 
-            <!-- Tab 2: Enrolled Children -->
+            <!-- Tab 2: Enrolled Children Component Block -->
             <div class="tab-content" id="tab-view">
-                <h4 class="text-xl sm:text-2xl font-bold text-[#38547C] mb-4">Already Enrolled Children</h4>
+                <h4 class="text-xl sm:text-2xl font-bold text-white mb-6">Already Enrolled Children</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {% for child in existing_children %}
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        {% if child.profile_image %}
-                            <img src="{{ child.profile_image.url }}" class="w-full h-48 object-cover rounded-t-lg" alt="{{ child.name }}">
-                        {% else %}
-                            <img src="https://placehold.co/600x400/D1D9E6/38547C?text=No+Image" class="w-full h-48 object-cover rounded-t-lg" alt="No Image">
-                        {% endif %}
-                        <div class="p-4">
-                            <h5 class="text-lg font-semibold text-[#38547C] mb-2">{{ child.name }}</h5>
-                            <p class="text-sm text-gray-700"><strong>Gender:</strong> {{ child.gender }}</p>
-                            <p class="text-sm text-gray-700"><strong>DOB:</strong> {{ child.dob }}</p>
-                            <p class="text-sm text-gray-700"><strong>School:</strong> {{ child.school }}</p>
-                            <p class="text-sm text-gray-700"><strong>Place:</strong> {{ child.place }}</p>
+                    <div class="assessment-sub-card !p-0 overflow-hidden flex flex-col justify-between">
+                        <div>
+                            {% if child.profile_image %}
+                                <img src="{{ child.profile_image.url }}" class="w-full h-44 object-cover border-b border-[rgba(45,67,115,0.3)]" alt="{{ child.name }}">
+                            {% else %}
+                                <div class="w-full h-44 bg-[rgba(8,10,27,0.5)] border-b border-[rgba(45,67,115,0.3)] flex items-center justify-center text-[var(--v-gray)] text-xs uppercase tracking-wider font-semibold">
+                                    No Image Provided
+                                </div>
+                            {% endif %}
+                            <div class="p-4 space-y-3">
+                                <h5 class="text-lg font-bold text-white tracking-wide border-b border-[rgba(45,67,115,0.2)] pb-1.5">{{ child.name }}</h5>
+                                
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <div class="data-label">Gender</div>
+                                        <div class="data-value">{{ child.gender }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="data-label">DOB</div>
+                                        <div class="data-value text-xs">{{ child.dob }}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="data-label">School</div>
+                                    <div class="data-value text-sm truncate">{{ child.school }}</div>
+                                </div>
+                                <div>
+                                    <div class="data-label">Place</div>
+                                    <div class="data-value text-sm">{{ child.place }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {% empty %}
-                    <p class="text-gray-500 col-span-full">No children enrolled yet.</p>
+                    <p class="text-[var(--v-gray)] col-span-full italic py-6 text-center text-sm">No children enrolled in the database registry yet.</p>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- Tab 3: Update Profile (Placeholder) -->
+            <!-- Tab 3: Update Profile Component Block -->
             <div class="tab-content" id="tab-profile">
-                <h4 class="text-xl sm:text-2xl font-bold text-[#38547C] mb-4">Update Profile</h4>
+                <h4 class="text-xl sm:text-2xl font-bold text-white mb-4">Update Profile</h4>
                 {% if existing_children %}
-                    <a href="{% url 'child_profile' existing_children.0.id %}" class="inline-block border border-[#8AADDE] text-[#8AADDE] hover:bg-[#8AADDE] hover:text-[#EFF3FA] font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300 mt-2">
-                        Update {{ existing_children.0.name }}'s Profile
-                    </a>
+                    <div class="bg-[rgba(8,10,27,0.3)] border-left-glow p-4 border-l-4 border-[var(--v-teal)] rounded-r-lg">
+                        <p class="text-sm text-[var(--v-gray)] mb-3">Modify system parameters and portfolio configurations for active child files.</p>
+                        <a href="{% url 'child_profile' existing_children.0.id %}" class="btn-custom bg-[var(--v-navy)] hover:bg-[var(--v-teal)] border border-[rgba(45,67,115,0.5)] text-white transition-all duration-300">
+                            <ion-icon name="create-outline" class="w-4 h-4"></ion-icon> Update {{ existing_children.0.name }}'s Profile
+                        </a>
+                    </div>
                 {% else %}
-                    <p class="text-gray-500">No children enrolled yet to update.</p>
+                    <p class="text-[var(--v-gray)] italic text-sm">No functional records registered to execute updates.</p>
                 {% endif %}
             </div>
 
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-[#38547C] text-[#EFF3FA] text-center py-4 mt-auto shadow-inner rounded-t-lg">
-        <p class="text-sm">&copy; 2025 Victory Academy. All rights reserved.</p>
+    <!-- Seamless Footer Element -->
+    <footer class="text-[var(--v-gray)] text-center py-6 mt-auto relative z-10 border-t border-[rgba(45,67,115,0.2)]">
+        <p class="text-xs tracking-widest uppercase">&copy; 2026 Victory Academy. Core System Architecture. All rights reserved.</p>
     </footer>
 
-    <!-- Template for dynamic form -->
-    <template id="empty-form-template">
-        <div class="child-card bg-gray-50 p-4 rounded-lg shadow-sm mb-4 border border-gray-200">
-            __FORM_HTML__
-            <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors duration-300 text-sm btn-remove mt-2">
-                <ion-icon name="trash-outline" class="inline-block align-middle mr-1"></ion-icon> Remove
-            </button>
-        </div>
-    </template>
-
+    <!-- Template Processing Block for Dynamic UI Sub-Cards -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Tab functionality
+            // Interactive Tab System Functional Signatures
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
 
@@ -186,45 +393,43 @@
                 button.addEventListener('click', () => {
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
-                    const tabId = button.dataset.tab || 'tab-enroll'; // Default to enroll tab if no data-tab
+                    const tabId = button.dataset.tab;
                     tabContents.forEach(content => content.classList.remove('active'));
                     document.getElementById(tabId).classList.add('active');
                 });
             });
 
-            // Set initial active tab
-            document.querySelector('.tab-btn').classList.add('active');
-            document.getElementById('tab-enroll').classList.add('active');
-
-            // Add form dynamically
+            // Dynamic Formset Matrix Component Generation
             const formContainer = document.getElementById('form-container');
             const addButton = document.querySelector('.btn-add');
             const totalForms = document.getElementById('id_form-TOTAL_FORMS');
-            // Ensure formset.empty_form.as_p is properly escaped for JS
             const emptyFormHtml = `{{ formset.empty_form.as_p|escapejs }}`;
 
             addButton.addEventListener('click', () => {
                 const newFormIndex = parseInt(totalForms.value);
                 const newFormHtml = emptyFormHtml.replace(/__prefix__/g, newFormIndex);
                 const wrapper = document.createElement('div');
-                wrapper.classList.add('child-card', 'bg-gray-50', 'p-4', 'rounded-lg', 'shadow-sm', 'mb-4', 'border', 'border-gray-200');
-                wrapper.innerHTML = newFormHtml + `
-                    <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors duration-300 text-sm btn-remove mt-2">
-                        <ion-icon name="trash-outline" class="inline-block align-middle mr-1"></ion-icon> Remove
-                    </button>
+                wrapper.classList.add('child-card', 'bg-[rgba(6,35,93,0.25)]', 'p-5', 'rounded-xl', 'border', 'border-[rgba(45,67,115,0.3)]', 'mb-4', 'relative');
+                
+                wrapper.innerHTML = `
+                    <div class="text-xs font-bold text-[var(--v-teal)] uppercase tracking-wider mb-3">Child Entry</div>
+                    ${newFormHtml}
+                    <div class="flex justify-end mt-2">
+                        <button type="button" class="btn-custom bg-red-950/40 hover:bg-red-900 border border-red-800 text-red-200 transition-all duration-300 btn-remove">
+                            <ion-icon name="trash-outline" class="w-3.5 h-3.5"></ion-icon> Remove
+                        </button>
+                    </div>
                 `;
                 formContainer.appendChild(wrapper);
                 totalForms.value = newFormIndex + 1;
             });
 
-            // Remove child form
+            // Interactive Removal Handling Node
             formContainer.addEventListener('click', function(e) {
                 if (e.target.classList.contains('btn-remove') || e.target.closest('.btn-remove')) {
                     const button = e.target.closest('.btn-remove');
                     if (button) {
                         button.closest('.child-card').remove();
-                        // Optional: Re-index forms if needed for backend processing,
-                        // but Django formsets usually handle gaps.
                     }
                 }
             });

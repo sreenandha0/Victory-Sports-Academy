@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-EVENT HUB | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --v-dark-bg: #080a1b;
+            --v-navy: #06235d;
+            --v-steel: #2d4373;
+            --v-teal: #2596be;
+            --v-blue: #0038a8;
+            --v-green: #4ca63b;
+            --v-orange: #ff8c00;
+            --v-gold: #d4af37;
+            --v-gray: #b2beb5;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(0, 56, 168, 0.15);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: rgba(37, 150, 190, 0.1);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glass-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(37, 150, 190, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .form-input {
+            background: rgba(8, 10, 27, 0.6);
+            border: 1px solid var(--v-steel);
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--v-teal);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.2);
+            background: rgba(8, 10, 27, 0.8);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--v-orange), #e67e00);
+            box-shadow: 0 10px 20px rgba(255, 140, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+            box-shadow: 0 12px 25px rgba(255, 140, 0, 0.4);
+        }
+
+        .registration-item {
+            background: rgba(8, 10, 27, 0.4);
+            border-left: 3px solid var(--v-teal);
+            border-radius: 8px;
+        }
+
+        ::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-dropdown {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <div class="relative z-10">
+        <nav class="p-6 border-b border-white/5 backdrop-blur-xl sticky top-0 bg-black/20 mb-8">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-black italic tracking-tighter uppercase">
+                    V-EVENT<span class="text-[var(--v-teal)] not-italic">HUB</span>
+                </h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-[10px] font-bold uppercase text-gray-400 bg-white/5 px-3 py-1 rounded-full border border-white/10">
+                        Django Mode Active
+                    </span>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto p-6">
+            <div class="grid lg:grid-cols-3 gap-8">
+
+                <aside class="space-y-6">
+                    <div class="glass-card p-6 border-t-4 border-t-[var(--v-orange)]">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="fas fa-plus-circle text-[var(--v-orange)] text-xl"></i>
+                            <h3 class="text-lg font-black uppercase tracking-tight">Create Event</h3>
+                        </div>
+
+                        <form method="POST" class="space-y-4">
+                            {% csrf_token %}
+                            
+                            <div>
+                                <label class="text-[10px] uppercase font-bold text-gray-500 mb-1 block">Event Title</label>
+                                <input type="text" name="title" placeholder="Event Title" class="form-input" required>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] uppercase font-bold text-gray-500 mb-1 block">Description</label>
+                                <textarea name="description" rows="3" placeholder="Description" class="form-input" required></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[10px] uppercase font-bold text-gray-500 mb-1 block">Date</label>
+                                    <input type="date" name="date" class="form-input" required>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] uppercase font-bold text-gray-500 mb-1 block">Time</label>
+                                    <input type="time" name="time" class="form-input" required>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] uppercase font-bold text-gray-500 mb-1 block">Location</label>
+                                <div class="relative">
+                                    <i class="fas fa-map-marker-alt absolute left-3 top-3.5 text-gray-500 text-xs"></i>
+                                    <input type="text" name="location" placeholder="Location" class="form-input pl-8" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary w-full py-4 mt-2 rounded-xl text-white font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                                <i class="fas fa-paper-plane"></i>
+                                Create Event
+                            </button>
+                        </form>
+                    </div>
+                </aside>
+
+                <section class="lg:col-span-2 space-y-6">
+                    <div class="flex justify-between items-end mb-4">
+                        <div>
+                            <h2 class="text-3xl font-black uppercase tracking-tighter bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">
+                                Live Dashboard
+                            </h2>
+                            <p class="text-xs text-gray-400 font-medium">Manage and track your active registrations</p>
+                        </div>
+                    </div>
+
+                    {% for event in events %}
+                    <div class="glass-card p-6 group">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-2.5 py-1 bg-[var(--v-teal)]/20 text-[var(--v-teal)] text-[10px] font-black rounded uppercase border border-[var(--v-teal)]/30">
+                                        Active
+                                    </span>
+                                    <span class="text-xs text-gray-500 font-mono tracking-tighter">REF#{{ event.id }}</span>
+                                </div>
+                                <h4 class="text-xl font-bold group-hover:text-[var(--v-teal)] transition-colors duration-300">
+                                    {{ event.title }}
+                                </h4>
+                                <p class="text-sm text-gray-400 mt-2 leading-relaxed">
+                                    {{ event.description }}
+                                </p>
+                            </div>
+                            <div class="md:text-right bg-white/5 p-3 rounded-xl border border-white/5">
+                                <div class="text-sm font-black text-white mb-1">{{ event.date }}</div>
+                                <div class="text-[10px] uppercase font-bold text-[var(--v-teal)] flex md:justify-end items-center gap-1">
+                                    <i class="fas fa-clock"></i> {{ event.time }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-4 mt-6 pt-6 border-t border-white/5">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-gray-300">
+                                <i class="fas fa-map-pin text-[var(--v-orange)]"></i>
+                                {{ event.location }}
+                            </div>
+                            
+                            <div class="ml-auto">
+                                <button onclick="toggleRegistrations('{{ event.id }}')"
+                                        class="flex items-center gap-2 bg-[var(--v-navy)] hover:bg-[var(--v-steel)] px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all">
+                                    <span>Attendees ({{ event.registrations.count }})</span>
+                                    <i class="fas fa-chevron-down text-[8px]" id="icon-{{ event.id }}"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="reg-{{ event.id }}" class="hidden mt-4 pt-4 space-y-2 animate-dropdown">
+                            {% for reg in event.registrations.all %}
+                            <div class="registration-item flex justify-between items-center p-3 text-sm">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--v-teal)] to-[var(--v-blue)] flex items-center justify-center font-bold text-[10px]">
+                                        {{ reg.child.name|slice:":1" }}
+                                    </div>
+                                    <span class="font-bold text-gray-200">{{ reg.child.name }}</span>
+                                </div>
+                                <span class="text-[10px] font-mono text-gray-500">
+                                    {{ reg.registered_at|date:"M d, H:i" }}
+                                </span>
+                            </div>
+                            {% empty %}
+                            <div class="text-center py-6 border-2 border-dashed border-white/5 rounded-xl">
+                                <i class="fas fa-user-slash text-gray-600 mb-2"></i>
+                                <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">No registrations yet</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="glass-card p-12 text-center border-dashed border-2 border-white/10">
+                        <i class="fas fa-calendar-times text-gray-600 text-5xl mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-400">No Events Found</h3>
+                        <p class="text-sm text-gray-500 max-w-xs mx-auto mt-2">Start by creating your first event using the panel on the left.</p>
+                    </div>
+                    {% endfor %}
+
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        /**
+         * Toggles the visibility of the registrations dropdown
+         * Uses a unique ID based on the Django event ID
+         */
+        function toggleRegistrations(id) {
+            const el = document.getElementById('reg-' + id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                el.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
+</body>
+</html>

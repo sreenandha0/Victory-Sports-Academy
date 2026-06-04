@@ -1,0 +1,40 @@
+<div class="p-6">
+
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold">Events</h2>
+
+        <a href="{% url 'create_event' %}"
+           class="bg-v-orange px-3 py-2 rounded text-white text-sm font-bold">
+           + Create Event
+        </a>
+    </div>
+
+    <div class="space-y-4">
+
+        {% for event in events %}
+        <div class="p-4 bg-gray-800 rounded">
+
+            <div class="flex justify-between">
+                <h3 class="font-bold">{{ event.title }}</h3>
+                <span class="text-sm">{{ event.date }}</span>
+            </div>
+
+            <p class="text-sm text-gray-400">{{ event.description }}</p>
+
+            <div class="flex justify-between mt-3">
+
+                <a href="{% url 'event_registrations' event.id %}"
+                   class="text-blue-400 text-sm font-bold">
+                   View Registrations
+                </a>
+
+            </div>
+
+        </div>
+        {% empty %}
+        <p>No events yet.</p>
+        {% endfor %}
+
+    </div>
+
+</div>

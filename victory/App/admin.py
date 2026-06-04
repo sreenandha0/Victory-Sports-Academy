@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Parent, Child, ChildProfile, PlayerAssessment, GalleryImage, Attendance
 from .models import Coach
+from .models import Event, EventRegistration
 
 admin.site.register(Parent)
 admin.site.register(Child)
@@ -9,7 +10,12 @@ admin.site.register(PlayerAssessment)
 admin.site.register(GalleryImage)
 admin.site.register(Attendance)
 
+admin.site.register(Event)
+admin.site.register(EventRegistration)
 
+from .models import News
+
+admin.site.register(News)
 
 
 

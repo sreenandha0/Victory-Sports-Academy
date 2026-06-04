@@ -14,6 +14,12 @@ urlpatterns = [
     path('child/<int:child_id>/profile/', views.create_or_update_child_profile, name='child_profile'),
     path('assessment/charts/<int:child_id>/', views.parent_assessment_charts, name='assessment_charts'),
     path('dashboard/parent/performance/',views.parent_child_selection_view, name='parent_child_selection'),
+    path('events/', views.events_page, name='events_page'),
+    path(
+    'register-event/<int:event_id>/<int:child_id>/',
+    views.register_event,
+    name='register_event'
+),
 
     # 🧑‍🏫 Coach
     path('register/coach/', views.register_coach, name='register_coach'),
@@ -56,6 +62,19 @@ path(
     views.manage_enrolled_children,
     name='manage_enrolled_children'
 ),
+
+path('events-admin/', views.event_dashboard, name='event_dashboard'),
+
+path('create-fee/', views.create_fee, name='create_fee'),
+    path('fees/', views.parent_fees, name='parent_fees'),
+
+    # -------------------------
+    # PAYMENT SYSTEM
+    # -------------------------
+    path('pay-fee/<int:id>/', views.pay_fee, name='pay_fee'),
+   
+
+
     # ✅ Utilities
     path('logout/', views.logout_view, name='logout'),
     path('ajax/check-username/', views.check_username, name='check_username'),

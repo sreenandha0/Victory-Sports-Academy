@@ -1,560 +1,350 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Victory Football Coaching</title>
+<head>
+    <title>Victory Academy | Admin Hub</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="author" content="Victory Academy Team">
-    <meta name="keywords" content="eCommerce, Grocery, HTML Template, Bootstrap, Store">
-    <meta name="description" content="Victory Football Academy Management Hub.">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    
-    <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="{% static 'victory/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/font-style.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-      :root {
-        --v-dark-bg: #080a1b;
-        --v-navy: #06235d;
-        --v-steel: #2d4373;
-        --v-teal: #2596be;
-        --v-blue: #0038a8;
-        --v-green: #4ca63b;
-        --v-orange: #ff8c00;
-        --v-gold: #d4af37;
-        --v-gray: #b2beb5;
-      }
+        :root {
+            --v-dark-bg: #080a1b;
+            --v-navy: #06235d;
+            --v-steel: #2d4373;
+            --v-teal: #2596be;
+            --v-blue: #0038a8;
+            --v-green: #4ca63b;
+            --v-orange: #ff8c00;
+            --v-gold: #d4af37;
+            --v-gray: #b2beb5;
+        }
 
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: var(--v-dark-bg);
-        color: #ffffff;
-        overflow-x: hidden;
-      }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-      /* Seamless Navigation Styling */
-      .navbar {
-        background: rgba(6, 35, 93, 0.4) !important;
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border-bottom: 1px solid rgba(45, 67, 115, 0.2) !important;
-      }
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: rgba(0, 56, 168, 0.15);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-      .nav-link {
-        color: var(--v-gray) !important;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        transition: all 0.3s ease;
-      }
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(37, 150, 190, 0.1);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-      .nav-link:hover, .nav-link.active {
-        color: #ffffff !important;
-        text-shadow: 0 0 10px rgba(37, 150, 190, 0.4);
-      }
+        .glass-header {
+            background: rgba(6, 35, 93, 0.4) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.3) !important;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-      .nav-link.active {
-        border-bottom: 2px solid var(--v-teal);
-      }
+        .glass-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.25);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
 
-      /* Ambient Glow Elements */
-      .ambient-glow-1 {
-        position: absolute;
-        top: -10%;
-        left: -10%;
-        width: 50vw;
-        height: 50vw;
-        background: rgba(0, 56, 168, 0.15);
-        border-radius: 50%;
-        filter: blur(120px);
-        pointer-events: none;
-        z-index: 1;
-      }
+        .glass-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--v-teal);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 15px rgba(37, 150, 190, 0.2);
+        }
 
-      .ambient-glow-2 {
-        position: absolute;
-        bottom: 10%;
-        right: -10%;
-        width: 45vw;
-        height: 45vw;
-        background: rgba(37, 150, 190, 0.1);
-        border-radius: 50%;
-        filter: blur(120px);
-        pointer-events: none;
-        z-index: 1;
-      }
+        .btn-v-core {
+            border-radius: 50px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.7rem;
+            padding: 0.8rem 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
 
-      /* Typography Updates */
-      h1, h2, h3, h4, h5, h6 {
-        font-family: 'Inter', sans-serif;
-        font-weight: 800;
-        letter-spacing: -0.02em;
-      }
+        .btn-teal {
+            background: var(--v-teal);
+            color: white;
+        }
 
-      .section-title {
-        color: #ffffff;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: -0.01em;
-        position: relative;
-        padding-bottom: 10px;
-      }
+        .btn-teal:hover {
+            box-shadow: 0 0 20px rgba(37, 150, 190, 0.4);
+            filter: brightness(1.1);
+        }
 
-      .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 60px;
-        height: 4px;
-        background: linear-gradient(90deg, var(--v-orange), var(--v-teal));
-        border-radius: 2px;
-      }
+        .btn-outline-v {
+            background: rgba(6, 35, 93, 0.2);
+            border-color: var(--v-steel);
+            color: var(--v-gray);
+        }
 
-      /* Glassmorphic Card Redesign */
-      .glass-card {
-        background: rgba(6, 35, 93, 0.25) !important;
-        border: 1px solid rgba(45, 67, 115, 0.2) !important;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        border-radius: 1.25rem !important;
-      }
+        .btn-outline-v:hover {
+            border-color: var(--v-teal);
+            color: white;
+            background: rgba(37, 150, 190, 0.1);
+        }
 
-      .glass-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(37, 150, 190, 0.4) !important;
-        box-shadow: 0 15px 30px rgba(8, 10, 27, 0.5), 0 0 20px rgba(37, 150, 190, 0.15) !important;
-      }
+        .nav-link {
+            color: var(--v-gray) !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 1.5rem 1rem !important;
+            position: relative;
+        }
 
-      /* Premium Buttons */
-      .btn-outline-custom {
-        border: 1px solid rgba(45, 67, 115, 0.6);
-        color: var(--v-gray);
-        background: rgba(6, 35, 93, 0.2);
-        backdrop-filter: blur(5px);
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-size: 0.75rem;
-        transition: all 0.3s ease;
-      }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: var(--v-teal);
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 -2px 10px var(--v-teal);
+        }
 
-      .btn-outline-custom:hover {
-        border-color: var(--v-teal);
-        color: #ffffff;
-        background: var(--v-teal);
-        box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
-      }
+        .coach-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            border: 2px solid var(--v-steel);
+            object-fit: cover;
+        }
 
-      /* Swiper Buttons */
-      .swiper-buttons .btn {
-        background: rgba(6, 35, 93, 0.4);
-        border: 1px solid rgba(45, 67, 115, 0.4);
-        color: #ffffff;
-        transition: all 0.3s ease;
-      }
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
 
-      .swiper-buttons .btn:hover {
-        background: var(--v-teal);
-        border-color: var(--v-teal);
-        box-shadow: 0 0 10px rgba(37, 150, 190, 0.3);
-      }
+        .status-online { background: rgba(76, 166, 59, 0.2); color: #81cf72; border: 1px solid var(--v-green); }
+        .status-busy { background: rgba(255, 140, 0, 0.2); color: #ffb357; border: 1px solid var(--v-orange); }
 
-      /* Custom Category items */
-      .category-item img {
-        width: 130px;
-        height: 130px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid rgba(45, 67, 115, 0.3);
-        padding: 5px;
-        transition: all 0.4s ease;
-      }
+        .event-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
 
-      .category-item:hover img {
-        border-color: var(--v-teal);
-        transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(37, 150, 190, 0.25);
-      }
-
-      /* Footer Styling Override */
-      footer {
-        background-color: #050714 !important;
-        border-top: 1px solid rgba(45, 67, 115, 0.2) !important;
-      }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--v-dark-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--v-steel); border-radius: 10px; }
     </style>
-  </head>
+</head>
 
-  <body class="selection:bg-victory-teal selection:text-white">
-
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-      <defs>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="link" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12 19a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm5 0a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm0-4a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm-5 0a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm7-12h-1V2a1 1 0 0 0-2 0v1H8V2a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3Zm1 17a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9h16Zm0-11H4V6a1 1 0 0 1 1-1h1v1a1 1 0 0 0 2 0V5h8v1a1 1 0 0 0 2 0V5h1a1 1 0 0 1 1 1ZM7 15a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm0 4a1 1 0 1 0-1-1a1 1 0 0 0 1 1Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="arrow-right" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M17.92 11.62a1 1 0 0 0-.21-.33l-5-5a1 1 0 0 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l5-5a1 1 0 0 0 .21-.33a1 1 0 0 0 0-.76Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="category" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M19 5.5h-6.28l-.32-1a3 3 0 0 0-2.84-2H5a3 3 0 0 0-3 3v13a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-10a3 3 0 0 0-3-3Zm1 13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1h4.56a1 1 0 0 1 .95.68l.54 1.64a1 1 0 0 0 .95.68h7a1 1 0 0 1 1 1Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="calendar" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="heart" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Zm-1.41 7.46L12 18.81l-6.75-6.74a4.28 4.28 0 0 1 3-7.3a4.25 4.25 0 0 1 3 1.25a1 1 0 0 0 1.42 0a4.27 4.27 0 0 1 6 6.05Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="plus" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M19 11h-6V5a1 1 0 0 0-2 0v6H5a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="minus" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M19 11H5a1 1 0 0 0 0 2h14a1 1 0 0 0 0-2Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="cart" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.491a3.013 3.013 0 0 0 2.885-2.176l1.585-5.55A1 1 0 0 0 19 5H6.74a3.007 3.007 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.921a1.005 1.005 0 0 1 .962.725l.155.545v.005l1.641 5.742A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Zm-1.326-9l-1.22 4.274a1.005 1.005 0 0 1-.963.726H8.754l-.255-.892L7.326 7ZM16.5 19a1.5 1.5 0 1 0 1.5 1.5a1.5 1.5 0 0 0-1.5-1.5Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="check" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M18.71 7.21a1 1 0 0 0-1.42 0l-7.45 7.46l-3.13-3.14A1 1 0 1 0 5.29 13l3.84 3.84a1 1 0 0 0 1.42 0l8.16-8.16a1 1 0 0 0 0-1.47Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="trash" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M10 18a1 1 0 0 0 1-1v-6a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1ZM20 6h-4V5a3 3 0 0 0-3-3h-2a3 3 0 0 0-3 3v1H4a1 1 0 0 0 0 2h1v11a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8h1a1 1 0 0 0 0-2ZM10 5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1h-4Zm7 14a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8h10Zm-3-1a1 1 0 0 0 1-1v-6a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="star-outline" viewBox="0 0 15 15">
-          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M7.5 9.804L5.337 11l.413-2.533L4 6.674l2.418-.37L7.5 4l1.082 2.304l2.418.37l-1.75 1.793L9.663 11L7.5 9.804Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="star-solid" viewBox="0 0 15 15">
-          <path fill="currentColor" d="M7.953 3.788a.5.5 0 0 0-.906 0L6.08 5.85l-2.154.33a.5.5 0 0 0-.283.843l1.574 1.613l-.373 2.284a.5.5 0 0 0 .736.518l1.92-1.063l1.921 1.063a.5.5 0 0 0 .736-.519l-.373-2.283l1.574-1.613a.5.5 0 0 0-.283-.844L8.921 5.85l-.968-2.062Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="search" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="user" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M15.71 12.71a6 6 0 1 0-7.42 0a10 10 0 0 0-6.22 8.18a1 1 0 0 0 2 .22a8 8 0 0 1 15.9 0a1 1 0 0 0 1 .89h.11a1 1 0 0 0 .88-1.1a10 10 0 0 0-6.25-8.19ZM12 12a4 4 0 1 1 4-4a4 4 0 0 1-4 4Z"/>
-        </symbol>
-        <symbol xmlns="http://www.w3.org/2000/svg" id="close" viewBox="0 0 15 15">
-          <path fill="currentColor" d="M7.953 3.788a.5.5 0 0 0-.906 0L6.08 5.85l-2.154.33a.5.5 0 0 0-.283.843l1.574 1.613l-.373 2.284a.5.5 0 0 0 .736.518l1.92-1.063l1.921 1.063a.5.5 0 0 0 .736-.519l-.373-2.283l1.574-1.613a.5.5 0 0 0-.283-.844L8.921 5.85l-.968-2.062Z"/>
-        </symbol>
-      </defs>
-    </svg>
-
-    <div class="preloader-wrapper">
-      <div class="preloader"></div>
-    </div>
-
+<body>
     <div class="ambient-glow-1"></div>
     <div class="ambient-glow-2"></div>
 
-    <header class="relative z-10">
-      <div class="container-fluid py-4 px-4 px-lg-5" style="background: rgba(6, 35, 93, 0.15);">
-        <div class="row align-items-center g-3">
-          
-          <div class="col-lg-3 col-md-4 col-sm-12 text-center text-md-start">
-            <div class="main-logo">
-              <a href="#" class="fs-3 font-black text-white text-decoration-none tracking-tighter italic">
-                VICTORY <span class="text-victory-teal not-italic font-extrabold" style="color: var(--v-teal);">ACADEMY</span>
-              </a>
-              <div class="text-uppercase tracking-widest text-victory-gold font-bold small mt-1" style="color: var(--v-gold); font-size: 0.65rem;">
-                Admin Workspace
-              </div>
+    <header class="glass-header">
+        <div class="container-fluid px-lg-5">
+            <div class="row align-items-center py-3">
+                <div class="col-lg-3 d-flex align-items-center">
+                    <div class="main-logo">
+                        <a href="#" class="text-decoration-none d-block">
+                            <span class="fs-4 fw-black text-white italic tracking-tighter">VICTORY <span class="not-italic text-v-teal" style="color:var(--v-teal)">HUB</span></span>
+                        </a>
+                        <span class="d-block text-uppercase small font-bold tracking-widest text-v-gray" style="font-size: 0.6rem; color: var(--v-gold)">HQ Command Center</span>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 d-none d-lg-block">
+                    <ul class="nav justify-content-center">
+                        <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'pending_coach_approvals' %}">Coaches</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'manage_enrolled_children' %}">Students</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/events-admin/">Events</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'manage_batches' %}">Batches</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'create_fee' %}">Fees</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 d-flex justify-content-end align-items-center gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-v rounded-circle p-2" type="button" data-bs-toggle="dropdown">
+                            <i data-lucide="bell" style="width:18px"></i>
+                        </button>
+                    </div>
+                    <div class="h-8 w-[1px] bg-white-50 opacity-20"></div>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="text-end d-none d-sm-block">
+                            <p class="m-0 small font-black text-white leading-tight">{{ user.username }}</p>
+                            <p class="m-0 text-v-gray" style="font-size: 0.65rem">Super Admin</p>
+                        </div>
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ user.username }}" class="rounded-circle border border-v-teal" style="width:38px; height:38px;">
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-sm-12 text-center text-md-start">
-            <div class="d-inline-flex align-items-center gap-2 bg-navy-subtle px-3 py-2 rounded-pill border border-white-50" style="background: rgba(45,67,115,0.15); border-color: rgba(45,67,115,0.2) !important;">
-              <span class="bg-success rounded-circle" style="width: 8px; height: 8px; display: inline-block;"></span>
-              <span class="text-white-50 small font-semibold">Active: <strong class="text-white">{{ user.username }}</strong></span>
-            </div>
-          </div>
-
-          <div class="col-lg-6 col-md-12 d-flex flex-wrap justify-content-center justify-content-lg-end gap-2 align-items-center">
-            
-            <a href="#" class="btn btn-outline-custom rounded-pill px-3 position-relative">
-              <i class="bi bi-bell me-1"></i> Updates
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow" style="font-size: 0.6rem;">
-                3
-              </span>
-            </a>
-
-            <a href="#" class="btn btn-outline-custom rounded-pill px-3">
-              <i class="bi bi-chat-dots me-1"></i> Messages
-            </a>
-
-            <a href="#" class="btn btn-outline-custom rounded-pill px-3">
-              <i class="bi bi-currency-rupee me-1"></i> Fees
-            </a>
-
-            <a href="{% url 'logout' %}" class="btn rounded-pill px-3 font-bold text-uppercase tracking-wider text-xs border border-danger text-danger hover:bg-danger" style="font-size: 0.75rem; background: rgba(220,53,69,0.05); transition: 0.3s ease;" onmouseover="this.style.background='#dc3545';this.style.color='#fff';" onmouseout="this.style.background='rgba(220,53,69,0.05)';this.style.color='#dc3545';">
-              <i class="bi bi-box-arrow-right me-1"></i> Logout
-            </a>
-          </div>
-
         </div>
-      </div>
-
-      <nav class="navbar navbar-expand-lg py-0">
-        <div class="container-fluid px-4 px-lg-5">
-          <button class="navbar-toggler ms-auto my-3 border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation" style="filter: invert(1);">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse justify-content-center" id="adminNavbar">
-            <ul class="navbar-nav d-flex flex-column flex-lg-row gap-lg-4 py-3 py-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" href="">Dashboard</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'pending_coach_approvals' %}">Manage Coaches</a>
-              </li>
-              
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'manage_enrolled_children' %}">Manage Students</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="">Events</a>
-              </li>
-              
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'manage_batches' %}">Batch</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'add_batch' %}">Assign Coaches</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
     </header>
 
-    <section class="py-5 position-relative overflow-hidden d-flex align-items-center" style="background-image: url('{% static 'images/coaching2.jpg' %}'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 420px; border-bottom: 1px solid rgba(45,67,115,0.25);">
-      <div class="overlay" style="background: linear-gradient(180deg, rgba(8,10,27,0.7) 0%, rgba(8,10,27,0.9) 100%); position: absolute; top: 0; left: 0; height: 100%; width: 100%; z-index: 1;"></div>
-
-      <div class="container-fluid position-relative px-4 px-lg-5" style="z-index: 2;">
-        <div class="row">
-          <div class="col-lg-8 col-md-11 text-light">
-            <span class="inline-block text-[10px] font-extrabold tracking-widest text-uppercase px-3 py-1.5 rounded-pill mb-3 border border-warning-50 text-warning" style="background: rgba(255,140,0,0.1); border: 1px solid rgba(255,140,0,0.2) !important; font-size: 0.75rem;">
-              Admin Control Panel
-            </span>
-            <h1 class="display-3 font-black text-white tracking-tight mt-2 mb-3">
-              Victory Football Academy
-            </h1>
-            <p class="text-white-50 leading-relaxed mb-4" style="max-width: 720px; font-size: 1.05rem;">
-              Welcome to the control center of excellence. Here, you manage registrations, monitor coaches and parents, track events, and steer Victory Academy toward success. Let’s shape the future — one kick at a time.
-            </p>
-           
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-5 relative z-10 overflow-hidden">
-      <div class="container-fluid px-4 px-lg-5">
+    <main class="container-fluid px-lg-5 py-5 position-relative z-1">
         
-        <div class="section-header d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
-          <h2 class="section-title mb-0">Top Performers</h2>
-          <div class="d-flex align-items-center gap-4">
-            <a href="#" class="text-decoration-none font-bold tracking-wide text-white-50 hover:text-white transition" style="font-size: 0.85rem;">View All Performers <i class="bi bi-arrow-right ms-1"></i></a>
-            <div class="swiper-buttons d-flex gap-2">
-              <button class="swiper-prev top-performers-prev btn p-2 rounded-circle" style="width: 40px; height: 40px; line-height: 1;"><i class="bi bi-chevron-left"></i></button>
-              <button class="swiper-next top-performers-next btn p-2 rounded-circle" style="width: 40px; height: 40px; line-height: 1;"><i class="bi bi-chevron-right"></i></button>
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8">
+                <div class="glass-card p-5 h-100 d-flex flex-column justify-content-center" style="background: linear-gradient(135deg, rgba(6,35,93,0.4) 0%, rgba(37,150,190,0.1) 100%);">
+                    <h5 class="text-v-teal text-uppercase tracking-widest font-black mb-3">Workspace Overview</h5>
+                    <h1 class="display-4 font-black mb-3 italic">Empower the <span class="text-v-teal">Next Generation</span> of Athletes.</h1>
+                    <p class="text-v-gray mb-4 col-lg-9">Welcome back, Commander. You have 3 pending coach certifications and 12 new student enrollments requiring your verification.</p>
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-v-core btn-teal">System Audit</button>
+                        <button class="btn btn-v-core btn-outline-v">Generate Reports</button>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="col-lg-4">
+                <div class="row g-4 h-100">
+                    <div class="col-6">
+                        <div class="glass-card p-4 h-100 text-center">
+                            <i data-lucide="users" class="text-v-teal mb-3 mx-auto"></i>
+                            <h2 class="font-black m-0">124</h2>
+                            <p class="small text-v-gray text-uppercase font-bold tracking-widest mt-1">Athletes</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="glass-card p-4 h-100 text-center">
+                            <i data-lucide="shield-check" class="text-v-gold mb-3 mx-auto"></i>
+                            <h2 class="font-black m-0">18</h2>
+                            <p class="small text-v-gray text-uppercase font-bold tracking-widest mt-1">Coaches</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="glass-card p-4 h-100 d-flex align-items-center justify-content-between px-5">
+                            <div>
+                                <p class="small text-v-gray text-uppercase font-bold tracking-widest mb-1">Monthly Revenue</p>
+                                <h2 class="font-black text-v-green m-0">₹ 48,250</h2>
+                            </div>
+                            <div class="bg-v-green bg-opacity-10 p-3 rounded-circle border border-v-green">
+                                <i data-lucide="trending-up" class="text-v-green"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="swiper top-performers-carousel pb-4">
-          <div class="swiper-wrapper">
-
-            <div class="swiper-slide text-center nav-link category-item">
-              <img src="images/player-athira.png" alt="Athira - Midfielder">
-              <h3 class="mt-3 mb-1 text-white" style="font-size: 1.15rem; font-weight: 700;">Athira S</h3>
-              <p class="text-white-50 small">Midfielder - U17 Girls</p>
+        <div class="row g-4">
+            <!-- Coaches Management Section -->
+            <div class="col-lg-8">
+                <div class="glass-card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="italic font-black text-uppercase tracking-tighter m-0">Active <span class="text-v-teal">Coaches</span></h3>
+                        <a href="{% url 'pending_coach_approvals' %}" class="btn btn-outline-v py-2 px-4 rounded-pill small" style="font-size: 0.7rem">View All Approvals</a>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <!-- Coach 1 -->
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-4 bg-white bg-opacity-5 border border-white-50 border-opacity-10 d-flex align-items-center gap-3">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=CoachDave" class="coach-avatar">
+                                <div class="flex-grow-1">
+                                    <h6 class="font-bold mb-0">Coach David Miller</h6>
+                                    <p class="text-v-gray small mb-0">U-15 Tactical Lead</p>
+                                </div>
+                                <span class="status-pill status-online">Active</span>
+                            </div>
+                        </div>
+                        <!-- Coach 2 -->
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-4 bg-white bg-opacity-5 border border-white-50 border-opacity-10 d-flex align-items-center gap-3">
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=CoachSarah" class="coach-avatar">
+                                <div class="flex-grow-1">
+                                    <h6 class="font-bold mb-0">Coach Sarah Chen</h6>
+                                    <p class="text-v-gray small mb-0">Endurance Specialist</p>
+                                </div>
+                                <span class="status-pill status-busy">On Field</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="swiper-slide text-center nav-link category-item">
-              <img src="images/player-joseph.png" alt="Joseph - Goalkeeper">
-              <h3 class="mt-3 mb-1 text-white" style="font-size: 1.15rem; font-weight: 700;">Joseph K</h3>
-              <p class="text-white-50 small">Goalkeeper - U15 Boys</p>
+            <!-- Events Section -->
+            <div class="col-lg-4">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <i data-lucide="calendar" class="text-v-orange"></i>
+                        <h3 class="italic font-black text-uppercase tracking-tighter m-0">Mission <span class="text-v-orange">Timeline</span></h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="event-dot bg-v-teal mt-2 shadow-[0_0_8px_var(--v-teal)]"></div>
+                            <div>
+                                <h6 class="font-bold mb-1">State Championship Qualifiers</h6>
+                                <p class="text-v-gray small mb-0">Today • 14:00 - Main Stadium</p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 mb-4">
+                            <div class="event-dot bg-v-orange mt-2 shadow-[0_0_8px_var(--v-orange)]"></div>
+                            <div>
+                                <h6 class="font-bold mb-1">Parent-Coach Synergy Meet</h6>
+                                <p class="text-v-gray small mb-0">Tomorrow • 10:00 - Virtual Hub</p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <div class="event-dot bg-v-steel mt-2"></div>
+                            <div>
+                                <h6 class="font-bold mb-1">Coach Licensing Workshop</h6>
+                                <p class="text-v-gray small mb-0">Jul 22 • 09:00 - Training Center</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-v w-100 mt-5 py-3 rounded-4">Create New Mission</button>
+                </div>
             </div>
-
-            <div class="swiper-slide text-center nav-link category-item">
-              <img src="images/player-keerthana.png" alt="Keerthana - Forward">
-              <h3 class="mt-3 mb-1 text-white" style="font-size: 1.15rem; font-weight: 700;">Keerthana R</h3>
-              <p class="text-white-50 small">Forward - U19 Girls</p>
-            </div>
-
-            <div class="swiper-slide text-center nav-link category-item">
-              <img src="images/player-team-alpha.png" alt="Team Alpha">
-              <h3 class="mt-3 mb-1 text-white" style="font-size: 1.15rem; font-weight: 700;">Team Alpha</h3>
-              <p class="text-white-50 small">Winners - Victory Cup 2025</p>
-            </div>
-
-          </div>
         </div>
+    </main>
 
-      </div>
-    </section>
-
-    <section class="py-5 relative z-10 overflow-hidden">
-      <div class="container-fluid px-4 px-lg-5">
-
-        <div class="section-header d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
-          <h2 class="section-title mb-0">News & Updates</h2>
-          <div class="d-flex align-items-center gap-4">
-            <a href="#" class="text-decoration-none font-bold tracking-wide text-white-50 hover:text-white transition" style="font-size: 0.85rem;">View All News <i class="bi bi-arrow-right ms-1"></i></a>
-            <div class="swiper-buttons d-flex gap-2">
-              <button class="swiper-prev brand-carousel-prev btn p-2 rounded-circle" style="width: 40px; height: 40px; line-height: 1;"><i class="bi bi-chevron-left"></i></button>
-              <button class="swiper-next brand-carousel-next btn p-2 rounded-circle" style="width: 40px; height: 40px; line-height: 1;"><i class="bi bi-chevron-right"></i></button>
-            </div>  
-          </div>
-        </div>
-
-        <div class="brand-carousel swiper pb-4">
-          <div class="swiper-wrapper">
-
-            <div class="swiper-slide">
-              <div class="card glass-card p-3 h-100 border-0">
-                <div class="row g-3 align-items-center">
-                  <div class="col-md-4">
-                    <img src="images/news-training.jpg" class="img-fluid rounded-3 w-100" style="object-fit: cover; aspect-ratio: 1;" alt="Training Update">
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body p-0 ps-md-2">
-                      <span class="text-uppercase tracking-widest font-extrabold text-white-50" style="font-size: 0.65rem; color: var(--v-teal) !important;">Training Update</span>
-                      <h5 class="card-title text-white mt-1 mb-0" style="font-size: 1rem; line-height: 1.4;">U15 team starts new endurance drills this week</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="swiper-slide">
-              <div class="card glass-card p-3 h-100 border-0">
-                <div class="row g-3 align-items-center">
-                  <div class="col-md-4">
-                    <img src="images/news-victorycup.jpg" class="img-fluid rounded-3 w-100" style="object-fit: cover; aspect-ratio: 1;" alt="Victory Cup">
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body p-0 ps-md-2">
-                      <span class="text-uppercase tracking-widest font-extrabold text-white-50" style="font-size: 0.65rem; color: var(--v-orange) !important;">Victory Cup</span>
-                      <h5 class="card-title text-white mt-1 mb-0" style="font-size: 1rem; line-height: 1.4;">Team Alpha crowned champions of 2025 tournament</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="swiper-slide">
-              <div class="card glass-card p-3 h-100 border-0">
-                <div class="row g-3 align-items-center">
-                  <div class="col-md-4">
-                    <img src="images/news-nutrition.jpg" class="img-fluid rounded-3 w-100" style="object-fit: cover; aspect-ratio: 1;" alt="Nutrition Talk">
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body p-0 ps-md-2">
-                      <span class="text-uppercase tracking-widest font-extrabold text-white-50" style="font-size: 0.65rem; color: var(--v-gold) !important;">Health & Nutrition</span>
-                      <h5 class="card-title text-white mt-1 mb-0" style="font-size: 1rem; line-height: 1.4;">Coach Priya leads new session on athlete diets</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="swiper-slide">
-              <div class="card glass-card p-3 h-100 border-0">
-                <div class="row g-3 align-items-center">
-                  <div class="col-md-4">
-                    <img src="images/news-parentmeet.jpg" class="img-fluid rounded-3 w-100" style="object-fit: cover; aspect-ratio: 1;" alt="Parent Meeting">
-                  </div>
-                  <div class="col-md-8">
-                    <div class="card-body p-0 ps-md-2">
-                      <span class="text-uppercase tracking-widest font-extrabold text-white-50" style="font-size: 0.65rem; color: var(--v-gray) !important;">Parent Engagement</span>
-                      <h5 class="card-title text-white mt-1 mb-0" style="font-size: 1rem; line-height: 1.4;">Monthly parent meet scheduled for June 20th</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <footer class="text-center py-5">
-      <div class="container">
-        <img src="{% static 'images/victorylogo.png' %}" alt="Victory Academy Logo" style="max-height: 48px; filter: drop-shadow(0 0 10px rgba(37,150,190,0.25));" class="mb-3">
-        <p class="mb-1 text-white-50 small">© 2025 Victory Academy. All rights reserved.</p>
-        <p class="text-muted small mb-0">Made with ❤️ for sports excellence.</p>
-      </div>
-    </footer>
-
-    <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-    <script src="{% static 'js/plugins.js' %}"></script>
-    <script src="{% static 'js/script.js' %}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      const swiperCategory = new Swiper('.category-carousel', {
-        slidesPerView: 5,
-        spaceBetween: 20,
-        navigation: {
-          nextEl: '.category-carousel-next',
-          prevEl: '.category-carousel-prev',
-        },
-        breakpoints: {
-          0: { slidesPerView: 2 },
-          576: { slidesPerView: 3 },
-          768: { slidesPerView: 4 },
-          992: { slidesPerView: 5 }
-        }
-      });
-
-      const swiperPerformers = new Swiper(".top-performers-carousel", {
-        slidesPerView: 4,
-        spaceBetween: 24,
-        navigation: {
-          nextEl: ".top-performers-next",
-          prevEl: ".top-performers-prev",
-        },
-        breakpoints: {
-          0: { slidesPerView: 1 },
-          576: { slidesPerView: 2 },
-          992: { slidesPerView: 4 }
-        }
-      });
-
-      const swiperNews = new Swiper(".brand-carousel", {
-        slidesPerView: 3,
-        spaceBetween: 24,
-        navigation: {
-          nextEl: ".brand-carousel-next",
-          prevEl: ".brand-carousel-prev",
-        },
-        breakpoints: {
-          0: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1200: { slidesPerView: 3 }
-        }
-      });
+        lucide.createIcons();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </body>
+</body>
 </html>

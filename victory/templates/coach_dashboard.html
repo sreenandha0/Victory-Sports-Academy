@@ -1,251 +1,339 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" class="transition duration-300">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coach Dashboard</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
   <script>
-    // Theme toggling script
-    if (localStorage.getItem('theme') === 'dark' ||
-        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    // Systemic enforcement of dark mode theme execution profile
+    document.documentElement.classList.add('dark');
   </script>
 
   <style>
     body {
       font-family: 'Inter', sans-serif;
     }
-    /* Custom CSS for the donut chart placeholder */
-    .donut-chart-placeholder {
+
+    /* Ambient background lighting structures */
+    .ambient-glow-1 {
+      position: absolute;
+      top: -10%;
+      left: -5%;
+      width: 45vw;
+      height: 45vw;
+      background: rgba(0, 56, 104, 0.2);
+      border-radius: 50%;
+      filter: blur(140px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      bottom: 5%;
+      right: -5%;
+      width: 40vw;
+      height: 40vw;
+      background: rgba(37, 150, 190, 0.12);
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Conic Data Visualizer Chart Elements */
+    .donut-chart-container {
       position: relative;
-      width: 128px;
-      height: 128px;
-      border-radius: 9999px; /* Makes it a perfect circle */
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
       background: conic-gradient(
-        #3b82f6 0% 30%, /* Blue for 30% */
-        #22c55e 30% 60%, /* Green for next 30% */
-        #a855f7 60% 100% /* Purple for remaining 40% */
+        #2596be 0% 45%,   /* Glowing Teal */
+        #ff8c00 45% 75%, /* Vivid Orange Accent */
+        #2d4373 75% 100% /* Structural Base */
       );
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 0 20px rgba(37, 150, 190, 0.2);
     }
-    .donut-chart-inner {
-      width: 80px;
-      height: 80px;
-      border-radius: 9999px; /* Inner circle to create the donut hole */
-      background-color: white; /* Background color of the inner circle */
+
+    .donut-chart-core {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background-color: #0d122c;
       position: absolute;
-    }
-    /* Dark mode specific styles for the donut chart inner circle */
-    .dark .donut-chart-inner {
-      background-color: #1f2937; /* Dark background for inner circle in dark mode */
     }
   </style>
 </head>
-<body class="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-300">
+<body class="flex min-h-screen bg-[#080a1b] text-white overflow-x-hidden relative">
 
-  <!-- Sidebar -->
-  <!-- The sidebar will transition its width for collapse/expand effect -->
-  <aside id="sidebar" class="w-64 bg-gray-900 text-white p-6 flex flex-col rounded-r-xl shadow-lg transition-all duration-300 ease-in-out">
-    <div class="flex items-center mb-10">
-      <!-- Profile image or initial -->
-      {% if coach.photo %}
-        <img src="{{ coach.photo.url }}" alt="Profile" class="w-10 h-10 rounded-full object-cover mr-3 border-2 border-white shadow-md" />
-      {% else %}
-        <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-3">
-          {{ coach.full_name|slice:":1" }}
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <aside id="sidebar" class="w-64 fixed top-0 bottom-0 left-0 bg-[#06235d]/40 backdrop-blur-xl border-r border-[#2d4373]/20 p-5 flex flex-col justify-between shadow-2xl transition-all duration-300 ease-in-out z-40 select-none">
+    <div>
+      <div class="flex items-center gap-3 mb-8 border-b border-[#2d4373]/20 pb-5 overflow-hidden">
+        {% if coach.photo %}
+          <img src="{{ coach.photo.url }}" alt="Profile" class="w-11 h-11 flex-shrink-0 rounded-full object-cover border-2 border-[#2596be] shadow-lg" />
+        {% else %}
+          <div class="w-11 h-11 flex-shrink-0 bg-[#2596be] text-white rounded-full flex items-center justify-center font-bold text-lg shadow-md">
+            {{ coach.full_name|slice:":1" }}
+          </div>
+        {% endif %}
+        <div class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">
+          <p class="text-[10px] text-slate-400 tracking-wider uppercase font-semibold">Authorized Coach</p>
+          <h1 class="text-base font-bold text-white truncate max-w-[140px]">Coach {{ coach.full_name }}</h1>
         </div>
-      {% endif %}
-      <!-- Coach name, hidden when sidebar is collapsed -->
-      <h1 class="text-xl font-semibold sidebar-text">Coach {{ coach.full_name }}</h1>
+      </div>
+
+      <nav class="space-y-1">
+        <a href="{% url 'coach_dashboard' %}" title="Dashboard Overview" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 {% if request.resolver_match.url_name == 'coach_dashboard' %}bg-[#2596be] text-white shadow-lg shadow-[#2596be]/20{% else %}text-slate-300 hover:bg-[#06235d]/50 hover:text-white{% endif %}">
+          <i class='bx bxs-dashboard text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Dashboard Overview</span>
+        </a>
+
+        <a href="{% url 'manage_performance' %}" title="Player Performance" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 {% if request.resolver_match.url_name == 'manage_performance' %}bg-[#2596be] text-white shadow-lg shadow-[#2596be]/20{% else %}text-slate-300 hover:bg-[#06235d]/50 hover:text-white{% endif %}">
+          <i class='bx bx-run text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Player Performance</span>
+        </a>
+
+        <a href="#" title="Training Schedule" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 text-slate-300 hover:bg-[#06235d]/50 hover:text-white">
+          <i class='bx bx-calendar text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Training Schedule</span>
+        </a>
+
+        <a href="#" title="Program Upload" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 text-slate-300 hover:bg-[#06235d]/50 hover:text-white">
+          <i class='bx bx-cloud-upload text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Program Upload</span>
+        </a>
+
+        <a href="{% url 'mark_attendance' %}" title="Attendance Management" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 {% if request.resolver_match.url_name == 'mark_attendance' %}bg-[#2596be] text-white shadow-lg shadow-[#2596be]/20{% else %}text-slate-300 hover:bg-[#06235d]/50 hover:text-white{% endif %}">
+          <i class='bx bx-check-square text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Attendance Management</span>
+        </a>
+
+        <a href="#" title="Communications" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 text-slate-300 hover:bg-[#06235d]/50 hover:text-white">
+          <i class='bx bx-message-square-detail text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Communications</span>
+        </a>
+
+        <a href="#" title="Notifications System" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 text-slate-300 hover:bg-[#06235d]/50 hover:text-white">
+          <i class='bx bx-bell text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Notifications System</span>
+        </a>
+
+        <a href="#" title="Progress Reports" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 text-slate-300 hover:bg-[#06235d]/50 hover:text-white">
+          <i class='bx bx-bar-chart-alt-2 text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Progress Reports</span>
+        </a>
+
+        <a href="#" title="Events & Tournaments" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 text-slate-300 hover:bg-[#06235d]/50 hover:text-white">
+          <i class='bx bx-trophy text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Events & Tournaments</span>
+        </a>
+
+        <a href="{% url 'coach_profile' coach_id=coach.id %}" title="Profile & Settings" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm transition-all duration-200 text-slate-300 hover:bg-[#06235d]/50 hover:text-white">
+          <i class='bx bx-user-circle text-xl flex-shrink-0'></i>
+          <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">Profile & Settings</span>
+        </a>
+      </nav>
     </div>
-<nav class="flex-grow">
-  <ul>
-    <!-- Sidebar navigation links -->
-    <li class="mb-2">
-      <a href="{% url 'coach_dashboard' %}" class="sidebar-link flex items-center p-3 rounded-lg {% if request.resolver_match.url_name == 'coach_dashboard' %}bg-blue-700 text-white{% else %}hover:bg-gray-700 text-gray-300{% endif %}">
-        <span class="mr-3 text-lg">🏠</span><span class="sidebar-text">Dashboard Overview</span>
+
+    <div class="border-t border-[#2d4373]/20 pt-4 overflow-hidden">
+      <a href="{% url 'logout' %}" title="System Log Out" class="flex items-center gap-3 p-3 rounded-xl font-medium text-sm text-red-400 hover:bg-red-500/10 transition-all duration-200">
+        <i class='bx bx-log-out text-xl flex-shrink-0'></i>
+        <span class="sidebar-text transition-all duration-200 opacity-100 whitespace-nowrap">System Log Out</span>
       </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="{% url 'manage_performance' %}" class="sidebar-link flex items-center p-3 rounded-lg {% if request.resolver_match.url_name == 'manage_performance' %}bg-blue-700 text-white{% else %}hover:bg-gray-700 text-gray-300{% endif %}">
-        <span class="mr-3 text-lg">🏃</span><span class="sidebar-text">Player Performance</span>
-      </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="#" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
-        <span class="mr-3 text-lg">🗓️</span><span class="sidebar-text">Training Schedule</span>
-      </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="#" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
-        <span class="mr-3 text-lg">📤</span><span class="sidebar-text">Program Upload</span>
-      </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="{% url 'mark_attendance' %}" class="sidebar-link flex items-center p-3 rounded-lg {% if request.resolver_match.url_name == 'mark_attendance' %}bg-blue-700 text-white{% else %}hover:bg-gray-700 text-gray-300{% endif %}">
-        <span class="mr-3 text-lg">✅</span><span class="sidebar-text">Attendance Management</span>
-      </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="#" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
-        <span class="mr-3 text-lg">💬</span><span class="sidebar-text">Messaging & Communication</span>
-      </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="#" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
-        <span class="mr-3 text-lg">🔔</span><span class="sidebar-text">Notifications System</span>
-      </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="#" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
-        <span class="mr-3 text-lg">📄</span><span class="sidebar-text">Progress Reports</span>
-      </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="#" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
-        <span class="mr-3 text-lg">🏆</span><span class="sidebar-text">Event & Tournament</span>
-      </a>
-    </li>
-
-    <li class="mb-2">
-      <a href="{% url 'coach_profile' coach_id=coach.id %}" class="sidebar-link ...">
-        <span class="mr-3 text-lg">🧑‍🏫</span><span class="sidebar-text">Coach Profile & Settings</span>
-      </a>
-    </li>
-  </ul>
-</nav>
-
-
-    <div class="mt-auto pt-6 border-t border-gray-700">
-      <a href="{% url 'logout' %}" class="sidebar-link flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300"><span class="mr-3 text-lg">🚪</span><span class="sidebar-text">Log out</span></a>
     </div>
   </aside>
 
-  <!-- Main Content -->
-  <!-- Main content adjusts its margin based on sidebar state -->
-  <main id="main-content" class="flex-1 p-6 lg:p-10 overflow-y-auto max-h-screen transition-all duration-300 ease-in-out">
+  <main id="main-content" class="flex-1 ml-64 p-6 lg:p-10 overflow-y-auto max-h-screen transition-all duration-300 relative z-10">
     <div class="max-w-6xl mx-auto space-y-6">
 
-      <!-- Header -->
-      <header class="flex justify-between items-center mb-8">
-        <div class="flex items-center">
-          <!-- Sidebar toggle button -->
-          <button id="sidebar-toggle" class="mr-4 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none">
-            <svg class="w-6 h-6 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
+      <header class="flex justify-between items-center mb-4 relative z-30">
+        <div class="flex items-center gap-2">
+          <button id="sidebar-toggle" aria-label="Toggle Sidebar Navigation" class="p-2 rounded-xl bg-[#06235d]/30 border border-[#2d4373]/20 hover:border-[#2596be]/50 transition-colors text-white focus:outline-none">
+            <i class='bx bx-menu text-2xl block'></i>
           </button>
-          <h2 class="text-3xl font-bold">Dashboard</h2>
+          <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight uppercase italic text-white ml-2">Coach <span class="text-[#2596be] not-italic">Dashboard</span></h2>
         </div>
+        
         <div class="flex items-center space-x-4">
-          <!-- Notification button -->
-          <button class="relative">
-            <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">3</span>
-            <svg class="w-6 h-6 text-gray-700 dark:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
+          <button class="relative w-10 h-10 flex items-center justify-center bg-[#06235d]/30 border border-[#2d4373]/20 rounded-xl hover:border-[#2596be]/30 transition-all">
+            <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center text-[10px] font-black text-white bg-red-500 rounded-full ring-2 ring-[#080a1b]">3</span>
+            <i class='bx bx-bell text-xl text-slate-300 hover:text-white transition-colors'></i>
           </button>
-          <!-- Theme toggle button -->
-          <button onclick="toggleTheme()" class="text-gray-700 dark:text-white focus:outline-none text-xl">🌙</button>
-          <!-- User profile dropdown -->
+          
           <div class="relative group">
-            <button class="flex items-center focus:outline-none">
+            <button class="flex items-center focus:outline-none transition-transform active:scale-95">
               {% if coach.photo %}
-                <img src="{{ coach.photo.url }}" class="w-10 h-10 rounded-full object-cover border-2 border-blue-500" />
+                <img src="{{ coach.photo.url }}" class="w-10 h-10 rounded-xl object-cover border-2 border-[#2596be] shadow-md" />
               {% else %}
-                <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                <div class="w-10 h-10 bg-[#2596be] text-white rounded-xl flex items-center justify-center font-bold shadow-md">
                   {{ coach.full_name|slice:":1" }}
                 </div>
               {% endif %}
             </button>
-            <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 rounded-lg shadow-lg hidden group-hover:block z-50">
-              <a href="{% url 'coach_profile' coach_id=coach.id %}" class="block px-4 py-2 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg">View Profile</a>
-              <a href="#" class="block px-4 py-2 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>
-              <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-700 dark:text-red-400 rounded-b-lg">Logout</a>
+            <div class="absolute right-0 mt-2 w-48 bg-[#080a1b] border border-[#2d4373]/40 rounded-xl shadow-2xl hidden group-hover:block z-50 overflow-hidden backdrop-blur-xl">
+              <a href="{% url 'coach_profile' coach_id=coach.id %}" class="block px-4 py-3 text-sm text-slate-300 hover:bg-[#06235d]/40 hover:text-white transition-colors">View Profile</a>
+              <a href="#" class="block px-4 py-3 text-sm text-slate-300 hover:bg-[#06235d]/40 hover:text-white transition-colors">System Settings</a>
+              <hr class="border-[#2d4373]/20">
+              <a href="{% url 'logout' %}" class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors">Logout</a>
             </div>
           </div>
         </div>
       </header>
 
-      <!-- Greeting + Widgets - Full width section -->
-      <div class="grid grid-cols-1 gap-6">
-        <section class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 flex flex-col md:flex-row justify-between items-center">
-          <div class="text-center md:text-left">
-            <h5 class="text-xl text-gray-800 dark:text-white">{{ time_greeting }}, <strong>Coach {{ coach.full_name }}</strong></h5>
-            <p class="text-gray-600 dark:text-gray-300 mt-2 text-sm italic">"{{ daily_greeting }}"</p>
+      <div class="grid grid-cols-1">
+        <section class="bg-[#06235d]/15 backdrop-blur-md border border-[#2d4373]/20 rounded-2xl p-6 flex flex-col sm:flex-row justify-between items-center gap-6 shadow-xl">
+          <div class="text-center sm:text-left">
+            <h5 class="text-xl lg:text-2xl text-white font-medium">{{ time_greeting }}, <span class="font-extrabold text-[#2596be]">Coach {{ coach.full_name }}</span></h5>
+            <p class="text-slate-300 mt-2 text-sm italic font-light max-w-xl">"{{ daily_greeting }}"</p>
           </div>
-          <div class="mt-4 md:mt-0">
-            <div class="donut-chart-placeholder">
-              <div class="donut-chart-inner"></div>
+          <div class="flex-shrink-0">
+            <div class="donut-chart-container">
+              <div class="donut-chart-core"></div>
+              <div class="absolute text-center z-10">
+                <span class="text-xs font-bold text-white block leading-none">82%</span>
+                <span class="text-[9px] text-slate-400 uppercase tracking-wider block mt-0.5">Rating</span>
+              </div>
             </div>
           </div>
         </section>
       </div>
 
-      <!-- Organized Sections - Responsive Grid Layout -->
-      <!-- This section will arrange its children in a grid of 1, 2, or 3 columns based on screen size -->
-      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
-        <!-- Reminders Section -->
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
-          <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-white">🔔 Reminders</h3>
-          <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-            <li>📌 Team meeting scheduled at 5 PM.</li>
-            <li>📌 Fitness evaluations due tomorrow.</li>
-            <li>📌 Send feedback report to parents.</li>
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        
+        <div class="bg-[#06235d]/15 backdrop-blur-md border border-[#2d4373]/20 p-6 rounded-2xl shadow-xl">
+          <h3 class="text-sm font-bold uppercase tracking-wider mb-4 text-[#ff8c00] flex items-center gap-2">
+            <i class='bx bx-pin text-lg'></i> Action Reminders
+          </h3>
+          <ul class="space-y-3 text-sm text-slate-200">
+            <li class="flex items-start gap-2 bg-[#06235d]/10 border border-[#2d4373]/10 p-3 rounded-xl">
+              <span class="text-[#2596be] font-bold mt-0.5">•</span>
+              <span>Team operational briefing alignment metrics scheduled at <strong class="text-white">5:00 PM</strong>.</span>
+            </li>
+            <li class="flex items-start gap-2 bg-[#06235d]/10 border border-[#2d4373]/10 p-3 rounded-xl">
+              <span class="text-[#2596be] font-bold mt-0.5">•</span>
+              <span>Comprehensive structural metric evaluations due by tomorrow close of business.</span>
+            </li>
+            <li class="flex items-start gap-2 bg-[#06235d]/10 border border-[#2d4373]/10 p-3 rounded-xl">
+              <span class="text-[#2596be] font-bold mt-0.5">•</span>
+              <span>Distribute finalized progress performance reviews to registered guardians.</span>
+            </li>
           </ul>
         </div>
 
-        <!-- Total Performance Chart Section -->
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
-          <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-white">📊 Total Performance Chart</h3>
-          <div class="flex justify-center">
-            <div class="donut-chart-placeholder">
-              <div class="donut-chart-inner"></div>
+        <div class="bg-[#06235d]/15 backdrop-blur-md border border-[#2d4373]/20 p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+          <h3 class="text-sm font-bold uppercase tracking-wider mb-4 text-white flex items-center gap-2">
+            <i class='bx bx-pie-chart-alt-2 text-lg text-[#2596be]'></i> Squad Performance Analytics
+          </h3>
+          <div class="flex items-center justify-around flex-1 py-2">
+            <div class="donut-chart-container">
+              <div class="donut-chart-core"></div>
+              <div class="absolute text-center z-10">
+                <span class="text-xs font-black text-white block leading-none">MVP</span>
+                <span class="text-[9px] text-slate-400 uppercase tracking-wider block mt-0.5">Metrics</span>
+              </div>
+            </div>
+            <div class="text-xs space-y-2 text-slate-300">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-[#2596be] block"></span> 45% Technical</div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-[#ff8c00] block"></span> 30% Physical Endurance</div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-md bg-[#2d4373] block"></span> 25% Tactical Discipline</div>
             </div>
           </div>
         </div>
 
-        <!-- New Joins This Week Section -->
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
-          <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-white">👥 New Joins This Week</h3>
-          <ul class="divide-y divide-gray-300 dark:divide-gray-700">
-            <li class="py-2 flex justify-between"><span>Arjun P.</span><span class="text-sm text-gray-500">Age 12</span></li>
-            <li class="py-2 flex justify-between"><span>Sneha M.</span><span class="text-sm text-gray-500">Age 14</span></li>
-            <li class="py-2 flex justify-between"><span>Rahul D.</span><span class="text-sm text-gray-500">Age 11</span></li>
-          </ul>
+        <div class="bg-[#06235d]/15 backdrop-blur-md border border-[#2d4373]/20 p-6 rounded-2xl shadow-xl">
+  <h3 class="text-sm font-bold uppercase tracking-wider mb-4 text-white flex items-center gap-2">
+    <i class='bx bx-group text-lg text-[#2596be]'></i> Assigned Batches
+  </h3>
+
+  <ul class="divide-y divide-[#2d4373]/20">
+
+    {% for batch in batches %}
+    <li class="py-3 flex justify-between items-center">
+
+      <!-- Left -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-[#2596be]/10 text-[#2596be] flex items-center justify-center font-bold text-xs">
+          {{ batch.name|slice:":2"|upper }}
         </div>
 
-        <!-- To-Do List Section -->
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
-          <h3 class="text-lg font-bold mb-3 text-gray-800 dark:text-white">✅ To-Do List</h3>
-          <ul class="space-y-2">
-            <li class="flex items-center">
-              <input type="checkbox" class="mr-3 form-checkbox h-5 w-5 text-blue-600 dark:bg-gray-700 rounded">
-              <span>Update player performance logs</span>
+        <div>
+          <span class="font-semibold text-sm text-white block">
+            {{ batch.name }}
+          </span>
+
+          <!-- Time -->
+          <span class="text-xs text-slate-400">
+            {{ batch.start_time|time:"h:i A" }} - {{ batch.end_time|time:"h:i A" }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <span class="text-xs font-semibold bg-[#06235d]/40 px-3 py-1.5 border border-[#2d4373]/30 text-slate-300 rounded-full">
+        {{ batch.age_group }}
+      </span>
+
+    </li>
+    {% empty %}
+    <li class="py-3 text-center text-slate-400 text-sm">
+      No batches assigned yet
+    </li>
+    {% endfor %}
+
+  </ul>
+</div>
+
+        <div class="bg-[#06235d]/15 backdrop-blur-md border border-[#2d4373]/20 p-6 rounded-2xl shadow-xl">
+          <h3 class="text-sm font-bold uppercase tracking-wider mb-4 text-white flex items-center gap-2">
+            <i class='bx bx-task text-lg text-[#2596be]'></i> Agenda Operational Logs
+          </h3>
+          <ul class="space-y-3">
+            <li>
+              <label class="flex items-center gap-3 bg-[#080a1b]/40 p-3 rounded-xl border border-[#2d4373]/10 hover:border-[#2596be]/20 transition-all cursor-pointer group">
+                <input type="checkbox" class="peer hidden" />
+                <div class="w-5 h-5 rounded-md border border-[#2d4373] bg-[#080a1b] flex items-center justify-center text-transparent peer-checked:text-white peer-checked:bg-[#2596be] peer-checked:border-[#2596be] transition-all flex-shrink-0">
+                  <i class='bx bx-check text-base font-bold'></i>
+                </div>
+                <span class="text-sm text-slate-300 peer-checked:line-through peer-checked:text-slate-500 transition-all select-none">
+                  Update metrics and child performance profiles.
+                </span>
+              </label>
             </li>
-            <li class="flex items-center">
-              <input type="checkbox" class="mr-3 form-checkbox h-5 w-5 text-blue-600 dark:bg-gray-700 rounded">
-              <span>Prepare next week’s training plan</span>
+            <li>
+              <label class="flex items-center gap-3 bg-[#080a1b]/40 p-3 rounded-xl border border-[#2d4373]/10 hover:border-[#2596be]/20 transition-all cursor-pointer group">
+                <input type="checkbox" class="peer hidden" />
+                <div class="w-5 h-5 rounded-md border border-[#2d4373] bg-[#080a1b] flex items-center justify-center text-transparent peer-checked:text-white peer-checked:bg-[#2596be] peer-checked:border-[#2596be] transition-all flex-shrink-0">
+                  <i class='bx bx-check text-base font-bold'></i>
+                </div>
+                <span class="text-sm text-slate-300 peer-checked:line-through peer-checked:text-slate-500 transition-all select-none">
+                  Formulate dynamic framework macrocycles for next phase.
+                </span>
+              </label>
             </li>
-            <li class="flex items-center">
-              <input type="checkbox" class="mr-3 form-checkbox h-5 w-5 text-blue-600 dark:bg-gray-700 rounded">
-              <span>Call back parents for feedback</span>
+            <li>
+              <label class="flex items-center gap-3 bg-[#080a1b]/40 p-3 rounded-xl border border-[#2d4373]/10 hover:border-[#2596be]/20 transition-all cursor-pointer group">
+                <input type="checkbox" class="peer hidden" />
+                <div class="w-5 h-5 rounded-md border border-[#2d4373] bg-[#080a1b] flex items-center justify-center text-transparent peer-checked:text-white peer-checked:bg-[#2596be] peer-checked:border-[#2596be] transition-all flex-shrink-0">
+                  <i class='bx bx-check text-base font-bold'></i>
+                </div>
+                <span class="text-sm text-slate-300 peer-checked:line-through peer-checked:text-slate-500 transition-all select-none">
+                  Execute parent-coach communications strategy sessions.
+                </span>
+              </label>
             </li>
           </ul>
         </div>
@@ -254,46 +342,39 @@
   </main>
 
   <script>
-    // Function to toggle dark/light theme
-    function toggleTheme() {
-      const html = document.documentElement;
-      const isDark = html.classList.contains('dark');
-      if (isDark) {
-        html.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      } else {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    }
-
-    // Sidebar collapse/expand functionality
     document.addEventListener('DOMContentLoaded', () => {
       const sidebar = document.getElementById('sidebar');
       const sidebarToggle = document.getElementById('sidebar-toggle');
       const mainContent = document.getElementById('main-content');
-      const sidebarTexts = document.querySelectorAll('.sidebar-text'); // Select all elements with sidebar-text class
+      const sidebarTexts = document.querySelectorAll('.sidebar-text');
 
-      // Initial state: sidebar is open
       let isSidebarCollapsed = false;
 
       sidebarToggle.addEventListener('click', () => {
         isSidebarCollapsed = !isSidebarCollapsed;
 
         if (isSidebarCollapsed) {
-          // Collapse sidebar
+          // Reallocate widths safely to avoid overlap or shifting anomalies
           sidebar.classList.remove('w-64');
-          sidebar.classList.add('w-20'); // Collapsed width
-          sidebarTexts.forEach(text => text.classList.add('hidden')); // Hide text
-          mainContent.classList.remove('lg:p-10'); // Adjust padding for smaller sidebar
-          mainContent.classList.add('lg:ml-20'); // Adjust margin for collapsed sidebar
+          sidebar.classList.add('w-20', 'px-3');
+          mainContent.classList.remove('ml-64');
+          mainContent.classList.add('ml-20');
+          
+          // Animate structural text opacity out smoothly before hiding visibility completely
+          sidebarTexts.forEach(text => {
+            text.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => text.classList.add('hidden'), 150);
+          });
         } else {
-          // Expand sidebar
-          sidebar.classList.remove('w-20');
-          sidebar.classList.add('w-64'); // Expanded width
-          sidebarTexts.forEach(text => text.classList.remove('hidden')); // Show text
-          mainContent.classList.remove('lg:ml-20'); // Reset margin
-          mainContent.classList.add('lg:p-10'); // Reset padding
+          sidebar.classList.remove('w-20', 'px-3');
+          sidebar.classList.add('w-64');
+          mainContent.classList.remove('ml-20');
+          mainContent.classList.add('ml-64');
+          
+          sidebarTexts.forEach(text => {
+            text.classList.remove('hidden');
+            setTimeout(() => text.classList.remove('opacity-0', 'pointer-events-none'), 50);
+          });
         }
       });
     });

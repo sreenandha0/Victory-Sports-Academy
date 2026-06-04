@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import (
     Attendance, Batch, Child, ChildProfile, Coach,
-    GalleryImage, Parent, PlayerAssessment
+    GalleryImage, Parent, PlayerAssessment, Event, EventRegistration,News
 )
 
 from .forms import (
@@ -29,17 +29,22 @@ from .forms import (
 
 # ----------------------- COMMON VIEWS -----------------------
 
-def home(request):
-    # Home Page View
 
+def home(request):
+    # Coaches
     all_approved = list(Coach.objects.filter(is_approved=True))
     random_coaches = sample(all_approved, min(3, len(all_approved)))
 
+    # Gallery
     gallery_images = GalleryImage.objects.all().order_by('-uploaded_at')
+
+    # 🆕 News
+    news_list = News.objects.all().order_by('-created_at')[:6]
 
     return render(request, 'index.html', {
         'coaches': random_coaches,
         'images': gallery_images,
+        'news_list': news_list,   # ✅ pass to template
     })
 
 
@@ -71,6 +76,13 @@ def is_parent(user):
 
 
 # ----------------------- PARENT VIEWS -----------------------
+@login_required(login_url='/login/parent/')
+def register_event(request, event_id, child_id):
+    EventRegistration.objects.get_or_create(
+        event_id=event_id,
+        child_id=child_id
+    )
+    return redirect('/events/')
 
 def register_parent(request):
     # Parent Registration View
@@ -121,13 +133,13 @@ def login_parent(request):
     return render(request, 'login_parent.html')
 
 
+from .models import Attendance
+
 @login_required(login_url='/login/parent/')
 def parent_dashboard(request):
-    # Parent Dashboard View
 
     try:
         parent = Parent.objects.get(user=request.user)
-
     except Parent.DoesNotExist:
         return HttpResponseNotFound(
             "❌ Parent profile not found. Please contact admin."
@@ -135,9 +147,15 @@ def parent_dashboard(request):
 
     children = parent.children.all()
 
+    # Get attendance for all children
+    attendance_data = Attendance.objects.filter(
+        child__in=children
+    ).order_by('-date')[:10]   # last 10 records
+
     return render(request, 'parent_dashboard.html', {
         'parent': parent,
-        'children': children
+        'children': children,
+        'attendance_data': attendance_data
     })
 
 
@@ -255,6 +273,26 @@ def parent_child_selection_view(request):
     })
 
 
+@login_required(login_url='/login/parent/')
+def events_page(request):
+
+    parent = Parent.objects.get(user=request.user)
+    children = parent.children.all()
+
+    events = Event.objects.all().order_by('date')
+
+    return render(request, 'events.html', {
+        'events': events,
+        'children': children
+    })
+def parent_fees(request):
+    parent = request.user.parent_profile
+
+    children = parent.children.all()
+
+    fees = FeeAssignment.objects.filter(child__in=children)
+
+    return render(request, "parent_fees.html", {"fees": fees})
 # ----------------------- COACH VIEWS -----------------------
 
 def register_coach(request):
@@ -363,22 +401,21 @@ def login_coach(request):
 @login_required(login_url='/login/coach/')
 @user_passes_test(is_coach, login_url='/login/coach/')
 def coach_dashboard(request):
-    # Coach Dashboard View
 
     coach = request.user.coach_profile
+
+    # ✅ GET ASSIGNED BATCHES
+    batches = coach.batches.all().order_by('age_group')
 
     now = datetime.datetime.now()
     hour = now.hour
 
     if hour < 12:
         time_greeting = "Good morning"
-
     elif 12 <= hour < 17:
         time_greeting = "Good afternoon"
-
     elif 17 <= hour < 21:
         time_greeting = "Good evening"
-
     else:
         time_greeting = "Good night"
 
@@ -398,6 +435,7 @@ def coach_dashboard(request):
 
     return render(request, 'coach_dashboard.html', {
         'coach': coach,
+        'batches': batches,   # ✅ ADD THIS
         'time_greeting': time_greeting,
         'daily_greeting': daily_greeting,
     })
@@ -919,3 +957,71 @@ def manage_enrolled_children(request):
     return render(request, 'manage_enrolled_children.html', {
         'children': children
     })
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .models import Event
+
+@login_required(login_url='/login/admin/')
+def event_dashboard(request):
+
+    if request.method == 'POST':
+        Event.objects.create(
+            title=request.POST.get('title'),
+            description=request.POST.get('description'),
+            date=request.POST.get('date'),
+            time=request.POST.get('time'),
+            location=request.POST.get('location')
+        )
+        return redirect('/events-admin/')
+
+    events = Event.objects.all().order_by('-date')
+
+    return render(request, 'event_dashboard.html', {
+        'events': events
+    })
+from .models import Fee, FeeAssignment, Child
+
+def create_fee(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        amount = request.POST.get("amount")
+        due_date = request.POST.get("due_date")
+        batch_id = request.POST.get("batch")
+
+        batch = Batch.objects.get(id=batch_id)
+
+        fee = Fee.objects.create(
+            title=title,
+            description=description,
+            amount=amount,
+            due_date=due_date,
+            batch=batch
+        )
+
+        # Assign to children in that batch
+        children = Child.objects.filter(batch=batch)
+
+        for child in children:
+            FeeAssignment.objects.create(
+                fee=fee,
+                child=child
+            )
+
+        return redirect("fee_list")
+
+    batches = Batch.objects.all()
+    return render(request, "create_fee.html", {"batches": batches})
+
+from django.contrib import messages
+
+def pay_fee(request, id):
+    fee = FeeAssignment.objects.get(id=id)
+
+    fee.is_paid = True
+    fee.paid_at = timezone.now()
+    fee.save()
+
+    messages.success(request, "Payment Successful ✅")
+
+    return redirect("parent_fees")

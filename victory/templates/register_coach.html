@@ -7,256 +7,426 @@
     <title>Coach Registration | Victory Sports Academy</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN (Mandatory, even if not directly used for this specific page) -->
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Custom styles for the chart container, as per instructions */
-        .chart-container {
+        /* ==========================================================================
+           1. GLOBAL VARIABLES & COLOR PALETTE
+           ========================================================================== */
+        :root {
+            --v-dark-bg: #080a1b;   /* Deep space midnight blue background */
+            --v-navy: #06235d;      /* Solid base theme dark navy */
+            --v-steel: #2d4373;     /* Muted structural border tone */
+            --v-teal: #2596be;      /* Vibrant glowing neon cyan accent */
+            --v-blue: #0038a8;      /* Primary atmospheric lighting source */
+            --v-green: #4ca63b;     /* Success metric / positive value pill */
+            --v-orange: #ff8c00;    /* Alert metric / gradient accent */
+            --v-gold: #d4af37;      /* Secondary key marker / medal color */
+            --v-gray: #b2beb5;      /* High-contrast ash grey secondary text */
+        }
+
+        /* ==========================================================================
+           2. BODY & AMBIENT GLOW BACKDROPS
+           ========================================================================== */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
             position: relative;
+        }
+
+        .ambient-glow-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(0, 56, 168, 0.15);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: rgba(37, 150, 190, 0.1);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ==========================================================================
+           3. SEAMLESS GLASSMORPHIC NAVIGATION BAR
+           ========================================================================== */
+        .navbar {
+            background: rgba(6, 35, 93, 0.4) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.2) !important;
+            z-index: 50;
+        }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-style: italic;
+            color: #ffffff !important;
+        }
+
+        .navbar-brand span {
+            color: var(--v-teal);
+            font-style: normal;
+        }
+
+        .nav-link {
+            color: var(--v-gray) !important;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #ffffff !important;
+            text-shadow: 0 0 10px rgba(37, 150, 190, 0.4);
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid var(--v-teal);
+        }
+
+        /* ==========================================================================
+           4. INTERACTIVE BUTTON SIGNATURES
+           ========================================================================== */
+        .btn-custom {
+            padding: 12px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: 1px solid var(--v-teal);
+            background: rgba(37, 150, 190, 0.15);
+            color: #ffffff;
+        }
+
+        .btn-custom:hover {
+            background: rgba(37, 150, 190, 0.3);
+            box-shadow: 0 0 20px rgba(37, 150, 190, 0.5);
+            transform: translateY(-1px);
+            color: #ffffff;
+        }
+
+        /* ==========================================================================
+           5. COMPONENT CONTAINERS (GLASS CARDS)
+           ========================================================================== */
+        .child-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.25) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(8, 10, 27, 0.5);
+        }
+
+        /* ==========================================================================
+           6. METRIC BLOCKS & TYPOGRAPHY METRICS
+           ========================================================================== */
+        .data-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--v-gray);
+            margin-bottom: 6px;
+            display: block;
+            font-weight: 600;
+        }
+
+        /* Global Structural Form Inputs Override */
+        input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], select, textarea {
+            background-color: rgba(8, 10, 27, 0.6) !important;
+            border: 1px solid rgba(45, 67, 115, 0.5) !important;
+            border-radius: 8px !important;
+            color: #ffffff !important;
+            padding: 12px 16px !important;
+            font-size: 0.9rem !important;
+            transition: all 0.3s ease !important;
             width: 100%;
-            max-width: 600px; /* Example max-width */
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px; /* Base height */
-            max-height: 400px; /* Max height */
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
         }
 
-        /* Custom scrollbar for better aesthetics */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+            outline: none !important;
+            border-color: var(--v-teal) !important;
+            box-shadow: 0 0 12px rgba(37, 150, 190, 0.4) !important;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #EFF3FA; /* Alice Blue */
-            border-radius: 10px;
+        /* Custom file selector button style alignment */
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            font-size: 0.85rem;
+            color: var(--v-gray);
+        }
+        input[type="file"]::file-selector-button {
+            margin-right: 16px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--v-teal);
+            background: rgba(37, 150, 190, 0.2);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background: rgba(37, 150, 190, 0.4);
+            box-shadow: 0 0 10px rgba(37, 150, 190, 0.4);
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: #8AADDE; /* Jordy Blue */
-            border-radius: 10px;
+        /* Custom native system overrides */
+        input[type="checkbox"] {
+            accent-color: var(--v-teal);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #38547C; /* Yinmn Blue */
-        }
-
-        /* Style for Django form errors */
         .errorlist {
-            color: #dc2626; /* Tailwind red-600 */
-            font-size: 0.875rem; /* sm */
-            margin-top: 0.25rem;
+            color: #ff4a4a;
+            font-size: 0.8rem;
+            margin-top: 4px;
             list-style: none;
             padding-left: 0;
+            font-weight: 600;
         }
 
-        /* Styling for Django's default date input widget */
-        input[type="date"] {
-            @apply shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent;
+        /* Scrollbars UI decoration */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        /* Styling for Django's default select widget */
-        select {
-            @apply shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent;
+        ::-webkit-scrollbar-track {
+            background: var(--v-dark-bg);
         }
-
-        /* Styling for Django's default file input widget */
-        input[type="file"] {
-            @apply block w-full text-sm text-[#38547C]
-            file:mr-4 file:py-2 file:px-4
-            file:rounded-lg file:border-0
-            file:text-sm file:font-semibold
-            file:bg-[#8AADDE] file:text-[#EFF3FA]
-            hover:file:bg-[#38547C] file:transition-colors file:duration-300;
+        ::-webkit-scrollbar-thumb {
+            background: var(--v-steel);
+            border-radius: 10px;
         }
-
-        /* Styling for Django's default textarea widget */
-        textarea {
-            @apply shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent;
-        }
-
-        /* Styling for Django's default checkbox widget */
-        input[type="checkbox"] {
-            @apply w-4 h-4 text-[#8AADDE] bg-[#EFF3FA] border-[#BBC7D8] rounded focus:ring-[#8AADDE] focus:ring-2;
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--v-teal);
         }
     </style>
 </head>
-<body class="bg-[#EFF3FA] font-sans flex flex-col items-center justify-center min-h-screen p-4">
-    <!-- Chosen Palette: Website Elements Color Palette -->
-    <!-- Application Structure Plan: This single-page application is designed for coach registration, featuring a prominent header for branding and a central motto. The core of the page is a tabbed form, split into "Personal Details" and "Professional Details" sections. All form fields are contained within a single HTML <form> element, with JavaScript controlling the visibility of each tab's content. This tabbed approach simplifies a lengthy form, making it less daunting for the user. On smaller screens, the layout remains responsive, stacking elements appropriately. A subtle footer provides additional information. This structure was chosen to provide a clear, guided, and less overwhelming user experience for form completion while correctly handling Django form submission. -->
-    <!-- Visualization & Content Choices: The primary goal is to collect comprehensive coach registration data. This is achieved through standard HTML form elements (input fields, select dropdowns, file input, textarea, checkbox). Interaction is handled by JavaScript to toggle the visibility of tab content based on user clicks, and to ensure the correct tab is displayed if there are form validation errors upon submission. No complex data visualizations are needed for this specific task; the focus is on form interaction and clear presentation of input fields. Unicode characters are used for simple icons. NO SVG graphics used. NO Mermaid JS used. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<body class="font-sans flex flex-col min-h-screen z-0">
 
-    <!-- Global Header / Branding -->
-    <header class="text-center mb-8 max-w-2xl w-full">
-        <div class="flex items-center justify-center mb-4">
-            <img src="{% static 'images\vic logo.png' %}" alt="Victory Sports Academy Logo" class="rounded-full border-2 border-[#8AADDE] mr-4">
-            <h1 class="text-4xl font-bold text-[#38547C]">Victory Sports Academy</h1>
+    <!-- Ambient Space Lighting Layers -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <!-- 3. SEAMLESS GLASSMORPHIC NAVIGATION BAR -->
+    <nav class="navbar fixed top-0 left-0 w-full px-6 py-4 flex items-center justify-between">
+        <a class="navbar-brand text-xl" href="{% url 'home' %}">
+            Victory Sports <span>Academy</span>
+        </a>
+        <div class="flex items-center gap-6">
+            <a class="nav-link" href="{% url 'login_coach' %}">Portal Login</a>
+            <a class="nav-link active pb-1" href="#">Registration</a>
+            <a class="nav-link" href="#">Support</a>
         </div>
-        <p class="text-xl italic font-light text-[#8AADDE] px-4">“Empowering coaches to shape future champions.”</p>
-    </header>
+    </nav>
 
-    <!-- Main Content - Registration Form -->
-    <div class="bg-[#B8CDEC] p-8 rounded-xl shadow-lg w-full max-w-2xl">
-        <h2 class="text-3xl font-bold text-[#38547C] mb-6 text-center">Register as a Coach</h2>
+    <!-- Main Wrapper Node to Offset Fixed Nav Content Stack -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4 pt-28 pb-12 z-10 relative">
 
-        <div class="flex mb-6 rounded-lg overflow-hidden border border-[#BBC7D8]">
-            <button id="personalDetailsTab" class="flex-1 py-3 text-center text-lg font-medium rounded-l-lg transition-all duration-300
-                                               bg-[#8AADDE] text-[#EFF3FA] focus:outline-none">
-                Personal Details
-            </button>
-            <button id="professionalDetailsTab" class="flex-1 py-3 text-center text-lg font-medium rounded-r-lg transition-all duration-300
-                                              bg-[#EFF3FA] text-[#38547C] hover:bg-[#BBC7D8] focus:outline-none">
-                Professional Details
-            </button>
-        </div>
+        <!-- Global Header / Branding -->
+        <header class="text-center mb-8 max-w-2xl w-full">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
+                <img src="{% static 'images/vic logo.png' %}" alt="Victory Sports Academy Logo" class="w-14 h-14 rounded-full border-2 border-[var(--v-teal)] shadow-[0_0_15px_rgba(37,150,190,0.4)]">
+                <h1 class="text-3xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]">Victory Sports Academy</h1>
+            </div>
+            <p class="text-base italic font-light text-[var(--v-gray)] px-4">“Empowering coaches to shape future champions.”</p>
+        </header>
 
-        <!-- Single Form wrapping both sections -->
-        <form method="POST" enctype="multipart/form-data" novalidate id="coachRegistrationForm">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
+        <!-- Main Form Glass Container Module -->
+        <div class="child-card p-8 w-full max-w-2xl">
+            <h2 class="text-2xl font-black text-white mb-6 text-center tracking-tight uppercase">Instructor Registry</h2>
 
-            <!-- Personal Details Tab Content -->
-            <div id="personalDetailsContent" class="tab-content">
-                <h3 class="text-2xl font-semibold text-[#38547C] mb-4">Your Personal Information</h3>
-
-                <div class="mb-4">
-                    <label for="{{ form.username.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Username:</label>
-                    {{ form.username.errors }}
-                    <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" required
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="Choose a username" value="{{ form.username.value|default:'' }}">
-                </div>
-
-                <div class="mb-4">
-                    <label for="{{ form.password.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Password:</label>
-                    {{ form.password.errors }}
-                    <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" required
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="••••••••">
-                </div>
-                <!-- Add a confirm password field for client-side UX, even if not in Django form -->
-                <div class="mb-6">
-                    <label for="confirmPassword" class="block text-[#38547C] text-sm font-bold mb-2">Confirm Password:</label>
-                    <input type="password" id="confirmPassword"
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="••••••••">
-                </div>
-
-                <div class="mb-4">
-                    <label for="{{ form.full_name.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Full Name:</label>
-                    {{ form.full_name.errors }}
-                    <input type="text" name="{{ form.full_name.name }}" id="{{ form.full_name.id_for_label }}" required
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="Your full name" value="{{ form.full_name.value|default:'' }}">
-                </div>
-
-                <div class="mb-4">
-                    <label for="{{ form.date_of_birth.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Date of Birth:</label>
-                    {{ form.date_of_birth.errors }}
-                    {{ form.date_of_birth }}
-                </div>
-
-                <div class="mb-4">
-    <label for="{{ form.gender.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Gender:</label>
-    {{ form.gender.errors }}
-    {{ form.gender }}
-</div>
-
-                <div class="mb-4">
-                    <label for="{{ form.nationality.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Nationality:</label>
-                    {{ form.nationality.errors }}
-                    <input type="text" name="{{ form.nationality.name }}" id="{{ form.nationality.id_for_label }}" required
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="Your nationality" value="{{ form.nationality.value|default:'' }}">
-                </div>
-
-                <div class="mb-4">
-                    <label for="{{ form.contact_number.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Contact Number:</label>
-                    {{ form.contact_number.errors }}
-                    <input type="tel" name="{{ form.contact_number.name }}" id="{{ form.contact_number.id_for_label }}" required
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="+1234567890" value="{{ form.contact_number.value|default:'' }}">
-                </div>
-
-                <div class="mb-4">
-                    <label for="{{ form.email.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Email:</label>
-                    {{ form.email.errors }}
-                    <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" required
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="your.email@example.com" value="{{ form.email.value|default:'' }}">
-                </div>
-
-                <div class="mb-4">
-                    <label for="{{ form.address.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Address:</label>
-                    {{ form.address.errors }}
-                    <textarea name="{{ form.address.name }}" id="{{ form.address.id_for_label }}" rows="3" required
-                              class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                              placeholder="Your full address">{{ form.address.value|default:'' }}</textarea>
-                </div>
-
-                <div class="mb-6">
-                    <label for="{{ form.photo.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Upload Photo:</label>
-                    {{ form.photo.errors }}
-                    {{ form.photo }}
-                </div>
-
-                <button type="button" id="nextToProfessionalDetails" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
-                    Next: Professional Details
+            <!-- Glassmorphic Tabs Component Subsystem -->
+            <div class="flex mb-8 rounded-xl overflow-hidden border border-slate-800 bg-slate-950/40 p-1">
+                <button id="personalDetailsTab" type="button" class="flex-1 py-3 text-center text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-300 focus:outline-none cursor-pointer">
+                    Personal Assets
+                </button>
+                <button id="professionalDetailsTab" type="button" class="flex-1 py-3 text-center text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-300 focus:outline-none cursor-pointer">
+                    Professional Matrix
                 </button>
             </div>
 
-            <!-- Professional Details Tab Content -->
-            <div id="professionalDetailsContent" class="tab-content hidden">
-                <h3 class="text-2xl font-semibold text-[#38547C] mb-4">Your Professional Information</h3>
+            <!-- Single Registration Form Element Module -->
+            <form method="POST" enctype="multipart/form-data" novalidate id="coachRegistrationForm" class="space-y-5">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="p-3 rounded-lg bg-red-500/20 border border-red-500 text-sm font-medium text-white mb-4">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
 
-                <div class="mb-4">
-                    <label for="{{ form.qualification.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Qualification:</label>
-                    {{ form.qualification.errors }}
-                    <input type="text" name="{{ form.qualification.name }}" id="{{ form.qualification.id_for_label }}" required
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="e.g., UEFA B License" value="{{ form.qualification.value|default:'' }}">
+                <!-- Personal Details Wizard Content View Segment -->
+                <div id="personalDetailsContent" class="tab-content space-y-4">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2 text-[var(--v-teal)]">
+                        <span>👤</span> Identity Parameters
+                    </h3>
+
+                    <div>
+                        <label for="{{ form.username.id_for_label }}" class="data-label">System Username string</label>
+                        {{ form.username.errors }}
+                        <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" required
+                               placeholder="Assign account ID handles" value="{{ form.username.value|default:'' }}">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="{{ form.password.id_for_label }}" class="data-label">Security Credentials (Password)</label>
+                            {{ form.password.errors }}
+                            <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" required placeholder="••••••••">
+                        </div>
+                        <div>
+                            <label for="confirmPassword" class="data-label">Verify Secret Key</label>
+                            <input type="password" id="confirmPassword" placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="{{ form.full_name.id_for_label }}" class="data-label">Legal Name Field</label>
+                        {{ form.full_name.errors }}
+                        <input type="text" name="{{ form.full_name.name }}" id="{{ form.full_name.id_for_label }}" required
+                               placeholder="Firstname Lastname" value="{{ form.full_name.value|default:'' }}">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="{{ form.date_of_birth.id_for_label }}" class="data-label">Chronological Birthdate</label>
+                            {{ form.date_of_birth.errors }}
+                            {{ form.date_of_birth }}
+                        </div>
+                        <div>
+                            <label for="{{ form.gender.id_for_label }}" class="data-label">Gender Verification</label>
+                            {{ form.gender.errors }}
+                            {{ form.gender }}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="{{ form.nationality.id_for_label }}" class="data-label">Origin Nationality</label>
+                            {{ form.nationality.errors }}
+                            <input type="text" name="{{ form.nationality.name }}" id="{{ form.nationality.id_for_label }}" required
+                                   placeholder="Citizen Country" value="{{ form.nationality.value|default:'' }}">
+                        </div>
+                        <div>
+                            <label for="{{ form.contact_number.id_for_label }}" class="data-label">Comms Line (Telephone)</label>
+                            {{ form.contact_number.errors }}
+                            <input type="tel" name="{{ form.contact_number.name }}" id="{{ form.contact_number.id_for_label }}" required
+                                   placeholder="+1 000 000 0000" value="{{ form.contact_number.value|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="{{ form.email.id_for_label }}" class="data-label">Digital Network Mailbox (Email)</label>
+                        {{ form.email.errors }}
+                        <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" required
+                               placeholder="instructor@victorysports.com" value="{{ form.email.value|default:'' }}">
+                    </div>
+
+                    <div>
+                        <label for="{{ form.address.id_for_label }}" class="data-label">Physical Domicile Address Data</label>
+                        {{ form.address.errors }}
+                        <textarea name="{{ form.address.name }}" id="{{ form.address.id_for_label }}" rows="2" required
+                                  placeholder="Complete geographic terminal details">{{ form.address.value|default:'' }}</textarea>
+                    </div>
+
+                    <div>
+                        <label for="{{ form.photo.id_for_label }}" class="data-label">Biometric Identification Matrix (Photo File)</label>
+                        {{ form.photo.errors }}
+                        <div class="p-3 bg-slate-950/40 border border-dashed border-slate-700 rounded-lg">
+                            {{ form.photo }}
+                        </div>
+                    </div>
+
+                    <button type="button" id="nextToProfessionalDetails" class="w-full btn-custom cursor-pointer mt-4">
+                        Proceed To Tactical Experience Parameters &rarr;
+                    </button>
                 </div>
 
-                <div class="mb-4">
-                    <label for="{{ form.experience_years.id_for_label }}" class="block text-[#38547C] text-sm font-bold mb-2">Years of Experience:</label>
-                    {{ form.experience_years.errors }}
-                    <input type="number" name="{{ form.experience_years.name }}" id="{{ form.experience_years.id_for_label }}" required
-                           class="shadow appearance-none border border-[#BBC7D8] rounded-lg w-full py-3 px-4 text-[#38547C] leading-tight focus:outline-none focus:ring-2 focus:ring-[#8AADDE] focus:border-transparent"
-                           placeholder="e.g., 5" min="0" value="{{ form.experience_years.value|default:'' }}">
+                <!-- Professional Details Wizard Content View Segment -->
+                <div id="professionalDetailsContent" class="tab-content space-y-4 hidden">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2 text-[var(--v-teal)]">
+                        <span>🏆</span> Athletic Vector Parameters
+                    </h3>
+
+                    <div>
+                        <label for="{{ form.qualification.id_for_label }}" class="data-label">Licensing Certification / Accreditation</label>
+                        {{ form.qualification.errors }}
+                        <input type="text" name="{{ form.qualification.name }}" id="{{ form.qualification.id_for_label }}" required
+                               placeholder="e.g., Tactical License Degree, FIFA A Endorsement" value="{{ form.qualification.value|default:'' }}">
+                    </div>
+
+                    <div>
+                        <label for="{{ form.experience_years.id_for_label }}" class="data-label">Active Field Tenure Duration (Years)</label>
+                        {{ form.experience_years.errors }}
+                        <input type="number" name="{{ form.experience_years.name }}" id="{{ form.experience_years.id_for_label }}" required
+                               placeholder="Numerical value entry" min="0" value="{{ form.experience_years.value|default:'' }}">
+                    </div>
+
+                    <div class="p-4 bg-slate-950/40 border border-slate-800 rounded-xl flex items-start gap-3 mt-6">
+                        <div class="pt-0.5">
+                            {{ form.declaration }}
+                        </div>
+                        <div>
+                            <label for="{{ form.declaration.id_for_label }}" class="text-xs font-medium text-slate-300 leading-normal block cursor-pointer select-none">
+                                I hereby declare that all data assets submitted within this operational interface profile match authenticated, legitimate legal qualifications.
+                            </label>
+                            {{ form.declaration.errors }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full btn-custom cursor-pointer mt-4 bg-[gradient-to-r] from-[var(--v-blue)] to-[var(--v-teal)]">
+                        Finalize Platform Registration Engine
+                    </button>
                 </div>
+            </form>
 
-                <div class="form-check mb-6 flex items-center">
-                    {{ form.declaration }}
-                    <label for="{{ form.declaration.id_for_label }}" class="ml-2 text-[#38547C] text-sm font-bold">
-                        {{ form.declaration.label }}
-                    </label>
-                    {{ form.declaration.errors }}
-                </div>
+            <!-- Required Chart Structural Elements -->
+            <div class="hidden"><canvas id="myChart"></canvas></div>
 
-                <button type="submit" class="w-full bg-[#8AADDE] hover:bg-[#38547C] text-[#EFF3FA] font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-colors duration-300">
-                    Submit Registration
-                </button>
-            </div>
-        </form>
-
-        <!-- Mandatory Chart Container (hidden as not needed for this specific page) -->
-        <div class="chart-container hidden mt-8">
-            <canvas id="myChart"></canvas>
         </div>
 
-    </div>
+        <!-- Structural Footer -->
+        <footer class="mt-8 text-center text-[0.7rem] uppercase tracking-widest text-slate-600">
+            &copy; 2026 Victory Sports Academy &bull; Secure User Ingestion Gateway
+        </footer>
+    </main>
 
-    <!-- Footer -->
-    <footer class="mt-8 text-center text-sm text-gray-600">
-        <small>&copy; 2025 Victory Sports Academy. All rights reserved.</small>
-    </footer>
-
+    <!-- Navigation Wizard Core Logic System Scripts -->
     <script>
         const personalDetailsTab = document.getElementById('personalDetailsTab');
         const professionalDetailsTab = document.getElementById('professionalDetailsTab');
@@ -264,118 +434,61 @@
         const professionalDetailsContent = document.getElementById('professionalDetailsContent');
         const nextToProfessionalDetailsButton = document.getElementById('nextToProfessionalDetails');
 
-        // Function to show the selected tab
         function showTab(tabName) {
             if (tabName === 'personal') {
                 personalDetailsContent.classList.remove('hidden');
                 professionalDetailsContent.classList.add('hidden');
-                personalDetailsTab.classList.remove('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
-                personalDetailsTab.classList.add('bg-[#8AADDE]', 'text-[#EFF3FA]');
-                professionalDetailsTab.classList.remove('bg-[#8AADDE]', 'text-[#EFF3FA]');
-                professionalDetailsTab.classList.add('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+                
+                personalDetailsTab.className = "flex-1 py-3 text-center text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-300 focus:outline-none cursor-pointer bg-[var(--v-teal)] text-white shadow-[0_0_15px_rgba(37,150,190,0.3)]";
+                professionalDetailsTab.className = "flex-1 py-3 text-center text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-300 focus:outline-none cursor-pointer text-[var(--v-gray)] hover:text-white hover:bg-slate-800/40";
             } else if (tabName === 'professional') {
                 professionalDetailsContent.classList.remove('hidden');
                 personalDetailsContent.classList.add('hidden');
-                professionalDetailsTab.classList.remove('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
-                professionalDetailsTab.classList.add('bg-[#8AADDE]', 'text-[#EFF3FA]');
-                personalDetailsTab.classList.remove('bg-[#8AADDE]', 'text-[#EFF3FA]');
-                personalDetailsTab.classList.add('bg-[#EFF3FA]', 'text-[#38547C]', 'hover:bg-[#BBC7D8]');
+                
+                professionalDetailsTab.className = "flex-1 py-3 text-center text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-300 focus:outline-none cursor-pointer bg-[var(--v-teal)] text-white shadow-[0_0_15px_rgba(37,150,190,0.3)]";
+                personalDetailsTab.className = "flex-1 py-3 text-center text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-300 focus:outline-none cursor-pointer text-[var(--v-gray)] hover:text-white hover:bg-slate-800/40";
             }
         }
 
-        // Event listeners for tab buttons
         personalDetailsTab.addEventListener('click', () => showTab('personal'));
         professionalDetailsTab.addEventListener('click', () => showTab('professional'));
-
-        // Handle "Next: Professional Details" button click to switch tabs
         nextToProfessionalDetailsButton.addEventListener('click', () => showTab('professional'));
 
-        // Check for form errors on page load and display the relevant tab
+        // Form pipeline parsing logic checks on error conditions
         document.addEventListener('DOMContentLoaded', () => {
-            // Check if any field in the professional details section has errors
             const professionalFields = ['qualification', 'experience_years', 'declaration'];
             let hasProfessionalErrors = false;
             for (const fieldName of professionalFields) {
-                const errorElement = document.querySelector(`[name="${fieldName}"] + .errorlist li`);
-                if (errorElement) {
+                if (document.querySelector(`[name="${fieldName}"] ~ .errorlist li`)) {
                     hasProfessionalErrors = true;
                     break;
                 }
             }
 
-            // Check if any field in the personal details section has errors (excluding password confirm)
             const personalFields = ['username', 'password', 'full_name', 'date_of_birth', 'gender', 'nationality', 'contact_number', 'email', 'address', 'photo'];
             let hasPersonalErrors = false;
             for (const fieldName of personalFields) {
-                const errorElement = document.querySelector(`[name="${fieldName}"] + .errorlist li`);
-                if (errorElement) {
+                if (document.querySelector(`[name="${fieldName}"] ~ .errorlist li`)) {
                     hasPersonalErrors = true;
                     break;
                 }
             }
 
-            // Check for non-field errors
             const nonFieldErrors = document.querySelector('#coachRegistrationForm > .errorlist li');
 
             if (hasProfessionalErrors || (nonFieldErrors && !hasPersonalErrors)) {
-                showTab('professional'); // Show professional tab if professional fields or non-field errors exist and no personal errors
+                showTab('professional');
             } else {
-                showTab('personal'); // Default to personal tab or show if personal errors exist
+                showTab('personal');
             }
         });
 
-
-        // Initialize Chart.js even if not used, as per instructions
+        // Initialize required analytics chart engine layer safely
         const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, /* Critical for responsiveness */
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            title: function(context) {
-                                return context[0].label.length > 16 ? context[0].label.substring(0, 16) + '...' : context[0].label;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            callback: function(value, index, ticks) {
-                                const label = this.getLabelForValue(value);
-                                return label.length > 16 ? label.substring(0, 16) + '...' : label;
-                            }
-                        }
-                    }
-                }
-            }
+            data: { labels: ['A'], datasets: [{ data: [1], backgroundColor: ['rgba(0,0,0,0)'] }] },
+            options: { responsive: true, maintainAspectRatio: false }
         });
     </script>
 </body>

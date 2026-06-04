@@ -5,482 +5,710 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Victory Academy - Football Coaching</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="{% static 'css/index .css' %}" rel="stylesheet">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        /* Extend Tailwind CSS theme with your custom colors */
-        /* Tailwind configuration moved to a script tag for dynamic loading */
+        /* Global Variables matching brand request */
+        :root {
+            --v-dark-bg: #080a1b;   /* Deep space midnight blue background */
+            --v-navy: #06235d;      /* Solid base theme dark navy */
+            --v-steel: #2d4373;     /* Muted structural border tone */
+            --v-teal: #2596be;      /* Vibrant glowing neon cyan accent */
+            --v-blue: #0038a8;      /* Primary atmospheric lighting source */
+            --v-green: #4ca63b;     /* Success metric / positive value pill */
+            --v-orange: #ff8c00;    /* Alert metric / gradient accent */
+            --v-gold: #d4af37;      /* Secondary key marker / medal color */
+            --v-gray: #b2beb5;      /* High-contrast ash grey secondary text */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg) !important;
+            color: #ffffff;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient background glow rings */
+        .ambient-glow-1 {
+            position: absolute;
+            top: -5%;
+            left: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: rgba(0, 56, 168, 0.22);
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            bottom: 20%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(37, 150, 190, 0.15);
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-glow-3 {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40vw;
+            height: 40vw;
+            background: rgba(255, 140, 0, 0.06);
+            border-radius: 50%;
+            filter: blur(150px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Glassmorphic Styles */
+        .glass-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(8, 10, 27, 0.5);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(37, 150, 190, 0.45);
+            box-shadow: 0 20px 40px rgba(37, 150, 190, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .navbar-glass {
+            background: rgba(8, 10, 27, 0.65) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.25) !important;
+        }
+
+        /* Tactical Pitch Details */
+        .pitch-outline {
+            background-color: rgba(6, 35, 93, 0.3);
+            border: 2px solid rgba(37, 150, 190, 0.4);
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            aspect-ratio: 16 / 10;
+        }
+
+        .pitch-half {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            border-right: 2px dashed rgba(37, 150, 190, 0.4);
+        }
+
+        .pitch-center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 18%;
+            height: 28.8%;
+            border: 2px solid rgba(37, 150, 190, 0.4);
+            border-radius: 50%;
+        }
+
+        .pitch-penalty-area-left {
+            position: absolute;
+            left: 0;
+            top: 20%;
+            bottom: 20%;
+            width: 16.5%;
+            border: 2px solid rgba(37, 150, 190, 0.4);
+            border-left: none;
+        }
+
+        .pitch-penalty-area-right {
+            position: absolute;
+            right: 0;
+            top: 20%;
+            bottom: 20%;
+            width: 16.5%;
+            border: 2px solid rgba(37, 150, 190, 0.4);
+            border-right: none;
+        }
+
+        /* Animated Player Nodes */
+        .player-node {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            position: absolute;
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 10;
+        }
+
+        .player-attacker {
+            background: radial-gradient(circle, #2596be 0%, #06235d 100%);
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(37, 150, 190, 0.8);
+        }
+
+        .player-defender {
+            background: radial-gradient(circle, #ff8c00 0%, #080a1b 100%);
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 140, 0, 0.8);
+        }
+
+        .tactical-ball {
+            width: 14px;
+            height: 14px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 12px 4px rgba(255, 255, 255, 0.9);
+            transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 20;
+        }
+
+        /* Action Buttons */
+        .btn-primary-gradient {
+            background: linear-gradient(135deg, var(--v-teal) 0%, var(--v-blue) 100%);
+            border: 1px solid rgba(37, 150, 190, 0.4);
+            box-shadow: 0 4px 15px rgba(37, 150, 190, 0.2);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .btn-primary-gradient:hover {
+            background: linear-gradient(135deg, var(--v-teal) 30%, var(--v-navy) 100%);
+            box-shadow: 0 0 25px rgba(37, 150, 190, 0.6);
+            transform: scale(1.03);
+        }
+
+        /* Modal Overlay and Window */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 10, 27, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(6, 35, 93, 0.95);
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Typewriter Glow */
+        .typewriter-text {
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(37, 150, 190, 0.6);
+        }
     </style>
     <script>
+        // Overriding Tailwind config to support new structural UI design parameters
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'deep-navy-blue': '#06235d',   /* Primary: Navbar, footer, deep background */
-                        'slate-gray': '#677991',       /* Secondary: Subheadings, descriptions, labels */
-                        'light-gray-blue': '#d3d8dd',  /* Page background, containers, section background */
-                        'vibrant-orange': '#FF8C00',   /* Accent: Buttons, CTAs, highlights */
-                        'bright-green': '#4CAF50',     /* Secondary Accent: Buttons, highlights */
-                        'ebony': '#060712',            /* Footer background, primary text color */
+                        'deep-navy-blue': '#06235d',   
+                        'slate-gray': '#b2beb5',       
+                        'light-gray-blue': '#d3d8dd',  
+                        'vibrant-orange': '#ff8c00',   
+                        'bright-green': '#4ca63b',     
+                        'ebony': '#080a1b',            
                     },
                     boxShadow: {
                         'soft': '0 4px 12px rgba(0, 0, 0, 0.08)',
-                        'medium': '0 8px 20px rgba(0, 0, 0, 0.15)',
+                        'medium': '0 8px 20px rgba(0, 0, 0, 0.35)',
                     }
                 }
             }
         }
     </script>
-    <style>
-        /* Custom CSS variables for direct use if needed */
-        :root {
-            --deep-navy-blue: #06235d;
-            --slate-gray: #677991;
-            --light-gray-blue: #d3d8dd;
-            --vibrant-orange: #FF8C00;
-            --bright-green: #4CAF50;
-            --ebony: #060712;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--light-gray-blue); /* Page background */
-            color: var(--ebony); /* Primary text color */
-        }
-
-        /* Gradient for primary buttons and elements */
-        .btn-primary-gradient {
-            background: linear-gradient(to right, #080a1b, #022660, #334c78, #c9d1d8);
-        }
-        .btn-primary-gradient:hover {
-            background: linear-gradient(to left, #080a1b, #022660, #334c78, #c9d1d8);
-        }
-
-        /* Subtle gradient for bright green buttons (retained if needed for other elements) */
-        .btn-green-gradient {
-            background-image: linear-gradient(to right, var(--bright-green), #3E9C41);
-        }
-        .btn-green-gradient:hover {
-            background-image: linear-gradient(to right, #3E9C41, var(--bright-green));
-        }
-
-        /* Circular icon styling - NOW USING THE NEW GRADIENT */
-        .circular-icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 72px; /* Increased size for prominence */
-            height: 72px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #334c78, #022660, #080a1b);
-            color: white;
-            font-size: 2.5rem; /* Larger icon size */
-            font-weight: bold;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-        .circular-icon:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Background overlay for hero section */
-        .hero-overlay {
-            background: linear-gradient(to bottom, #000421, #022660, #334c78);
-        }
-
-        /* Parallax Card Styles */
-        .parallax-card-container {
-            perspective: 1000px; /* For 3D effect */
-        }
-
-        .parallax-card {
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out; /* Smooth transition for mouse movement */
-        }
-
-        .parallax-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.1s ease-out; /* Smooth transition for layers */
-        }
-
-        /* Typewriter Animation */
-        .typewriter-text {
-            overflow: hidden; /* Ensures the text is hidden until typed */
-            white-space: nowrap; /* Keeps text on a single line */
-            border-right: .15em solid var(--vibrant-orange); /* Blinking cursor */
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-        }
-
-        /* Typing animation */
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        /* Blinking cursor animation */
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--vibrant-orange); }
-        }
-
-        /* Gradient Border Effect - NOW USING THE NEW GRADIENT */
-        .gradient-border {
-            border: 4px solid transparent;
-            background: linear-gradient(var(--light-gray-blue), var(--light-gray-blue)) padding-box,
-                        linear-gradient(to right, #022660, #334c78) border-box;
-            background-origin: border-box;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-
-        /* Accordion Styles */
-        .accordion-header {
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.3s ease;
-        }
-        .accordion-header:hover {
-            background-color: rgba(6, 35, 93, 0.05); /* Light hover effect */
-        }
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-        }
-        .accordion-content.open {
-            max-height: 500px; /* Sufficiently large value for content */
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-        }
-        .accordion-icon {
-            transition: transform 0.3s ease;
-        }
-        .accordion-icon.rotate {
-            transform: rotate(90deg);
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .modal-overlay.open {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            max-width: 90%;
-            width: 500px;
-            position: relative;
-        }
-        .modal-overlay.open .modal-content {
-            transform: scale(1);
-        }
-        .modal-close-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--slate-gray);
-        }
-    </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
+    <!-- Global Ambient Lighting Backdrops -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+    <div class="ambient-glow-3"></div>
+
     <!-- Navbar Section -->
-    <header class="bg-deep-navy-blue text-white shadow-medium">
+    <header class="navbar-glass text-white shadow-medium sticky top-0 z-50">
         <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <!-- Logo Placeholder -->
-                <!-- IMPORTANT: Please replace 'https://placehold.co/40x40/d3d8dd/06235d?text=VA' with your actual logo's PUBLIC URL -->
-                <img src="{% static 'images\rsz_whatsapp_image_2025-05-12_at_203817_e093d0f6-removebg-preview.png' %}" alt="Victory Academy Logo" class="rounded-full w-10 h-10">
-                <a href="#" class="text-3xl font-extrabold text-light-gray-blue tracking-wide">VICTORY ACADEMY</a>
+                <img src="{% static 'images/rsz_whatsapp_image_2025-05-12_at_203817_e093d0f6-removebg-preview.png' %}" alt="Victory Academy Logo" class="rounded-full w-10 h-10 border border-[#2596be]/40" onerror="this.src='https://placehold.co/40x40/06235d/2596be?text=VA'">
+                <a href="#" class="text-2xl md:text-3xl font-black tracking-wider text-white uppercase italic">VICTORY <span class="text-[#2596be] not-italic">ACADEMY</span></a>
             </div>
-            <div class="hidden md:flex space-x-8 items-center">
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Home</a>
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Programs</a>
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Coaches</a>
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Testimonials</a>
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Contact</a>
-                <!-- Coach Button - Now with gradient -->
-                <a href="{% url 'login_coach' %}" class="px-6 py-2 rounded-lg text-white font-semibold shadow-md btn-primary-gradient transition duration-300">Coach</a>
-                <!-- Parent Button - Now with gradient -->
-                <a href="{% url 'login_parent' %}" class="px-6 py-2 rounded-lg text-white font-semibold shadow-md btn-primary-gradient transition duration-300">Parent</a>
+            
+            <div class="hidden lg:flex space-x-8 items-center">
+                <a href="#" class="text-slate-gray hover:text-white transition duration-300 font-semibold tracking-wider text-xs uppercase">Home</a>
+                <a href="#tactical-pitch" class="text-slate-gray hover:text-white transition duration-300 font-semibold tracking-wider text-xs uppercase">Tactical Drills</a>
+                <a href="#programs" class="text-slate-gray hover:text-white transition duration-300 font-semibold tracking-wider text-xs uppercase">Programs</a>
+                <a href="#coaches" class="text-slate-gray hover:text-white transition duration-300 font-semibold tracking-wider text-xs uppercase">Coaches</a>
+                <a href="#parent-preview" class="text-slate-gray hover:text-white transition duration-300 font-semibold tracking-wider text-xs uppercase">Portal</a>
+                
+                <a href="{% url 'login_coach' %}" class="px-5 py-2 rounded-full text-white text-xs uppercase font-bold tracking-wider shadow-md btn-primary-gradient transition duration-300 flex items-center gap-1.5"><i data-lucide="shield"></i> Coach</a>
+                <a href="{% url 'login_parent' %}" class="px-5 py-2 rounded-full text-white text-xs uppercase font-bold tracking-wider shadow-md btn-primary-gradient transition duration-300 flex items-center gap-1.5"><i data-lucide="users"></i> Parent</a>
             </div>
-            <!-- Mobile Menu Button (Hamburger Icon) -->
-            <button class="md:hidden text-light-gray-blue focus:outline-none" id="mobile-menu-button">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <!-- Mobile Menu Button -->
+            <button class="lg:hidden text-white focus:outline-none" id="mobile-menu-button">
+                <i data-lucide="menu" class="w-8 h-8"></i>
             </button>
         </nav>
         <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="hidden md:hidden bg-deep-navy-blue py-4">
-            <div class="flex flex-col items-center space-y-4">
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Home</a>
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Programs</a>
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Coaches</a>
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Testimonials</a>
-                <a href="#" class="text-light-gray-blue hover:text-vibrant-orange transition duration-300 font-medium">Contact</a>
-                <a href="#" class="px-6 py-2 rounded-lg text-white font-semibold shadow-md w-max btn-primary-gradient transition duration-300">Coach</a>
-                <a href="#" class="px-6 py-2 rounded-lg text-white font-semibold shadow-md w-max btn-primary-gradient transition duration-300">Parent</a>
+        <div id="mobile-menu" class="hidden lg:hidden bg-ebony/95 backdrop-blur-md py-6 border-b border-white/10">
+            <div class="flex flex-col items-center space-y-5">
+                <a href="#" class="text-slate-gray hover:text-white transition duration-300 font-medium uppercase text-sm">Home</a>
+                <a href="#tactical-pitch" class="text-slate-gray hover:text-white transition duration-300 font-medium uppercase text-sm">Tactical Drills</a>
+                <a href="#programs" class="text-slate-gray hover:text-white transition duration-300 font-medium uppercase text-sm">Programs</a>
+                <a href="#coaches" class="text-slate-gray hover:text-white transition duration-300 font-medium uppercase text-sm">Coaches</a>
+                <a href="#parent-preview" class="text-slate-gray hover:text-white transition duration-300 font-medium uppercase text-sm">Portal</a>
+                <a href="{% url 'login_coach' %}" class="px-6 py-2 rounded-full text-white font-semibold text-sm shadow-md w-max btn-primary-gradient transition duration-300 flex items-center gap-1.5"><i data-lucide="shield" class="w-4 h-4"></i> Coach Portal</a>
+                <a href="{% url 'login_parent' %}" class="px-6 py-2 rounded-full text-white font-semibold text-sm shadow-md w-max btn-primary-gradient transition duration-300 flex items-center gap-1.5"><i data-lucide="users" class="w-4 h-4"></i> Parent Portal</a>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <main class="flex-grow">
-        <section class="relative bg-cover bg-center h-[600px] md:h-[700px] flex items-center justify-center text-center"
-                         style="background-image: url('https://placehold.co/1920x1080/06235d/677991?text=KIDS+TRAINING+FOOTBALL');">
-            <div class="absolute inset-0 hero-overlay"></div>
+    <main class="flex-grow relative z-10">
+        <section class="relative bg-cover bg-center h-[550px] md:h-[650px] flex items-center justify-center text-center"
+                 style="background-image: linear-gradient(rgba(8, 10, 27, 0.82), rgba(8, 10, 27, 0.95)), url('https://placehold.co/1920x1080/06235d/677991?text=KIDS+TRAINING+FOOTBALL');">
             <div class="container mx-auto px-4 relative z-10">
-                <h1 id="hero-title" class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-tight text-light-gray-blue drop-shadow-lg typewriter-text">
-                    <!-- Text will be typed by JS -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-deep-navy-blue/80 border border-[#2596be]/30 mb-6 text-sm">
+                    <span class="w-2.5 h-2.5 rounded-full bg-bright-green animate-pulse"></span>
+                    <span class="text-white font-semibold uppercase tracking-wider text-xs">Summer Admissions Open '26</span>
+                </div>
+                <h1 id="hero-title" class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight typewriter-text min-h-[90px]">
+                    <!-- Text typed by JS -->
                 </h1>
-                <p class="text-lg md:text-xl max-w-3xl mx-auto text-light-gray-blue opacity-90 mb-10">
-                    Victory Academy offers elite football coaching, fostering talent, discipline, and passion in every aspiring athlete.
+                <p class="text-lg md:text-xl max-w-3xl mx-auto text-slate-gray opacity-90 mb-10 leading-relaxed">
+                    Elevating standard coaching into complete athletic transformation. Guided by UEFA-certified professionals and supported by modern player analytics.
                 </p>
-                <a href="#" class="px-10 py-4 rounded-full btn-primary-gradient text-white font-bold text-xl hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
-                    Discover Programs
-                </a>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#programs" class="px-10 py-4 rounded-full btn-primary-gradient text-white font-bold text-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 inline-block uppercase tracking-wider">
+                        Explore Programs
+                    </a>
+                    <a href="#tactical-pitch" class="px-10 py-4 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white font-bold text-lg hover:bg-white/10 transition duration-300 transform hover:-translate-y-1 inline-block uppercase tracking-wider">
+                        See Tactical Board
+                    </a>
+                </div>
             </div>
         </section>
 
-       <!-- Parallax Card Section -->
-{% comment %} <section class="bg-white py-16 md:py-24">
-  <div class="container mx-auto px-4 text-center">
-    <h2 class="text-3xl md:text-4xl font-bold text-ebony mb-12">Experience Our Dynamic Training</h2>
-
-    <div class="flex justify-center items-center">
-      <div id="parallax-card-container" class="parallax-card-container relative w-full max-w-lg h-80 rounded-xl overflow-hidden shadow-medium mx-auto">
-        <div id="parallax-card" class="parallax-card absolute inset-0 flex items-center justify-center bg-deep-navy-blue rounded-xl overflow-hidden">
-
-          <!-- Floating Football Icon -->
-          <div class="parallax-layer animate-bounce-slow z-10" data-depth="0.2">
-            <img src="https://placehold.co/150x150/d3d8dd/06235d?text=⚽" alt="Football Icon" class="w-32 h-32 opacity-80" />
-          </div>
-
-          <!-- Center Text -->
-          <div class="parallax-layer z-20" data-depth="0.4">
-            <p class="text-light-gray-blue text-3xl font-bold animate-fade-in-up">Skill. Dedication. Victory.</p>
-          </div>
-
-          <!-- Trophy Icon with Floating Animation -->
-          <div class="parallax-layer absolute bottom-4 right-4 animate-float z-10" data-depth="0.6">
-            <img src="https://placehold.co/80x80/FF8C00/FFFFFF?text=🏆" alt="Trophy Icon" class="w-20 h-20 opacity-90" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> {% endcomment %}
-
-
-        <!-- About Us Section -->
-        <section class="bg-light-gray-blue py-16 md:py-24">
+        <!-- Stats Section (Autocount feature) -->
+        <section class="py-12 bg-ebony/60 border-y border-white/5 relative">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">About Victory Academy</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div class="relative rounded-xl overflow-hidden shadow-medium">
-                        <img src="https://placehold.co/600x400/677991/d3d8dd?text=ACADEMY+OVERVIEW" alt="Academy Overview" class="w-full h-auto object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-deep-navy-blue to-transparent opacity-60"></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center" id="stats-container">
+                    <div class="p-4">
+                        <div class="text-[#2596be] text-4xl md:text-5xl font-extrabold mb-2" data-target="98">0%</div>
+                        <p class="text-slate-gray text-xs md:text-sm uppercase tracking-wider font-semibold">Pro Contract Success</p>
                     </div>
-                    <div class="text-center lg:text-left">
-                        <p class="text-slate-gray text-lg leading-relaxed mb-6">
-                            Victory Academy is dedicated to developing the next generation of football stars. Our comprehensive training methodology focuses on technical proficiency, tactical understanding, physical conditioning, and mental fortitude.
-                        </p>
-                        <p class="text-slate-gray text-lg leading-relaxed mb-8">
-                            We provide a supportive and challenging environment where every player can thrive, guided by experienced coaches who are passionate about the beautiful game.
-                        </p>
-                        <a href="#" class="px-8 py-3 rounded-lg bg-deep-navy-blue text-light-gray-blue font-semibold hover:bg-deep-navy-blue/80 transition duration-300 shadow-md">Our Philosophy</a>
+                    <div class="p-4">
+                        <div class="text-[#2596be] text-4xl md:text-5xl font-extrabold mb-2" data-target="15">0+</div>
+                        <p class="text-slate-gray text-xs md:text-sm uppercase tracking-wider font-semibold">Active Scout Partners</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-[#2596be] text-4xl md:text-5xl font-extrabold mb-2" data-target="1200">0+</div>
+                        <p class="text-slate-gray text-xs md:text-sm uppercase tracking-wider font-semibold">Graduated Athletes</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-[#2596be] text-4xl md:text-5xl font-extrabold mb-2" data-target="45">0+</div>
+                        <p class="text-slate-gray text-xs md:text-sm uppercase tracking-wider font-semibold">Trophy Championships</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Training Programs Section -->
-        <section class="bg-white py-16 md:py-24">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">Our Training Programs</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Program Card 1 -->
-                    <div class="bg-light-gray-blue p-6 rounded-xl shadow-soft gradient-border transform hover:-translate-y-2 transition duration-300">
-                        <div class="circular-icon mx-auto mb-4">⚽</div>
-                        <h3 class="text-2xl font-semibold text-deep-navy-blue mb-3">Foundational Skills</h3>
-                        <p class="text-slate-gray mb-4">Mastering the basics: dribbling, passing, and shooting for young players.</p>
-                        <a href="#" class="text-vibrant-orange hover:text-bright-green font-medium transition duration-300">Learn More &rarr;</a>
-                    </div>
-                    <!-- Program Card 2 -->
-                    <div class="bg-light-gray-blue p-6 rounded-xl shadow-soft gradient-border transform hover:-translate-y-2 transition duration-300">
-                        <div class="circular-icon mx-auto mb-4">📈</div>
-                        <h3 class="text-2xl font-semibold text-deep-navy-blue mb-3">Advanced Tactics</h3>
-                        <p class="text-slate-gray mb-4">In-depth tactical understanding and strategic play for competitive teams.</p>
-                        <a href="#" class="text-vibrant-orange hover:text-bright-green font-medium transition duration-300">Learn More &rarr;</a>
-                    </div>
-                    <!-- Program Card 3 -->
-                    <div class="bg-light-gray-blue p-6 rounded-xl shadow-soft gradient-border transform hover:-translate-y-2 transition duration-300">
-                        <div class="circular-icon mx-auto mb-4">💪</div>
-                        <h3 class="text-2xl font-semibold text-deep-navy-blue mb-3">Physical Conditioning</h3>
-                        <p class="text-slate-gray mb-4">Building strength, speed, and endurance tailored for football athletes.</p>
-                        <a href="#" class="text-vibrant-orange hover:text-bright-green font-medium transition duration-300">Learn More &rarr;</a>
-                    </div>
+        <!-- NEW FEATURE: Animated Interactive Tactical Pitch Section -->
+        <section id="tactical-pitch" class="py-20 relative">
+            <div class="container mx-auto px-4 max-w-5xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold uppercase tracking-wide">Dynamic Drill Blueprint</h2>
+                    <p class="text-slate-gray mt-3 max-w-2xl mx-auto">Explore the interactive blueprint. Click drill variants below to see player spacing, tactical triangles, and real-time transition positioning in motion.</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- Coach Profiles Section -->
-        <section class="bg-light-gray-blue py-16 md:py-24">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">Meet Our Coaches</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for coach in coaches %}
-            <div class="bg-white p-6 rounded-xl shadow-soft gradient-border text-center transform hover:-translate-y-2 transition duration-300">
-                <img src="{% if coach.photo %}{{ coach.photo.url }}{% else %}https://placehold.co/120x120/677991/d3d8dd?text=Coach{% endif %}" 
-                     alt="Coach Profile" 
-                     class="rounded-full w-32 h-32 object-cover mx-auto mb-4 border-4 
-                     {% cycle 'border-vibrant-orange' 'border-bright-green' 'border-deep-navy-blue' %}">
                 
-                <h3 class="text-2xl font-semibold text-deep-navy-blue mb-2">{{ coach.full_name }}</h3>
-                <p class="text-slate-gray text-lg mb-3">{{ coach.qualification }}</p>
-                <p class="text-slate-gray text-sm">{{ coach.experience_years }} years of experience</p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                    <!-- Control panel -->
+                    <div class="glass-card p-6 flex flex-col justify-between h-full">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><i data-lucide="trending-up" class="text-[#2596be]"></i> Set Drill Preset</h3>
+                            <p class="text-slate-gray text-sm mb-6">Select a preset below to instruct the players to form positional formations and trigger dynamic play patterns.</p>
+                            
+                            <div class="space-y-3">
+                                <button onclick="triggerDrill('overlapping')" id="btn-overlapping" class="w-full text-left p-4 rounded-xl border border-[#2596be]/40 bg-[#06235d]/50 hover:bg-[#2596be]/20 transition-all font-semibold text-sm flex items-center justify-between">
+                                    <span>1. Wing Overlap Route</span>
+                                    <i data-lucide="play" class="w-4 h-4 text-[#2596be]"></i>
+                                </button>
+                                <button onclick="triggerDrill('pressing')" id="btn-pressing" class="w-full text-left p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-[#2596be]/20 transition-all font-semibold text-sm flex items-center justify-between">
+                                    <span>2. Central High Press</span>
+                                    <i data-lucide="play" class="w-4 h-4 text-[#2596be]"></i>
+                                </button>
+                                <button onclick="triggerDrill('counter')" id="btn-counter" class="w-full text-left p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-[#2596be]/20 transition-all font-semibold text-sm flex items-center justify-between">
+                                    <span>3. Counter Quick Strike</span>
+                                    <i data-lucide="play" class="w-4 h-4 text-[#2596be]"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-white/10 text-xs text-slate-gray">
+                            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#2596be]"></span> Academy Attackers</span>
+                            <span class="flex items-center gap-2 mt-1"><span class="w-2.5 h-2.5 rounded-full bg-[#ff8c00]"></span> Opponent Defense</span>
+                        </div>
+                    </div>
+
+                    <!-- Tactical Pitch Visual Board -->
+                    <div class="lg:col-span-2 glass-card p-4 relative">
+                        <div class="pitch-outline">
+                            <!-- Field lines -->
+                            <div class="pitch-half"></div>
+                            <div class="pitch-center-circle"></div>
+                            <div class="pitch-penalty-area-left"></div>
+                            <div class="pitch-penalty-area-right"></div>
+                            
+                            <!-- Tactical ball -->
+                            <div id="ball" class="tactical-ball" style="top: 50%; left: 45%;"></div>
+                            
+                            <!-- Academy Player Nodes -->
+                            <div id="attacker1" class="player-node player-attacker" style="top: 25%; left: 20%;">8</div>
+                            <div id="attacker2" class="player-node player-attacker" style="top: 50%; left: 30%;">10</div>
+                            <div id="attacker3" class="player-node player-attacker" style="top: 75%; left: 22%;">7</div>
+                            
+                            <!-- Opponent Nodes -->
+                            <div id="defender1" class="player-node player-defender" style="top: 35%; left: 70%;">4</div>
+                            <div id="defender2" class="player-node player-defender" style="top: 65%; left: 72%;">5</div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
+<section id="news" class="py-20 bg-ebony/30 border-y border-white/5 relative">
+    <div class="container mx-auto px-4">
+
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold uppercase tracking-wide">Latest Academy News</h2>
+            <p class="text-slate-gray mt-3 max-w-2xl mx-auto">
+                Stay updated with match highlights, announcements, and academy activities.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            {% for news in news_list %}
+            <div class="glass-card overflow-hidden flex flex-col">
+
+                <!-- Image -->
+                {% if news.image %}
+                <img src="{{ news.image.url }}" class="h-48 w-full object-cover">
+                {% endif %}
+
+                <div class="p-6 flex flex-col justify-between flex-1">
+                    <div>
+                        <p class="text-xs text-[#2596be] font-bold uppercase mb-2">
+                            {{ news.created_at|date:"M d, Y" }}
+                        </p>
+
+                        <h3 class="text-xl font-bold mb-3">
+                            {{ news.title }}
+                        </h3>
+
+                        <p class="text-slate-gray text-sm mb-4 line-clamp-3">
+                            {{ news.description }}
+                        </p>
+                    </div>
+
+                    <button class="mt-auto py-2 px-4 text-xs font-bold uppercase bg-white/5 hover:bg-[#2596be]/20 rounded-lg">
+                        Read More
+                    </button>
+                </div>
+
+            </div>
+            {% empty %}
+            <p class="text-center text-slate-gray col-span-3">
+                No news available yet.
+            </p>
             {% endfor %}
+
         </div>
     </div>
 </section>
-<!-- Image Gallery Section -->
-<section class="bg-white py-16 md:py-24">
-  <div class="container mx-auto px-4">
-    <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">Image Gallery</h2>
+        
+       <section id="coaches" class="py-20 relative">
+    <div class="container mx-auto px-4 max-w-5xl">
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for image in images %}
-      <div class="bg-light-gray-blue rounded-xl overflow-hidden shadow-soft transform hover:scale-105 transition duration-300">
-        <img src="{{ image.image.url }}" alt="{{ image.title }}"
-             class="w-full h-60 object-cover object-center" />
-        <div class="p-4 text-center">
-          <p class="text-deep-navy-blue font-semibold text-sm">{{ image.title }}</p>
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold uppercase tracking-wide">Elite Staff Leaders</h2>
+            <p class="text-slate-gray mt-3 max-w-2xl mx-auto">
+                Mentorship from proven competitors who understand technical precision at the highest international thresholds.
+            </p>
         </div>
-      </div>
-      {% endfor %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            {% for coach in coaches %}
+            <div class="glass-card overflow-hidden group">
+
+                <div class="relative overflow-hidden">
+                    
+                    {% if coach.photo %}
+                    <img src="{{ coach.photo.url }}" 
+                         class="w-full h-56 object-cover group-hover:scale-110 transition duration-500">
+                    {% else %}
+                    <img src="https://placehold.co/400x300/06235d/2d4373?text=COACH" 
+                         class="w-full h-56 object-cover">
+                    {% endif %}
+
+                    <div class="absolute bottom-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-[10px] uppercase tracking-wider font-extrabold text-[#2596be]">
+                        {{ coach.qualification }}
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-white">
+                        {{ coach.full_name }}
+                    </h3>
+
+                    <p class="text-[#ff8c00] text-xs font-semibold uppercase tracking-wider mb-3">
+                        {{ coach.nationality }}
+                    </p>
+
+                    <p class="text-slate-gray text-sm leading-relaxed mb-4">
+                        {{ coach.email }}
+                    </p>
+
+                    <span class="text-xs text-white/80 bg-white/5 px-2.5 py-1.5 rounded-full border border-white/10 inline-block font-semibold">
+                        {{ coach.experience_years }}+ Years Experience
+                    </span>
+                </div>
+
+            </div>
+            {% empty %}
+            <p class="text-center text-slate-gray col-span-3">
+                No approved coaches available.
+            </p>
+            {% endfor %}
+
+        </div>
     </div>
-  </div>
 </section>
 
-        <!-- Accordion Section (FAQ Example) -->
-        <section class="bg-white py-16 md:py-24">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-ebony text-center mb-12">Frequently Asked Questions</h2>
-                <div class="max-w-3xl mx-auto space-y-4">
-                    <!-- Accordion Item 1 -->
-                    <div class="rounded-lg shadow-soft overflow-hidden border border-slate-gray">
-                        <button class="accordion-header flex justify-between items-center w-full p-5 bg-light-gray-blue text-deep-navy-blue font-semibold text-lg" aria-expanded="false" aria-controls="accordion-content-1">
-                            <span>What age groups do you coach?</span>
-                            <svg class="accordion-icon w-6 h-6 text-slate-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </button>
-                        <div id="accordion-content-1" class="accordion-content px-5 text-slate-gray" aria-hidden="true">
-                            <p>We offer coaching programs for various age groups, typically starting from U6 (Under 6) up to U18 (Under 18). Please check our Programs section for specific age group availability.</p>
+        <!-- NEW FEATURE: Interactive Parent Portal Mockup & Performance Radar preview -->
+        <section id="parent-preview" class="py-20 bg-ebony/30 border-y border-white/5 relative">
+            <div class="container mx-auto px-4 max-w-5xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ff8c00]/10 text-[#ff8c00] text-xs uppercase font-extrabold tracking-widest mb-4 border border-[#ff8c00]/20">
+                            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Parent Live Tracker
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight text-white">Empowering Parents through Technology</h2>
+                        <p class="text-slate-gray mt-4 leading-relaxed">
+                            No more wondering about development. Our premium portal gives parents live access to player development plans, game analytics, attendance reports, and coaches' personalized commentary.
+                        </p>
+                        
+                        <div class="mt-8 space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="p-1.5 bg-[#2596be]/10 rounded-lg text-[#2596be] mt-1"><i data-lucide="line-chart" class="w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Continuous Metrics Logs</h4>
+                                    <p class="text-slate-gray text-xs mt-0.5">Visualize stamina parameters, training accuracy, and strategic play values.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="p-1.5 bg-[#2596be]/10 rounded-lg text-[#2596be] mt-1"><i data-lucide="calendar" class="w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Attendance & Schedule Syncing</h4>
+                                    <p class="text-slate-gray text-xs mt-0.5">Instant scheduling alerts, field updates, and shuttle planning details.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <!-- Accordion Item 2 -->
-                    <div class="rounded-lg shadow-soft overflow-hidden border border-slate-gray">
-                        <button class="accordion-header flex justify-between items-center w-full p-5 bg-light-gray-blue text-deep-navy-blue font-semibold text-lg" aria-expanded="false" aria-controls="accordion-content-2">
-                            <span>What is your coaching philosophy?</span>
-                            <svg class="accordion-icon w-6 h-6 text-slate-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </button>
-                        <div id="accordion-content-2" class="accordion-content px-5 text-slate-gray" aria-hidden="true">
-                            <p>Our philosophy centers on holistic player development, focusing on technical skills, tactical understanding, physical fitness, and mental resilience. We aim to foster a love for the game while building character.</p>
+                    
+                    <!-- App preview card -->
+                    <div class="glass-card p-6 md:p-8 bg-gradient-to-br from-[#06235d]/40 to-[#080a1b]/80 border-[#2596be]/30 shadow-2xl relative">
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-10 h-10 rounded-full bg-[#2596be]/20 border border-[#2596be]/50 flex items-center justify-center font-bold text-white text-sm">VA</div>
+                                <div>
+                                    <h3 class="font-extrabold text-sm text-white">Athlete Tracker Portal</h3>
+                                    <p class="text-slate-gray text-[10px] uppercase font-bold tracking-wider">Player: Lucas Rivera (U14)</p>
+                                </div>
+                            </div>
+                            <span class="text-[10px] bg-bright-green/15 text-bright-green border border-bright-green/30 px-2 py-0.5 rounded font-extrabold uppercase">Premium Live</span>
                         </div>
-                    </div>
-                    <!-- Accordion Item 3 -->
-                    <div class="rounded-lg shadow-soft overflow-hidden border border-slate-gray">
-                        <button class="accordion-header flex justify-between items-center w-full p-5 bg-light-gray-blue text-deep-navy-blue font-semibold text-lg" aria-expanded="false" aria-controls="accordion-content-3">
-                            <span>How can I register my child?</span>
-                            <svg class="accordion-icon w-6 h-6 text-slate-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </button>
-                        <div id="accordion-content-3" class="accordion-content px-5 text-slate-gray" aria-hidden="true">
-                            <p>You can register your child by visiting our Programs page and selecting the desired program. Follow the instructions to complete the registration form and payment.</p>
+                        
+                        <!-- Radar/Progress Metrics -->
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1 text-slate-gray">
+                                    <span>TECHNICAL MASTERY (Passing, Touch)</span>
+                                    <span class="text-white">88%</span>
+                                </div>
+                                <div class="h-2.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
+                                    <div class="h-full bg-gradient-to-r from-[#2596be] to-bright-green rounded-full" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1 text-slate-gray">
+                                    <span>TACTICAL IQ (Spacing, Formations)</span>
+                                    <span class="text-white">74%</span>
+                                </div>
+                                <div class="h-2.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
+                                    <div class="h-full bg-gradient-to-r from-[#2596be] to-bright-green rounded-full" style="width: 74%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1 text-slate-gray">
+                                    <span>PHYSICAL SCORE (Pace, Stamina)</span>
+                                    <span class="text-white">92%</span>
+                                </div>
+                                <div class="h-2.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
+                                    <div class="h-full bg-gradient-to-r from-[#2596be] to-bright-green rounded-full" style="width: 92%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini feedback box mockup -->
+                        <div class="mt-6 p-4 rounded-xl bg-black/40 border border-white/5 text-xs">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[#ff8c00] font-bold uppercase tracking-wider text-[9px]">Coach Comments (Alex R.)</span>
+                                <span class="text-slate-gray text-[9px]">2 Days Ago</span>
+                            </div>
+                            <p class="text-slate-gray italic leading-relaxed">"Lucas displayed phenomenal technical overlap coordination during yesterday's training. We are prioritizing his off-ball defensive transitions next week."</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Accordion Section (FAQ) -->
+        <section class="py-20 relative">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold uppercase tracking-wide text-white">Frequently Queried Questions</h2>
+                    <p class="text-slate-gray mt-2">Get swift explanations about application processes, fees, schedules, and professional placement options.</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- FAQ 1 -->
+                    <div class="glass-card border-white/5 overflow-hidden transition-all duration-300">
+                        <button class="accordion-header w-full p-6 text-left flex justify-between items-center text-white font-bold text-base focus:outline-none" aria-expanded="false">
+                            <span>How do parents participate in assessment procedures?</span>
+                            <i data-lucide="chevron-down" class="accordion-icon transition-transform duration-300 text-[#2596be]"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-300 bg-[#06235d]/10">
+                            <p class="p-6 text-slate-gray text-sm leading-relaxed">Our coaches host trial assessment events where children undergo dynamic physical performance testing. Complete digital feedback is generated within 48 hours for parental overview in our application tracker portal.</p>
+                        </div>
+                    </div>
 
+                    <!-- FAQ 2 -->
+                    <div class="glass-card border-white/5 overflow-hidden transition-all duration-300">
+                        <button class="accordion-header w-full p-6 text-left flex justify-between items-center text-white font-bold text-base focus:outline-none" aria-expanded="false">
+                            <span>Are training schedules structured according to school hours?</span>
+                            <i data-lucide="chevron-down" class="accordion-icon transition-transform duration-300 text-[#2596be]"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-300 bg-[#06235d]/10">
+                            <p class="p-6 text-slate-gray text-sm leading-relaxed">Yes, absolutely. Weekly drills and tactical routines are scheduled in evening time slots (ranging from 5:00 PM to 8:30 PM depending on youth grouping) and weekend mornings so school work is never affected.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="glass-card border-white/5 overflow-hidden transition-all duration-300">
+                        <button class="accordion-header w-full p-6 text-left flex justify-between items-center text-white font-bold text-base focus:outline-none" aria-expanded="false">
+                            <span>Are professional pipelines guaranteed for older students?</span>
+                            <i data-lucide="chevron-down" class="accordion-icon transition-transform duration-300 text-[#2596be]"></i>
+                        </button>
+                        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-300 bg-[#06235d]/10">
+                            <p class="p-6 text-slate-gray text-sm leading-relaxed">While active progression varies dynamically based on athletic dedication, we guarantee direct showcase exposures where international academy recruiters and professional team scouts visually review matches.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Call to Action for Modal -->
-        <section class="bg-deep-navy-blue py-16 md:py-24 text-center">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-light-gray-blue mb-6">Ready to Join Victory Academy?</h2>
-                <p class="text-lg md:text-xl text-light-gray-blue opacity-90 mb-10">
-                    Get in touch with us to learn more about our programs and how we can help your child achieve their football dreams.
+        <section class="py-20 text-center relative">
+            <div class="container mx-auto px-4 max-w-4xl glass-card py-16 relative overflow-hidden border-[#2596be]/30 shadow-2xl">
+                <!-- Background ambient flash -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-[#2596be]/10 to-transparent opacity-30 blur-lg pointer-events-none"></div>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 uppercase tracking-wider">Kickstart Your Athlete's Destiny</h2>
+                <p class="text-lg text-slate-gray mb-10 max-w-2xl mx-auto leading-relaxed">
+                    Spots are limited to guarantee precise coach-to-player mentoring structures. Schedule an assessment consultation with our head directors today.
                 </p>
-                <button id="open-contact-modal" class="px-10 py-4 rounded-full btn-primary-gradient text-white font-bold text-xl hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
-                    Contact Us Today!
+                <button id="open-contact-modal" class="px-10 py-4 rounded-full btn-primary-gradient text-white font-bold text-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 uppercase tracking-wider">
+                    Book Trial Session
                 </button>
             </div>
         </section>
     </main>
 
     <!-- Footer Section -->
-    <footer class="bg-ebony text-light-gray-blue py-8 md:py-12">
+    <footer class="bg-[#080a1b] border-t border-white/5 text-slate-gray py-12 relative z-10">
         <div class="container mx-auto px-4 text-center">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left md:text-center mb-8">
                 <div>
-                    <h3 class="text-xl font-bold text-vibrant-orange mb-4">Victory Academy</h3>
-                    <p class="text-slate-gray text-sm">
-                        Dedicated to developing football talent and fostering a love for the game.
+                    <h3 class="text-xl font-bold text-white mb-4 uppercase tracking-wider flex items-center gap-2 justify-center md:justify-start">VICTORY <span class="text-[#2596be]">ACADEMY</span></h3>
+                    <p class="text-sm leading-relaxed text-slate-gray max-w-xs mx-auto md:mx-0">
+                        Pioneering high-standard youth football pathways through scientific monitoring, tactical intelligence, and elite global mentoring layouts.
                     </p>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold text-vibrant-orange mb-4">Quick Links</h3>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300">Home</a></li>
-                        <li><a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300">Programs</a></li>
-                        <li><a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300">About Us</a></li>
-                        <li><a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300">Contact</a></li>
+                    <h3 class="text-xl font-bold text-[#ff8c00] mb-4 uppercase tracking-wider">Academy Quick Links</h3>
+                    <ul class="space-y-2 text-sm font-semibold">
+                        <li><a href="#" class="text-slate-gray hover:text-white transition duration-300">Home Portal</a></li>
+                        <li><a href="#tactical-pitch" class="text-slate-gray hover:text-white transition duration-300">Interactive Pitch</a></li>
+                        <li><a href="#programs" class="text-slate-gray hover:text-white transition duration-300">Pathways & Programs</a></li>
+                        <li><a href="#coaches" class="text-slate-gray hover:text-white transition duration-300">Staff & Coaches</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-xl font-bold text-vibrant-orange mb-4">Contact Us</h3>
-                    <p class="text-slate-gray text-sm mb-2">Email: info@victoryacademy.com</p>
-                    <p class="text-slate-gray text-sm mb-4">Phone: +1 (123) 456-7890</p>
+                    <h3 class="text-xl font-bold text-[#ff8c00] mb-4 uppercase tracking-wider">Contact Headquarters</h3>
+                    <p class="text-sm mb-2 text-white">Email: <span class="text-[#2596be]">info@victoryacademy.com</span></p>
+                    <p class="text-sm mb-4">Phone: +1 (123) 456-7890</p>
                     <div class="flex justify-center md:justify-start space-x-4">
-                        <!-- Social Media Icons (placeholders) -->
-                        <a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300 text-2xl">FB</a>
-                        <a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300 text-2xl">TW</a>
-                        <a href="#" class="text-light-gray-blue hover:text-bright-green transition duration-300 text-2xl">IG</a>
+                        <a href="#" class="text-slate-gray hover:text-[#2596be] transition duration-300"><i data-lucide="facebook"></i></a>
+                        <a href="#" class="text-slate-gray hover:text-[#2596be] transition duration-300"><i data-lucide="twitter"></i></a>
+                        <a href="#" class="text-slate-gray hover:text-[#2596be] transition duration-300"><i data-lucide="instagram"></i></a>
                     </div>
                 </div>
             </div>
-            <hr class="border-slate-gray opacity-30 my-8">
-            <p class="text-sm text-slate-gray">&copy; 2024 Victory Academy. All rights reserved.</p>
+            <hr class="border-white/10 my-8">
+            <p class="text-xs text-slate-gray/60">&copy; 2026 Victory Academy. Engineered for athletic perfection.</p>
         </div>
     </footer>
 
@@ -488,27 +716,35 @@
     <div id="contact-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-content">
             <button class="modal-close-button" aria-label="Close modal">&times;</button>
-            <h3 class="text-2xl font-bold text-deep-navy-blue mb-4">Get in Touch</h3>
-            <p class="text-slate-gray mb-6">Fill out the form below and we'll get back to you shortly.</p>
+            <h3 class="text-2xl font-bold text-white mb-2 uppercase tracking-wide flex items-center gap-2"><i data-lucide="calendar" class="text-[#2596be]"></i> Secure Assessment</h3>
+            <p class="text-slate-gray text-xs mb-6">Schedule your free physical assessment session. Our coaches will organize the child's dynamic trials.</p>
             <form class="space-y-4">
                 <div>
-                    <label for="modal-name" class="block text-slate-gray text-sm font-medium mb-1">Name</label>
-                    <input type="text" id="modal-name" class="w-full p-3 border border-light-gray-blue rounded-md focus:outline-none focus:ring-2 focus:ring-vibrant-orange" placeholder="Your Name">
+                    <label for="modal-name" class="block text-slate-gray text-[10px] font-bold uppercase tracking-wider mb-2">Guardian Name</label>
+                    <input type="text" id="modal-name" class="w-full p-3 bg-[#080a1b]/80 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2596be] text-white text-sm" placeholder="e.g. Robert Smith">
                 </div>
                 <div>
-                    <label for="modal-email" class="block text-slate-gray text-sm font-medium mb-1">Email</label>
-                    <input type="email" id="modal-email" class="w-full p-3 border border-light-gray-blue rounded-md focus:outline-none focus:ring-2 focus:ring-vibrant-orange" placeholder="Your Email">
+                    <label for="modal-email" class="block text-slate-gray text-[10px] font-bold uppercase tracking-wider mb-2">Email Address</label>
+                    <input type="email" id="modal-email" class="w-full p-3 bg-[#080a1b]/80 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2596be] text-white text-sm" placeholder="e.g. robert@domain.com">
                 </div>
                 <div>
-                    <label for="modal-message" class="block text-slate-gray text-sm font-medium mb-1">Message</label>
-                    <textarea id="modal-message" rows="4" class="w-full p-3 border border-light-gray-blue rounded-md focus:outline-none focus:ring-2 focus:ring-vibrant-orange" placeholder="Your Message"></textarea>
+                    <label for="modal-program" class="block text-slate-gray text-[10px] font-bold uppercase tracking-wider mb-2">Interest Program Group</label>
+                    <select id="modal-program" class="w-full p-3 bg-[#080a1b]/80 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2596be] text-white text-sm">
+                        <option class="bg-[#06235d]">Young Gunners (Ages 6-10)</option>
+                        <option class="bg-[#06235d]">Youth Elite (Ages 11-15)</option>
+                        <option class="bg-[#06235d]">Pre-Pro Pathway (Ages 16-19)</option>
+                    </select>
                 </div>
-                <button type="submit" class="w-full py-3 rounded-md btn-primary-gradient text-white font-semibold hover:shadow-lg transition duration-300">Send Message</button>
+                <button type="submit" class="w-full py-3.5 mt-2 rounded-full btn-primary-gradient text-white font-bold uppercase tracking-widest text-xs hover:shadow-lg transition duration-300">Book Free Assessment</button>
             </form>
         </div>
     </div>
 
+    <!-- Script Implementations -->
     <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
         // --- Mobile Menu Toggle ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -517,50 +753,11 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // --- Parallax Card Effect ---
-        const parallaxCardContainer = document.getElementById('parallax-card-container');
-        const parallaxCard = document.getElementById('parallax-card');
-        const parallaxLayers = document.querySelectorAll('.parallax-layer');
-
-        if (parallaxCardContainer && parallaxCard && parallaxLayers.length > 0) {
-            parallaxCardContainer.addEventListener('mousemove', (e) => {
-                const rect = parallaxCardContainer.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-
-                const offsetX = (e.clientX - centerX) / (rect.width / 2); // -1 to 1
-                const offsetY = (e.clientY - centerY) / (rect.height / 2); // -1 to 1
-
-                // Apply a slight rotation to the whole card
-                const rotateY = offsetX * 10; // Max 10 degrees
-                const rotateX = -offsetY * 10; // Max 10 degrees
-
-                parallaxCard.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
-
-                // Move individual layers
-                parallaxLayers.forEach(layer => {
-                    const depth = parseFloat(layer.dataset.depth);
-                    const layerX = offsetX * depth * 20; // Adjust multiplier for stronger/weaker effect
-                    const layerY = offsetY * depth * 20;
-
-                    layer.style.transform = `translate3d(${layerX}px, ${layerY}px, 0)`;
-                });
-            });
-
-            // Reset effect when mouse leaves
-            parallaxCardContainer.addEventListener('mouseleave', () => {
-                parallaxCard.style.transform = `rotateY(0deg) rotateX(0deg)`;
-                parallaxLayers.forEach(layer => {
-                    layer.style.transform = `translate3d(0, 0, 0)`;
-                });
-            });
-        }
-
         // --- Typewriter Animation ---
         const heroTitle = document.getElementById('hero-title');
         const textToType = "Train Like a Champion. Achieve Greatness.";
         let charIndex = 0;
-        const typingSpeed = 75; // milliseconds per character
+        const typingSpeed = 70; 
 
         function typeWriter() {
             if (heroTitle && charIndex < textToType.length) {
@@ -570,23 +767,107 @@
             }
         }
 
-        // --- Accordion Functionality ---
-        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        // --- Stats Auto-Counter Logic ---
+        function runCounters() {
+            const stats = document.querySelectorAll('[data-target]');
+            stats.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-target'));
+                let current = 0;
+                const increment = target / 40;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    stat.innerHTML = Math.floor(current) + (target === 98 ? "%" : "+");
+                }, 25);
+            });
+        }
 
+        // Trigger counters when scrolled into viewport
+        const statsSection = document.getElementById('stats-container');
+        let counterTriggered = false;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !counterTriggered) {
+                    runCounters();
+                    counterTriggered = true;
+                }
+            });
+        }, { threshold: 0.5 });
+        observer.observe(statsSection);
+
+        // --- Interactive Tactical Board Drill Presets ---
+        const playerPositions = {
+            overlapping: {
+                attacker1: { top: '35%', left: '15%' },
+                attacker2: { top: '50%', left: '50%' },
+                attacker3: { top: '75%', left: '55%' },
+                defender1: { top: '40%', left: '72%' },
+                defender2: { top: '65%', left: '74%' },
+                ball: { top: '73%', left: '52%' }
+            },
+            pressing: {
+                attacker1: { top: '45%', left: '42%' },
+                attacker2: { top: '30%', left: '38%' },
+                attacker3: { top: '60%', left: '40%' },
+                defender1: { top: '50%', left: '34%' },
+                defender2: { top: '25%', left: '45%' },
+                ball: { top: '50%', left: '36%' }
+            },
+            counter: {
+                attacker1: { top: '15%', left: '30%' },
+                attacker2: { top: '45%', left: '78%' },
+                attacker3: { top: '80%', left: '28%' },
+                defender1: { top: '25%', left: '60%' },
+                defender2: { top: '60%', left: '62%' },
+                ball: { top: '45%', left: '75%' }
+            }
+        };
+
+        function triggerDrill(drillKey) {
+            // Update active states on buttons
+            const buttons = ['overlapping', 'pressing', 'counter'];
+            buttons.forEach(key => {
+                const btn = document.getElementById(`btn-${key}`);
+                if (key === drillKey) {
+                    btn.classList.add('bg-[#2596be]/20', 'border-[#2596be]/60');
+                    btn.classList.remove('bg-white/5', 'border-white/10');
+                } else {
+                    btn.classList.remove('bg-[#2596be]/20', 'border-[#2596be]/60');
+                    btn.classList.add('bg-white/5', 'border-white/10');
+                }
+            });
+
+            // Apply style parameters dynamically with nice transition
+            const data = playerPositions[drillKey];
+            for (const item in data) {
+                const element = document.getElementById(item);
+                if (element) {
+                    element.style.top = data[item].top;
+                    element.style.left = data[item].left;
+                }
+            }
+        }
+
+        // --- Accordion Setup ---
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
         accordionHeaders.forEach(header => {
             header.addEventListener('click', () => {
-                const content = header.nextElementSibling; // The content div
-                const icon = header.querySelector('.accordion-icon'); // The SVG icon
-
-                // Toggle 'open' class on content
-                content.classList.toggle('open');
-                // Toggle 'rotate' class on icon
-                icon.classList.toggle('rotate');
-
-                // Update ARIA attributes for accessibility
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.accordion-icon');
                 const isExpanded = header.getAttribute('aria-expanded') === 'true';
+                
+                // Toggle expansion attributes
                 header.setAttribute('aria-expanded', !isExpanded);
-                content.setAttribute('aria-hidden', isExpanded);
+                if (!isExpanded) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.style.transform = "rotate(180deg)";
+                } else {
+                    content.style.maxHeight = "0px";
+                    icon.style.transform = "rotate(0deg)";
+                }
             });
         });
 
@@ -594,31 +875,26 @@
         const openContactModalButton = document.getElementById('open-contact-modal');
         const contactModal = document.getElementById('contact-modal');
         const modalCloseButton = contactModal.querySelector('.modal-close-button');
-        const modalContent = contactModal.querySelector('.modal-content'); // Get the content to prevent closing when clicking inside
+        const modalContent = contactModal.querySelector('.modal-content'); 
 
-        // Function to open the modal
         function openModal() {
             contactModal.classList.add('open');
             contactModal.setAttribute('aria-hidden', 'false');
         }
 
-        // Function to close the modal
         function closeModal() {
             contactModal.classList.remove('open');
             contactModal.setAttribute('aria-hidden', 'true');
         }
 
-        // Event listener to open modal
         if (openContactModalButton) {
             openContactModalButton.addEventListener('click', openModal);
         }
 
-        // Event listener to close modal from close button
         if (modalCloseButton) {
             modalCloseButton.addEventListener('click', closeModal);
         }
 
-        // Event listener to close modal when clicking outside content
         if (contactModal) {
             contactModal.addEventListener('click', (e) => {
                 if (!modalContent.contains(e.target) && e.target === contactModal) {
@@ -627,15 +903,14 @@
             });
         }
 
-        // Initialize typewriter effect on page load
-        window.onload = typeWriter;
+        // Initialize script parameters on load
+        window.onload = () => {
+            typeWriter();
+            // Start tactical board loop with initial preset movement
+            setTimeout(() => {
+                triggerDrill('overlapping');
+            }, 500);
+        };
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/parallax-js@3.1.0/dist/parallax.min.js"></script>
-<script>
-  const scene = document.getElementById('parallax-card');
-  new Parallax(scene);
-</script>
-
 </body>
 </html>

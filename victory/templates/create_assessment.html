@@ -5,160 +5,263 @@
     <meta charset="UTF-8">
     <title>Player Assessment | Victory Academy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
+        /* ==========================================================================
+           1. GLOBAL VARIABLES & COLOR PALETTE
+           ========================================================================== */
         :root {
-            --rich-black: #080a1b;
-            --yinmn-blue: #334c78;
-            --french-gray: #c9d1d8;
-            --oxford-blue: #000421;
-            --royal-blue-traditional: #022660;
-            --accent-orange: #ffa500; /* Keeping a strong accent for active states/buttons */
+            --v-dark-bg: #080a1b;   /* Deep space midnight blue background */
+            --v-navy: #06235d;      /* Solid base theme dark navy */
+            --v-steel: #2d4373;     /* Muted structural border tone */
+            --v-teal: #2596be;      /* Vibrant glowing neon cyan accent */
+            --v-blue: #0038a8;      /* Primary atmospheric lighting source */
+            --v-green: #4ca63b;     /* Success metric / positive value pill */
+            --v-orange: #ff8c00;    /* Alert metric / gradient accent */
+            --v-gold: #d4af37;      /* Secondary key marker / medal color */
+            --v-gray: #b2beb5;      /* High-contrast ash grey secondary text */
         }
 
+        /* ==========================================================================
+           2. BODY & AMBIENT GLOW BACKDROPS
+           ========================================================================== */
         body {
-            background: linear-gradient(135deg, var(--royal-blue-traditional), var(--oxford-blue));
-            color: var(--french-gray);
-            padding-top: 70px; /* Adjust padding for fixed navbar */
-            padding-bottom: 30px;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column; /* Allow content to stack below navbar */
-            align-items: center;
-            justify-content: flex-start; /* Align content to the top */
+            margin: 0;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 90px; 
+            padding-bottom: 50px;
         }
+
+        .ambient-glow-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(0, 56, 168, 0.15);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: rgba(37, 150, 190, 0.1);
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .main-content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ==========================================================================
+           3. SEAMLESS GLASSMORPHIC NAVIGATION BAR
+           ========================================================================== */
         .navbar {
-            background-color: var(--rich-black); /* Dark background for navbar */
-            border-bottom: 1px solid var(--yinmn-blue);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: rgba(6, 35, 93, 0.4) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.2) !important;
+            z-index: 10;
         }
+
         .navbar-brand {
-            color: var(--french-gray) !important;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            font-style: italic;
+            color: #ffffff !important;
+        }
+
+        .navbar-brand span {
+            color: var(--v-teal);
+            font-style: normal;
+        }
+
+        /* ==========================================================================
+           4. INTERACTIVE BUTTON SIGNATURES
+           ========================================================================== */
+        .btn-nav-back {
+            color: var(--v-gray) !important;
             font-weight: 700;
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            border-radius: 30px;
+            background: rgba(6, 35, 93, 0.2);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-        .navbar-brand:hover {
-            color: var(--accent-orange) !important;
+
+        .btn-nav-back:hover {
+            color: #ffffff !important;
+            border-color: var(--v-teal);
+            background: rgba(37, 150, 190, 0.15);
+            box-shadow: 0 0 15px rgba(37, 150, 190, 0.3);
+            transform: translateX(-3px);
         }
-        .navbar-nav .nav-link {
-            color: var(--french-gray) !important;
-            font-weight: 600;
-            transition: color 0.3s ease;
+
+        .btn-submit-assessment {
+            padding: 12px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--v-teal);
+            border: 1px solid var(--v-teal);
+            color: #ffffff;
         }
-        .navbar-nav .nav-link:hover {
-            color: var(--accent-orange) !important;
+
+        .btn-submit-assessment:hover {
+            background: rgba(37, 150, 190, 0.8);
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(37, 150, 190, 0.5);
+            transform: translateY(-2px);
+            color: #ffffff;
         }
-        .container {
-            max-width: 900px;
-            width: 100%;
+
+        /* ==========================================================================
+           5. COMPONENT CONTAINERS (GLASS CARDS) & TABS
+           ========================================================================== */
+        .child-card {
+            background: rgba(6, 35, 93, 0.15);
+            border: 1px solid rgba(45, 67, 115, 0.2) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(8, 10, 27, 0.4);
         }
-        .card {
-            background: var(--rich-black);
-            color: var(--french-gray);
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--yinmn-blue);
+
+        .assessment-sub-card {
+            background: rgba(6, 35, 93, 0.25);
+            border: 1px solid rgba(45, 67, 115, 0.25);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 15px;
         }
-        h2 {
-            color: var(--accent-orange);
-            font-weight: 700;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        }
+
         .nav-tabs {
-            border-bottom: 1px solid var(--yinmn-blue);
+            border-bottom: 1px solid rgba(45, 67, 115, 0.3);
         }
+
         .nav-tabs .nav-link {
-            color: var(--french-gray);
-            font-weight: 600;
-            border: 1px solid transparent;
-            border-top-left-radius: 0.75rem;
-            border-top-right-radius: 0.75rem;
+            color: var(--v-gray) !important;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            border: none;
+            background: transparent;
             padding: 12px 20px;
             transition: all 0.3s ease;
-        }
-        .nav-tabs .nav-link:hover:not(.active) {
-            background-color: rgba(255, 255, 255, 0.08);
-            color: var(--accent-orange);
-            border-color: transparent;
-        }
-        .nav-tabs .nav-link.active {
-            background-color: var(--accent-orange);
-            color: var(--rich-black);
-            border-color: var(--accent-orange);
-            font-weight: 700;
-        }
-        .tab-pane label {
-            font-weight: 600;
-            margin-top: 15px;
-            color: var(--french-gray);
-            display: block; /* Ensure labels take full width */
-            margin-bottom: 5px;
-        }
-        .form-control, .form-select {
-            background-color: var(--yinmn-blue);
-            border: 1px solid var(--royal-blue-traditional);
-            color: var(--french-gray);
-            padding: 10px 15px;
-            border-radius: 8px;
-        }
-        .form-control:focus, .form-select:focus {
-            background-color: var(--yinmn-blue);
-            color: var(--french-gray);
-            border-color: var(--accent-orange);
-            box-shadow: 0 0 0 0.25rem rgba(255, 165, 0, 0.25);
-        }
-        .form-control::placeholder {
-            color: rgba(201, 209, 216, 0.7);
+            border-bottom: 2px solid transparent;
         }
 
-        .btn-success {
-            background-color: var(--accent-orange);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            color: var(--rich-black);
+        .nav-tabs .nav-link:hover {
+            color: #ffffff !important;
+            border-color: transparent;
         }
-        .btn-success:hover {
-            background-color: #e69500; /* Slightly darker orange */
-            transform: translateY(-2px);
-            color: var(--rich-black);
+
+        .nav-tabs .nav-link.active {
+            color: #ffffff !important;
+            background: transparent !important;
+            border-bottom: 2px solid var(--v-teal) !important;
+            text-shadow: 0 0 10px rgba(37, 150, 190, 0.4);
         }
-        .btn-success:active {
-            background-color: #cc8400 !important;
-            transform: translateY(0);
+
+        /* ==========================================================================
+           6. FORM HANDLING STYLE WRAPPERS
+           ========================================================================== */
+        .data-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--v-gray);
+            margin-bottom: 6px;
+            font-weight: 600;
+            display: block;
         }
+
+        .form-control, .form-select {
+            background-color: rgba(8, 10, 27, 0.5);
+            border: 1px solid rgba(45, 67, 115, 0.4);
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(8, 10, 27, 0.7);
+            color: #ffffff;
+            border-color: var(--v-teal);
+            box-shadow: 0 0 12px rgba(37, 150, 190, 0.25);
+        }
+
         .form-select option {
-            background-color: var(--yinmn-blue);
-            color: var(--french-gray);
+            background-color: var(--v-dark-bg);
+            color: #ffffff;
         }
-        /* Adjusting Django form fields for Bootstrap classes */
-        .form-group div { /* This targets the div wrappers around Django fields if any */
-            margin-bottom: 1rem;
-        }
+
         textarea.form-control {
-            min-height: 100px;
+            min-height: 110px;
             resize: vertical;
+        }
+
+        h2 {
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: #ffffff;
+        }
+        
+        h2 span {
+            color: var(--v-orange);
         }
     </style>
 </head>
 <body>
 
+<div class="ambient-glow-1"></div>
+<div class="ambient-glow-2"></div>
+
 <nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Victory Academy</a>
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="#">Victory <span>Academy</span></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="history.back(); return false;">
+                    <a class="btn-nav-back" href="#" onclick="history.back(); return false;">
                         <i class='bx bx-arrow-back'></i> Back
                     </a>
                 </li>
@@ -167,18 +270,19 @@
     </div>
 </nav>
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Player Assessment: {{ child }}</h2>
-    <div class="card shadow p-4">
+<div class="container main-content-wrapper mt-5">
+    <h2 class="text-center mb-4">Player Assessment: <span>{{ child }}</span></h2>
+    
+    <div class="card child-card p-4">
         <form method="post">
             {% csrf_token %}
 
-            <div class="mb-3">
-                <label for="id_position" class="form-label">Position</label>
+            <div class="assessment-sub-card mb-4">
+                <label for="id_position" class="data-label">Primary Playing Position</label>
                 {{ form.position }}
             </div>
 
-            <ul class="nav nav-tabs" id="assessmentTabs" role="tablist">
+            <ul class="nav nav-tabs mb-4" id="assessmentTabs" role="tablist">
                 <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cognitive" type="button" role="tab" aria-controls="cognitive" aria-selected="true">Cognitive</button></li>
                 <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#technical" type="button" role="tab" aria-controls="technical" aria-selected="false">Technical</button></li>
                 <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#physical" type="button" role="tab" aria-controls="physical" aria-selected="false">Physical</button></li>
@@ -186,129 +290,141 @@
                 <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#summary" type="button" role="tab" aria-controls="summary" aria-selected="false">Summary & Goals</button></li>
             </ul>
 
-            <div class="tab-content mt-4">
-                <div class="tab-pane fade show active" id="cognitive" role="tabpanel" aria-labelledby="cognitive-tab">
-                    <div class="mb-3">
-                        {{ form.spatial_awareness.label_tag }}
-                        {{ form.spatial_awareness }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.decision_making.label_tag }}
-                        {{ form.decision_making }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.understanding_position.label_tag }}
-                        {{ form.understanding_position }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.off_the_ball_movement.label_tag }}
-                        {{ form.off_the_ball_movement }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.game_intelligence.label_tag }}
-                        {{ form.game_intelligence }}
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="technical" role="tabpanel" aria-labelledby="technical-tab">
-                    <div class="mb-3">
-                        {{ form.ball_control.label_tag }}
-                        {{ form.ball_control }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.passing.label_tag }}
-                        {{ form.passing }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.shooting.label_tag }}
-                        {{ form.shooting }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.dribbling.label_tag }}
-                        {{ form.dribbling }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.tackling.label_tag }}
-                        {{ form.tackling }}
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="cognitive" role="tabpanel">
+                    <div class="assessment-sub-card">
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.spatial_awareness.label }}</label>
+                            {{ form.spatial_awareness }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.decision_making.label }}</label>
+                            {{ form.decision_making }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.understanding_position.label }}</label>
+                            {{ form.understanding_position }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.off_the_ball_movement.label }}</label>
+                            {{ form.off_the_ball_movement }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.game_intelligence.label }}</label>
+                            {{ form.game_intelligence }}
+                        </div>
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="physical" role="tabpanel" aria-labelledby="physical-tab">
-                    <div class="mb-3">
-                        {{ form.speed.label_tag }}
-                        {{ form.speed }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.stamina.label_tag }}
-                        {{ form.stamina }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.strength.label_tag }}
-                        {{ form.strength }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.agility.label_tag }}
-                        {{ form.agility }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.balance.label_tag }}
-                        {{ form.balance }}
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="psychological" role="tabpanel" aria-labelledby="psychological-tab">
-                    <div class="mb-3">
-                        {{ form.confidence.label_tag }}
-                        {{ form.confidence }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.leadership.label_tag }}
-                        {{ form.leadership }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.teamwork.label_tag }}
-                        {{ form.teamwork }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.discipline.label_tag }}
-                        {{ form.discipline }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.focus.label_tag }}
-                        {{ form.focus }}
+                <div class="tab-pane fade" id="technical" role="tabpanel">
+                    <div class="assessment-sub-card">
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.ball_control.label }}</label>
+                            {{ form.ball_control }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.passing.label }}</label>
+                            {{ form.passing }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.shooting.label }}</label>
+                            {{ form.shooting }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.dribbling.label }}</label>
+                            {{ form.dribbling }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.tackling.label }}</label>
+                            {{ form.tackling }}
+                        </div>
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab">
-                    <div class="mb-3">
-                        {{ form.coach_summary.label_tag }}
-                        {{ form.coach_summary }}
+                <div class="tab-pane fade" id="physical" role="tabpanel">
+                    <div class="assessment-sub-card">
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.speed.label }}</label>
+                            {{ form.speed }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.stamina.label }}</label>
+                            {{ form.stamina }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.strength.label }}</label>
+                            {{ form.strength }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.agility.label }}</label>
+                            {{ form.agility }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.balance.label }}</label>
+                            {{ form.balance }}
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        {{ form.strengths.label_tag }}
-                        {{ form.strengths }}
+                </div>
+
+                <div class="tab-pane fade" id="psychological" role="tabpanel">
+                    <div class="assessment-sub-card">
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.confidence.label }}</label>
+                            {{ form.confidence }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.leadership.label }}</label>
+                            {{ form.leadership }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.teamwork.label }}</label>
+                            {{ form.teamwork }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.discipline.label }}</label>
+                            {{ form.discipline }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.focus.label }}</label>
+                            {{ form.focus }}
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        {{ form.improvements.label_tag }}
-                        {{ form.improvements }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.suggested_drills.label_tag }}
-                        {{ form.suggested_drills }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.short_term_goal.label_tag }}
-                        {{ form.short_term_goal }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.long_term_goal.label_tag }}
-                        {{ form.long_term_goal }}
+                </div>
+
+                <div class="tab-pane fade" id="summary" role="tabpanel">
+                    <div class="assessment-sub-card">
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.coach_summary.label }}</label>
+                            {{ form.coach_summary }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.strengths.label }}</label>
+                            {{ form.strengths }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.improvements.label }}</label>
+                            {{ form.improvements }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.suggested_drills.label }}</label>
+                            {{ form.suggested_drills }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.short_term_goal.label }}</label>
+                            {{ form.short_term_goal }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="data-label">{{ form.long_term_goal.label }}</label>
+                            {{ form.long_term_goal }}
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success px-5 py-2">Submit Assessment</button>
+                <button type="submit" class="btn btn-submit-assessment">
+                    <i class='bx bx-save'></i> Submit Assessment
+                </button>
             </div>
         </form>
     </div>
