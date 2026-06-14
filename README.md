@@ -16,7 +16,7 @@ A centralized real-time sports management system for football academies, with ro
 
 - **Backend**: Python, Django
 - **Frontend**: HTML, CSS, JavaScript (or optionally React)
-- **Database**: MySQL / PostgreSQL
+- **Database**: MySQL 
 - **Authentication**: Django Auth 
 - **Tools**: Git, GitHub
 
